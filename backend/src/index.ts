@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import config from "./config";
 import sequelize from "./Models/database";
 import militaryLeaderRoutes from "./Routes/militaryLeaderRoutes";
+import warRoutes from "./Routes/warRoutes";
 import initModel from "./Models/initModel";
 
 (async () => {
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/militaryLeaders", militaryLeaderRoutes);
+app.use("/war", warRoutes);
 
 app.listen(config.port, () =>
   console.log(`Server listening on port ${config.port}`)
