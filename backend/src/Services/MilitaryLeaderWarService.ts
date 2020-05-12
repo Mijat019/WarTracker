@@ -19,11 +19,8 @@ class MilitaryLeaderWarController {
   }
 
   public async add(militaryLeaderWarPayload: any) {
-    const { militaryLeaderId, warId } = await MilitaryLeaderWar.create(
-      militaryLeaderWarPayload
-    );
-    const militaryLeaderWar = await MilitaryLeaderWar.findOne({
-      where: { militaryLeaderId, warId },
+    const { id } = await MilitaryLeaderWar.create(militaryLeaderWarPayload);
+    const militaryLeaderWar = await MilitaryLeaderWar.findByPk(id, {
       include,
       attributes,
     });
