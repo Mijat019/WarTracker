@@ -1,5 +1,4 @@
 import { Model, INTEGER, STRING, DATE } from "sequelize";
-import MilitaryRank from "./MilitaryRank";
 import sequelize from "./database";
 
 class MilitaryLeader extends Model {
@@ -9,7 +8,7 @@ class MilitaryLeader extends Model {
   public dateOfBirth!: Date;
   public dateOfDeath!: Date;
   public birthPlace!: string;
-  public militaryRank!: MilitaryRank;
+  public militaryRank!: string;
   public title!: string;
   public dynastyName!: string;
   public school!: string;
@@ -19,12 +18,12 @@ class MilitaryLeader extends Model {
 MilitaryLeader.init(
   {
     id: {
-      type: INTEGER.UNSIGNED,
+      type: INTEGER,
       primaryKey: true,
       allowNull: true,
       autoIncrement: true,
     },
-    fistName: {
+    firstName: {
       type: STRING,
       allowNull: false,
     },
