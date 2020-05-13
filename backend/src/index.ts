@@ -11,6 +11,7 @@ import militaryLeaderWarRoutes from "./Routes/militaryLeaderWarRoutes";
 import battlesRoutes from "./Routes/battleRoutes";
 import militaryLeaderBattleRoutes from "./Routes/militaryLeaderBattleRoutes";
 import militaryLeaderMapPositionRoutes from "./Routes/militaryLeaderMapPositionRoutes";
+import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
 
 (async () => {
   try {
@@ -40,6 +41,7 @@ app.use("/militaryLeaderWar", militaryLeaderWarRoutes);
 app.use("/battles", battlesRoutes);
 app.use("/militaryLeaderBattle", militaryLeaderBattleRoutes);
 app.use("/militaryLeaderMapPosition", militaryLeaderMapPositionRoutes);
+app.use("/battleMapPosition", battleMapPositionRoutes);
 
 app.listen(config.port, () =>
   console.log(`Server listening on port ${config.port}`)
