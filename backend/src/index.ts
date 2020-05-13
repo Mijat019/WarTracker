@@ -11,10 +11,7 @@ import militaryLeaderWarRoutes from "./Routes/militaryLeaderWarRoutes";
 import battlesRoutes from "./Routes/battleRoutes";
 import militaryLeaderBattleRoutes from "./Routes/militaryLeaderBattleRoutes";
 import militaryLeaderMapPositionRoutes from "./Routes/militaryLeaderMapPositionRoutes";
-<<<<<<< HEAD
 import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
-=======
->>>>>>> b6702d9881755372dab855f862c9ca0e9091c34a
 
 (async () => {
   try {
