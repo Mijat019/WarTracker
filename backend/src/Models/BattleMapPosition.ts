@@ -1,5 +1,7 @@
 import { Model, INTEGER, DECIMAL } from "sequelize";
 import sequelize from "./database";
+import Map from "./Map";
+import Battle from "./Battle";
 
 class BattleMapPosition extends Model {
   public id!: number;
@@ -45,5 +47,8 @@ BattleMapPosition.init(
     indexes: [{ unique: true, fields: ["mapId", "battleId"] }],
   }
 );
+
+BattleMapPosition.belongsTo(Map, { as: "map", foreignKey: "mapId" });
+BattleMapPosition.belongsTo(Battle, { as: "battle", foreignKey: "battleId" });
 
 export default BattleMapPosition;

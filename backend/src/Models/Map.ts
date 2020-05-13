@@ -20,7 +20,7 @@ Map.init(
       unique: true,
     },
   },
-  { sequelize, tableName: "map", timestamps: true }
+  { sequelize, tableName: "map", timestamps: false }
 );
 
 export default Map;
