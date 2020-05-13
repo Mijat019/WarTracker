@@ -4,8 +4,8 @@ import Battle from "../Models/Battle";
 import MilitaryLeader from "../Models/MilitaryLeader";
 
 const include: IncludeOptions[] = [
-  { model: Battle, as: "battle" },
-  { model: MilitaryLeader, as: "militaryLeader" },
+  { model: Battle, as: "battle", required: true },
+  { model: MilitaryLeader, as: "militaryLeader", required: true },
 ];
 
 const attributes: string[] = ["id"];
