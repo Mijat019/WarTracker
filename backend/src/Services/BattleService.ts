@@ -2,7 +2,7 @@ import Battle from "../Models/Battle";
 import { IncludeOptions } from "sequelize/types";
 import War from "../Models/War";
 
-const include: IncludeOptions[] = [{ model: War, as: "war" }];
+const include: IncludeOptions[] = [{ model: War, as: "war", required: true }];
 const attributes: string[] = [
   "id",
   "date",
