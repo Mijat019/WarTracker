@@ -11,16 +11,17 @@ const include: IncludeOptions[] = [
 const attributes: string[] = ["id", "lng", "lat"];
 
 class MilitaryLeaderMapPositionService {
-  public async getAllForMap(mapId: string) {
+  public async getAll() {
     const militaryLeaderMapPositions = await MilitaryLeaderMapPosition.findAll({
-      where: { mapId },
       include,
       attributes,
     });
     return militaryLeaderMapPositions;
   }
-  public async getAll() {
+
+  public async getAllForMap(mapId: string) {
     const militaryLeaderMapPositions = await MilitaryLeaderMapPosition.findAll({
+      where: { mapId },
       include,
       attributes,
     });

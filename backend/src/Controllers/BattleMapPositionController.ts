@@ -1,0 +1,59 @@
+import { Request, Response } from "express";
+import battleMapPositionService from "../Services/BattleMapPositionService";
+
+class BattleMapPositionController {
+  public async getAll(req: Request, res: Response) {
+    try {
+      const battleMapPositions = await battleMapPositionService.getAll();
+      res.send(battleMapPositions);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+  public async getAllForMap(req: Request, res: Response) {
+    try {
+      const { mapId } = req.params;
+      const battleMapPositions = await battleMapPositionService.getAllForMap(
+        mapId
+      );
+      res.send(battleMapPositions);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+  public async add(req: Request, res: Response) {
+    try {
+      const battleMapPosition = await battleMapPositionService.add(req.body);
+      res.send(battleMapPosition);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+  public async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const battleMapPosition = await battleMapPositionService.update(
+        id,
+        req.body
+      );
+      res.send(battleMapPosition);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+  public async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await battleMapPositionService.delete(id);
+      res.send("Deleted");
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+}
+
+export default new BattleMapPositionController();
