@@ -34,7 +34,7 @@ Battle.init(
 
     place: {
       type: STRING,
-      allowNull: false,
+      allowNull: true,
     },
 
     iconUrl: {

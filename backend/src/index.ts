@@ -20,8 +20,8 @@ import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
       To apply changes to the database schema, you need to 
       uncomment next two lines
     */
-    await sequelize.sync({ force: true });
-    await initModel();
+    // await sequelize.sync({ force: true });
+    // await initModel();
     console.log("Connected to the database.");
   } catch (error) {
     console.log(error);
