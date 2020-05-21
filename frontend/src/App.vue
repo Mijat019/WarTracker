@@ -1,13 +1,16 @@
 <template>
   <v-app>
-    <v-content>
-      haris gej
-    </v-content>
+    <Home />
   </v-app>
 </template>
 
 <script>
+import Home from "./views/Home";
 export default {
-  name: "App"
+  name: "App",
+
+  components: {
+    Home
+  }
 };
 </script>
