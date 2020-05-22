@@ -50,7 +50,6 @@ export default {
         editMilitaryLeader: null,
         dialog: false,
         headers: [
-            { text: "Id", value: "id" },
             { text: "Name", value: "firstName" },
             { text: "Last Name", value: "lastName" },
             { text: "Dynasty Name", value: "dynastyName" },

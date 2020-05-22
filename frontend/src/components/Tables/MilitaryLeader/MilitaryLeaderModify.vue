@@ -103,8 +103,6 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn @click="uploadImage">test</v-btn>
-
                     <v-btn @click="closeAddDialog" color="blue darken-1" text
                         >Close</v-btn
                     >

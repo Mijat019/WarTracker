@@ -77,7 +77,10 @@ const militaryLeaders = {
                     return;
                 }
 
-                dispatch("uploadImage", { militaryLeaderId: added.id, image });
+                dispatch("uploadImage", {
+                    militaryLeaderId: added.id,
+                    image,
+                });
             } catch (error) {
                 console.log(error);
             }

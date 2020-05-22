@@ -15,7 +15,7 @@
             :key="index"
         >
             <v-list-item-avatar>
-                <v-avatar color="grey">
+                <v-avatar color="pink">
                     <v-img
                         v-if="militaryLeader.imageUrl"
                         :src="militaryLeader.imageUrl"
