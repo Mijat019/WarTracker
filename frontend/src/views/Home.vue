@@ -1,19 +1,19 @@
 <template>
   <div>
-    <Drawer />
+    <drawer />
     <v-content>
-      <Map />
+      <map-view />
     </v-content>
   </div>
 </template>
 
 <script>
 import Drawer from "../components/Drawer/Drawer";
-import Map from "../components/Map/Map";
+import MapView from "../components/Map/MapView";
 
 export default {
   name: "Home",
-  components: { Map, Drawer }
+  components: { MapView, Drawer }
 };
 </script>
 
