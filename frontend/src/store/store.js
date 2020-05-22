@@ -1,19 +1,13 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import BattleModule from "./BattleModule";
-import MilitaryLeaderModule from "./MilitaryLeaderModule";
+import Vue from "vue";
+import Vuex from "vuex";
+import battles from "./modules/battles";
+import militaryLeaders from "./modules/militaryLeaders";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  namespaced: true,
-  state: {
-    battles: []
-  },
-  mutations: {},
-  actions: {},
   modules: {
-    militaryLeader: MilitaryLeaderModule,
-    battle: BattleModule
+    militaryLeaders,
+    battles,
   },
-})
+});

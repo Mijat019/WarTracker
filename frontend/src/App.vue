@@ -1,16 +1,31 @@
 <template>
-  <v-app>
-    <Home />
-  </v-app>
+    <v-app>
+        <Home />
+    </v-app>
 </template>
 
 <script>
 import Home from "./views/Home";
+import { mapActions } from "vuex";
 export default {
-  name: "App",
+    name: "App",
 
-  components: {
-    Home
-  }
+    components: {
+        Home,
+    },
+
+    methods: {
+        ...mapActions({
+            getBattles: "battles/getBattles",
+            getWars: "battles/getWars",
+            getMilitaryLeaders: "militaryLeaders/getMilitaryLeaders",
+        }),
+    },
+
+    created() {
+        this.getBattles();
+        this.getWars();
+        this.getMilitaryLeaders();
+    },
 };
 </script>
