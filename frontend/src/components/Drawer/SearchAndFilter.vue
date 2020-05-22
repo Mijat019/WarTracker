@@ -1,7 +1,9 @@
 <template>
     <v-list-item class="px-2">
         <v-list-item-avatar>
-            <v-icon>mdi-menu</v-icon>
+            <v-btn icon @click="$emit(`closeDrawer`)">
+                <v-icon>mdi-menu</v-icon>
+            </v-btn>
         </v-list-item-avatar>
         <v-text-field
             dense

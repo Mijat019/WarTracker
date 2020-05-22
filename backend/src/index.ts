@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import config from "./config";
@@ -14,18 +14,18 @@ import militaryLeaderMapPositionRoutes from "./Routes/militaryLeaderMapPositionR
 import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
 
 (async () => {
-  try {
-    await sequelize.authenticate();
-    /*
+    try {
+        await sequelize.authenticate();
+        /*
       To apply changes to the database schema, you need to 
       uncomment next two lines
     */
-    // await sequelize.sync({ force: true });
-    // await initModel();
-    console.log("Connected to the database.");
-  } catch (error) {
-    console.log(error);
-  }
+        // await sequelize.sync({ force: true });
+        // await initModel();
+        console.log("Connected to the database.");
+    } catch (error) {
+        console.log(error);
+    }
 })();
 
 const app = express();
@@ -33,6 +33,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//static files
+app.use("/uploads", express.static("uploads"));
 
 //routes
 app.use("/militaryLeader", militaryLeaderRoutes);
@@ -44,5 +47,5 @@ app.use("/militaryLeaderMapPosition", militaryLeaderMapPositionRoutes);
 app.use("/battleMapPosition", battleMapPositionRoutes);
 
 app.listen(config.port, () =>
-  console.log(`Server listening on port ${config.port}`)
+    console.log(`Server listening on port ${config.port}`)
 );

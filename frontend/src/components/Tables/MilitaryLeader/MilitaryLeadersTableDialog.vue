@@ -1,11 +1,13 @@
 <template>
-    <v-dialog v-model="dialog" scrollable width="95%">
+    <v-dialog v-model="dialog" scrollable fullscreen>
         <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
                 <v-icon>mdi-table</v-icon>
             </v-btn>
         </template>
-        <MilitaryLeadersTable />
+        <v-card min-height="100%">
+            <MilitaryLeadersTable />
+        </v-card>
     </v-dialog>
 </template>
 
