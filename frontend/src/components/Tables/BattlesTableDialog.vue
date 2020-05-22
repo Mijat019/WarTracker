@@ -16,7 +16,7 @@
 
 <script>
 export default {
-    name: "BattlesDialogTable",
+    name: "BattlesTableDialog",
 };
 </script>
 

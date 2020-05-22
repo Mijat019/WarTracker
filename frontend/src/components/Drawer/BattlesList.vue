@@ -6,7 +6,7 @@
             </v-list-item-avatar>
             <v-list-item-title>Battles</v-list-item-title>
             <v-list-item-action>
-                <BattlesDialogTable />
+                <BattlesTableDialog />
             </v-list-item-action>
         </template>
 
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import BattlesDialogTable from "../Tables/BattlesDialogTable";
+import BattlesTableDialog from "../Tables/BattlesTableDialog";
 import { mapGetters } from "vuex";
 export default {
-    components: { BattlesDialogTable },
+    components: { BattlesTableDialog },
 
     name: "BattlesList",
 
