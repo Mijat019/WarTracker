@@ -9,10 +9,12 @@
         >
             <SearchAndFilter v-on:closeDrawer="closeDrawer" />
             <v-divider></v-divider>
-            <BattlesList :showBattlesList="showBattlesList" />
-            <MilitaryLeadersList
-                :showMilitaryLeadersList="showMilitaryLeadersList"
-            />
+            <v-list>
+                <BattlesList :showBattlesList="showBattlesList" />
+                <MilitaryLeadersList
+                    :showMilitaryLeadersList="showMilitaryLeadersList"
+                />
+            </v-list>
         </v-navigation-drawer>
     </v-card>
 </template>
