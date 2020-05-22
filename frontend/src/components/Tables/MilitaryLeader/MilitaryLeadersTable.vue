@@ -3,7 +3,7 @@
         <v-data-table
             :headers="headers"
             :items="militaryLeaders"
-            class="elevation-1"
+            class="elevation-0"
             sort-by="calories"
         >
             <template v-slot:top>

@@ -1,4 +1,4 @@
-import fs from "fs";
+import { promises as fs } from "fs";
 import MilitaryLeader from "../Models/MilitaryLeader";
 
 class MilitaryLeaderService {
@@ -8,9 +8,8 @@ class MilitaryLeaderService {
     }
 
     public async add(militaryLeadersPayload: any) {
-        const militaryLeader = await MilitaryLeader.create(
-            militaryLeadersPayload
-        );
+        const { id } = await MilitaryLeader.create(militaryLeadersPayload);
+        const militaryLeader = await MilitaryLeader.findByPk(id);
         return militaryLeader;
     }
 
@@ -27,13 +26,15 @@ class MilitaryLeaderService {
     public async setImage(militaryLeaderId: string, file: any) {
         const extension = file.originalname.split(".")[1];
         const newFileName = `uploads/ml/${militaryLeaderId}.${extension}`;
-        fs.rename(file.path, newFileName, async () => {
-            const baseUrl = "http://localhost:4200/";
-            const militaryLeader = await this.update(militaryLeaderId, {
-                imageUrl: `${baseUrl}${newFileName}`,
-            });
-            return militaryLeader;
+        // rename the file because multer names it stupid
+        // and doesn't add the extension
+        await fs.rename(file.path, newFileName);
+
+        const baseUrl = "http://localhost:4200/";
+        const militaryLeader = await this.update(militaryLeaderId, {
+            imageUrl: `${baseUrl}${newFileName}`,
         });
+        return militaryLeader;
     }
 }
 export default new MilitaryLeaderService();

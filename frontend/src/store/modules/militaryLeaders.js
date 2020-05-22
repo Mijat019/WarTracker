@@ -23,7 +23,7 @@ const militaryLeaders = {
             const index = state.militaryLeaders.findIndex(
                 (c) => c.id === updatedMilitaryLeader.id
             );
-            state.militaryLeaders[index] = updatedMilitaryLeader;
+            Object.assign(state.militaryLeaders[index], updatedMilitaryLeader);
         },
 
         addMilitaryLeader(state, militaryLeader) {
@@ -49,19 +49,36 @@ const militaryLeaders = {
             }
         },
 
-        async updateMilitaryLeader({ commit }, { militaryLeader, image }) {
+        async updateMilitaryLeader(
+            { commit, dispatch },
+            { militaryLeader, image }
+        ) {
             image;
             try {
                 const { data: modified } = await Vue.$axios.patch(
                     `/militaryLeader/${militaryLeader.id}`,
                     militaryLeader
                 );
+
+                // upload the image if its provided
+                if (image) {
+                    dispatch("uploadImage", {
+                        militaryLeaderId: modified.id,
+                        image,
+                    });
+                    return;
+                }
+
                 commit("updateMilitaryLeader", modified);
             } catch (error) {
                 console.log(error);
             }
         },
 
+        /**
+         * Adds a military leader. If @param image is provided,
+         * @func uploadImage is dispatched to upload the provided image.
+         */
         async addMilitaryLeader(
             { commit, dispatch },
             { militaryLeader, image }
@@ -72,20 +89,22 @@ const militaryLeaders = {
                     militaryLeader
                 );
 
-                if (!image) {
-                    commit("addMilitaryLeader", added);
-                    return;
+                commit("addMilitaryLeader", added);
+                if (image) {
+                    dispatch("uploadImage", {
+                        militaryLeaderId: added.id,
+                        image,
+                    });
                 }
-
-                dispatch("uploadImage", {
-                    militaryLeaderId: added.id,
-                    image,
-                });
             } catch (error) {
                 console.log(error);
             }
         },
 
+        /**
+         * Uploads the provided image. Then it gets the militaryLeader
+         * with a imageUrl set. Then it updates the state.
+         */
         async uploadImage({ commit }, { image, militaryLeaderId }) {
             try {
                 let formData = new FormData();
@@ -94,7 +113,7 @@ const militaryLeaders = {
                     `/militaryLeader/${militaryLeaderId}`,
                     formData
                 );
-                commit("addMilitaryLeader", newMilitaryLeader);
+                commit("updateMilitaryLeader", newMilitaryLeader);
             } catch (error) {
                 console.log(error);
             }

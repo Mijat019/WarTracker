@@ -137,7 +137,7 @@ export default {
         dateOfDeath: "",
         dynastyName: "",
         firstName: "",
-        image: "",
+        image: null,
         id: "",
         lastName: "",
         militaryRank: "",
@@ -149,7 +149,7 @@ export default {
             dynastyName: "",
             firstName: "",
             id: "",
-            image: "",
+            image: null,
             lastName: "",
             militaryRank: "",
             school: "",
@@ -182,7 +182,6 @@ export default {
                 this.dynastyName = this.editMilitaryLeader.dynastyName;
                 this.firstName = this.editMilitaryLeader.firstName;
                 this.id = this.editMilitaryLeader.id;
-                // this.image = this.editMilitaryLeader.image;
                 this.lastName = this.editMilitaryLeader.lastName;
                 this.militaryRank = this.editMilitaryLeader.militaryRank;
                 this.school = this.editMilitaryLeader.school;
@@ -218,7 +217,6 @@ export default {
             this.militaryLeader.dynastyName = this.dynastyName;
             this.militaryLeader.firstName = this.firstName;
             this.militaryLeader.id = this.id;
-            // this.militaryLeader.image = this.image;
             this.militaryLeader.lastName = this.lastName;
             this.militaryLeader.militaryRank = this.militaryRank;
             this.militaryLeader.school = this.school;

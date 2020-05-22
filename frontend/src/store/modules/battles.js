@@ -23,7 +23,7 @@ const BattleModule = {
 
         updateBattle(state, battle) {
             const index = state.battles.findIndex((c) => c.id === battle.id);
-            state.battles[index] = battle;
+            Object.assign(state.battles[index], battle);
         },
 
         addBattle(state, battle) {
