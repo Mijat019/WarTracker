@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import BattlesTableDialog from "../Tables/BattlesTableDialog";
+import BattlesTableDialog from "../Tables/Battles/BattlesTableDialog.vue";
 import { mapGetters } from "vuex";
 export default {
     components: { BattlesTableDialog },

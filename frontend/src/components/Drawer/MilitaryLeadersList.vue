@@ -6,9 +6,7 @@
             </v-list-item-avatar>
             <v-list-item-title>Military leaders</v-list-item-title>
             <v-list-item-action>
-                <v-icon @click.stop="openMilitaryLeadersTable"
-                    >mdi-table</v-icon
-                >
+                <MilitaryLeadersTableDialog />
             </v-list-item-action>
         </template>
 
@@ -25,8 +23,11 @@
 </template>
 
 <script>
+import MilitaryLeadersTableDialog from "../Tables/MilitaryLeader/MilitaryLeadersTableDialog";
 import { mapGetters } from "vuex";
 export default {
+    components: { MilitaryLeadersTableDialog },
+
     name: "MilitaryLeadersList",
 
     props: ["showMilitaryLeadersList"],
