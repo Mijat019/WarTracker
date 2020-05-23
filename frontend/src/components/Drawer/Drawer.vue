@@ -1,5 +1,5 @@
 <template>
-    <v-card width="30%" class="rounded">
+    <v-card class="card">
         <search-and-filter v-model="drawer"></search-and-filter>
         <v-fade-transition>
             <v-divider v-show="drawer"></v-divider>
@@ -31,8 +31,8 @@ export default {
 </script>
 
 <style>
-    .rounded {
-        border-radius: 20px !important;
-        transition: height 2s !important;
+    .card {
+        border-radius: 1em !important;
+        width: 30%;
     }
 </style>
