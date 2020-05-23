@@ -28,6 +28,15 @@ class BattleMapPositionService {
     return battleMapPositions;
   }
 
+  public async getAllForMapName(mapName: string) {
+    const battleMapPositions = await BattleMapPosition.findAll({
+      where: { '$map.name$': mapName },
+      include,
+      attributes,
+    });
+    return battleMapPositions;
+  }
+
   public async add(battleMapPositionPayload: any) {
     const { id } = await BattleMapPosition.create(battleMapPositionPayload);
     const battleMapPosition = await BattleMapPosition.findByPk(id, {

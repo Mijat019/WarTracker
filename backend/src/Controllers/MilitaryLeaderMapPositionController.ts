@@ -14,6 +14,18 @@ class MilitaryLeaderMapPositionController {
     }
   }
 
+  public async getAllForMapByName(req: Request, res: Response) {
+    try {
+      const { mapName } = req.params;
+      const militaryLeaderMapPositions = await militaryLeaderMapPositionService.getAllForMapByName(
+          mapName
+      );
+      res.send(militaryLeaderMapPositions);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
   public async getAll(req: Request, res: Response) {
     try {
       const militaryLeaderMapPositions = await militaryLeaderMapPositionService.getAll();

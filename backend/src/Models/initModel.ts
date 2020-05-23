@@ -4,6 +4,7 @@ import Battle from "./Battle";
 import MilitaryLeaderBattle from "./MiltaryLeaderBattle";
 import Map from "./Map";
 import MilitaryLeaderMapPosition from "./MilitaryLeaderMapPosition";
+import BattleMapPosition from "./BattleMapPosition";
 
 export default async () => {
   const { id: warId1 } = await War.create({ name: "Krstaški ratovi" });
@@ -122,5 +123,26 @@ export default async () => {
     militaryLeaderId: militaryLeaderId2,
     lng: 1,
     lat: 1,
+  });
+
+  await BattleMapPosition.create({
+    mapId: mapId1,
+    battleId: battleId1,
+    lng: 20,
+    lat: 23,
+  });
+
+  await BattleMapPosition.create({
+    mapId: mapId2,
+    battleId: battleId3,
+    lng: 31,
+    lat: 42,
+  });
+
+  await BattleMapPosition.create({
+    mapId: mapId1,
+    battleId: battleId2,
+    lng: 42,
+    lat: 19,
   });
 };

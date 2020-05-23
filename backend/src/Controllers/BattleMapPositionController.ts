@@ -23,6 +23,19 @@ class BattleMapPositionController {
     }
   }
 
+  public async getAllForMapByName(req: Request, res: Response) {
+    try {
+      const { mapName } = req.params;
+      console.log(mapName);
+      const battleMapPositions = await battleMapPositionService.getAllForMapName(
+          mapName
+      );
+      res.send(battleMapPositions);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
   public async add(req: Request, res: Response) {
     try {
       const battleMapPosition = await battleMapPositionService.add(req.body);

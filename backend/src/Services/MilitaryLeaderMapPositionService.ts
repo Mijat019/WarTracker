@@ -28,6 +28,15 @@ class MilitaryLeaderMapPositionService {
     return militaryLeaderMapPositions;
   }
 
+  public async getAllForMapByName(mapName: string) {
+    const militaryLeaderMapPositions = await MilitaryLeaderMapPosition.findAll({
+      where: { '$map.name$': mapName },
+      include,
+      attributes
+    });
+    return militaryLeaderMapPositions;
+  }
+
   public async add(militaryLeaderMapPositionPayload: any) {
     const { id } = await MilitaryLeaderMapPosition.create(
       militaryLeaderMapPositionPayload

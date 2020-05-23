@@ -55,6 +55,7 @@ MilitaryLeader.init(
       type: STRING,
       allowNull: false,
     },
+
     imageUrl: {
       type: STRING,
       allowNull: true,
