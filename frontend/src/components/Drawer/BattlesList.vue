@@ -1,19 +1,33 @@
 <template>
-    <v-list-group v-model="showBattlesList">
+    <v-list-group :value="value" @input="$emit('input', $event)">
         <template v-slot:activator>
             <v-list-item-avatar>
                 <v-icon>mdi-sword-cross</v-icon>
             </v-list-item-avatar>
             <v-list-item-title>Battles</v-list-item-title>
             <v-list-item-action>
-                <BattlesTableDialog />
+                <BattlesTableDialog/>
             </v-list-item-action>
         </template>
+        <v-divider/>
 
-        <v-list-item v-for="(battle, index) in battles" :key="index">
-            <v-list-item-avatar></v-list-item-avatar>
-            <v-list-item-content>{{ battle.name }}</v-list-item-content>
-        </v-list-item>
+        <div class="height overflow-y-auto">
+
+            <v-list-item v-for="(battle, index) in battles" :key="index">
+                <v-list-item-avatar color="grey">
+                    <v-img
+                            v-if="battle.iconUrl"
+                            :src="battle.iconUrl"
+                    ></v-img>
+                    <span v-else class="white--text title">
+                        {{battle.name[0].toUpperCase()}}
+                    </span>
+                </v-list-item-avatar>
+                <v-list-item-content>{{ battle.name }}</v-list-item-content>
+            </v-list-item>
+        </div>
+        <v-divider/>
+
     </v-list-group>
 </template>
 
@@ -25,8 +39,14 @@ export default {
 
     name: "BattlesList",
 
-    props: ["showBattlesList"],
-
+    props: {
+        value: {
+            type: Boolean,
+            default() {
+                return false;
+            }
+        }
+    },
     methods: {
         openBattlesTable() {},
     },
@@ -37,4 +57,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+    .height {
+        max-height: 70vh;
+    }
+</style>

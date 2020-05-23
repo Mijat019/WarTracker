@@ -1,50 +1,38 @@
 <template>
-    <v-card>
-        <v-navigation-drawer
-            app
-            v-model="drawer"
-            :mini-variant.sync="drawer"
-            permanent
-            width="40%"
-        >
-            <SearchAndFilter v-on:closeDrawer="closeDrawer" />
-            <v-divider></v-divider>
-            <v-list>
-                <BattlesList :showBattlesList="showBattlesList" />
-                <MilitaryLeadersList
-                    :showMilitaryLeadersList="showMilitaryLeadersList"
-                />
-            </v-list>
-        </v-navigation-drawer>
+    <v-card class="card">
+        <search-and-filter v-model="drawer"></search-and-filter>
+        <v-fade-transition>
+            <v-divider v-show="drawer"></v-divider>
+        </v-fade-transition>
+        <v-expand-transition>
+            <div v-show="drawer">
+                <v-list color="transparent">
+                    <battles-list v-model="showBattlesList"/>
+                    <military-leaders-list v-model="showMilitaryLeadersList"/>
+                </v-list>
+            </div>
+        </v-expand-transition>
     </v-card>
 </template>
 
 <script>
 import SearchAndFilter from "./SearchAndFilter";
-import MilitaryLeadersList from "./MilitaryLeadersList";
 import BattlesList from "./BattlesList";
+import MilitaryLeadersList from "./MilitaryLeadersList";
 export default {
-    components: { BattlesList, MilitaryLeadersList, SearchAndFilter },
+    components: {MilitaryLeadersList, BattlesList, SearchAndFilter },
 
     data: () => ({
         drawer: false,
         showMilitaryLeadersList: false,
         showBattlesList: false,
-    }),
-
-    methods: {
-        closeDrawer() {
-            this.drawer = !this.drawer;
-            this.showMilitaryLeadersList = false;
-            this.showBattlesList = false;
-        },
-    },
+    })
 };
 </script>
 
 <style>
-.app-bar {
-    border-radius: 1em;
-    margin: 1em;
-}
+    .card {
+        border-radius: 1em !important;
+        width: 30%;
+    }
 </style>

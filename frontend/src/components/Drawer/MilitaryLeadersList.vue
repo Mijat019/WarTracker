@@ -1,34 +1,39 @@
 <template>
-    <v-list-group v-model="showMilitaryLeadersList">
+    <v-list-group :value="value" @input="$emit('input', $event)">
         <template v-slot:activator>
+
             <v-list-item-avatar>
                 <v-icon>mdi-account</v-icon>
             </v-list-item-avatar>
             <v-list-item-title>Military leaders</v-list-item-title>
             <v-list-item-action>
-                <MilitaryLeadersTableDialog />
+                <MilitaryLeadersTableDialog/>
             </v-list-item-action>
         </template>
+        <v-divider/>
 
-        <v-list-item
-            v-for="(militaryLeader, index) in militaryLeaders"
-            :key="index"
-        >
-            <v-list-item-avatar>
-                <v-avatar color="pink">
+        <div class="height overflow-y-auto">
+            <v-list-item
+                    v-for="(militaryLeader, index) in militaryLeaders"
+                    :key="index"
+            >
+                <v-list-item-avatar color="pink">
                     <v-img
-                        v-if="militaryLeader.imageUrl"
-                        :src="militaryLeader.imageUrl"
+                            v-if="militaryLeader.imageUrl"
+                            :src="militaryLeader.imageUrl"
                     ></v-img>
-                    <span v-else class="white--text headline">{{
-                        `${militaryLeader.firstName[0].toUpperCase()}${militaryLeader.lastName[0].toUpperCase()}`
-                    }}</span>
-                </v-avatar>
-            </v-list-item-avatar>
-            <v-list-item-content>{{
-                `${militaryLeader.firstName} ${militaryLeader.lastName}`
-            }}</v-list-item-content>
-        </v-list-item>
+                    <span v-else class="white--text title">{{
+                    `${militaryLeader.firstName[0].toUpperCase()}${militaryLeader.lastName[0].toUpperCase()}`
+                }}</span>
+                </v-list-item-avatar>
+                <v-list-item-content>{{
+                    `${militaryLeader.firstName} ${militaryLeader.lastName}`
+                    }}
+                </v-list-item-content>
+            </v-list-item>
+        </div>
+        <v-divider/>
+
     </v-list-group>
 </template>
 
@@ -40,7 +45,14 @@ export default {
 
     name: "MilitaryLeadersList",
 
-    props: ["showMilitaryLeadersList"],
+    props: {
+        value: {
+            type: Boolean,
+            default() {
+                return false;
+            }
+        }
+    },
 
     methods: {
         openMilitaryLeadersTable() {},
@@ -52,4 +64,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+    .height {
+        max-height: 70vh;
+    }
+</style>

@@ -26,7 +26,7 @@
     import {reverseGeoCode} from "../../utils/geoCoding";
     import {battleType, militaryLeaderType} from "../../utils/types";
     import PositionPopup from "./PositionPopup";
-    const POPUP_OFFSET = {x: 40, y: 20};
+    const POPUP_OFFSET = {x: 25, y: 12};
     export default {
         name: "MapView",
         components: {PositionPopup},
