@@ -58,7 +58,6 @@ const PositionsModule = {
             try {
                 let {data: battlePositions} = await Vue.$axios.get(`/battleMapPosition/mapName=${mapCode}`);
                 commit("setBattlePositions", battlePositions);
-                console.log(battlePositions);
             } catch (err) {
                 console.log(`An error occurred while acquiring battles: ${err}`);
 

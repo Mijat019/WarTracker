@@ -6,24 +6,41 @@
     >
         <div :id="mapId"
              style="min-width: 100vh; min-height: 100vh; z-index: 0;"
-        ></div>
-    </v-container>
+        >
+            <position-popup
+                    v-model="popup.open"
+                    :position-x="popup.x"
+                    :position-y="popup.y"
+                    :position="popup.position"
+                    :type="popup.type"
+            />
+        </div>
 
+    </v-container>
 </template>
 
 <script>
     import 'leaflet/dist/leaflet.css';
     import L from 'leaflet';
-    import {battleIconOptions, customIconOptions, militaryLeaderIconOptions} from "../../utils/icons";
     import {mapActions, mapState} from "vuex";
     import {reverseGeoCode} from "../../utils/geoCoding";
-
+    import {battleType, militaryLeaderType} from "../../utils/types";
+    import PositionPopup from "./PositionPopup";
+    const POPUP_OFFSET = {x: 40, y: 20};
     export default {
         name: "MapView",
+        components: {PositionPopup},
         data: () => ({
             map: null,
             tileLayer: null,
-            placed: {}
+            placed: {},
+            popup: {
+                open: false,
+                x: 0,
+                y: 0,
+                position: null,
+                type: null
+            },
         }),
         props: {
             mapId: {
@@ -45,11 +62,11 @@
         watch: {
             militaryLeaderPositions(newPositions, oldPositions) {
                 if(!oldPositions || oldPositions.length === 0)
-                    this.placeMarkers(newPositions, 'militaryLeader');
+                    this.placeMarkers(newPositions, militaryLeaderType);
             },
             battlePositions(newPositions, oldPositions) {
                 if(!oldPositions || oldPositions.length === 0)
-                    this.placeMarkers(newPositions, 'battle');
+                    this.placeMarkers(newPositions, battleType);
             }
         },
         methods: {
@@ -68,38 +85,39 @@
             },
             placeMarker(position, type) {
                 let marker = L.marker([position.lat, position.lng], {draggable: true});
-                marker.setIcon(this.determineIcon(position, type));
+                marker.setIcon(L.icon(type.determineIcon(position)));
+                marker.on('mousedown', () => { this.popup.open = false; })
                 marker.on('dragend', e => this.markerMoved(e, position, type));
+                marker.on('click', e => this.openPopup(e, position, type));
                 marker.addTo(this.map);
+
                 this.placed[position.id] = marker;
             },
-            determineIcon(position, type) {
-                let iconOptions;
-                if (type === 'battle') {
-                    if (position.battle.iconUrl)
-                        iconOptions = customIconOptions(position.battle.iconUrl);
-                    else iconOptions = battleIconOptions;
-                } else if (type === 'militaryLeader') {
-                    if (position.militaryLeader.imageUrl)
-                        iconOptions = customIconOptions(position.militaryLeader.imageUrl);
-                    else iconOptions = militaryLeaderIconOptions;
-                }
-                return L.icon(iconOptions);
+            openPopup(event, position, type) {
+                console.log(this.map);
+                let marker = event.target;
+                let point = this.map.latLngToContainerPoint(marker.getLatLng()).round();
+                this.popup.open = true;
+                this.popup.position = position;
+                this.popup.type = type;
+                this.popup.x = point.x + POPUP_OFFSET.x;
+                this.popup.y = point.y + POPUP_OFFSET.y;
             },
             async markerMoved(event, position, type) {
                 let {lat, lng} = event.target.getLatLng();
                 position.lat = lat;
                 position.lng = lng;
-                if (type === 'battle') {
+                if (type.label === battleType.label) {
                     position.battle.place = (await reverseGeoCode(lat, lng)).display_name;
-                    console.log(position.battle.place);
                     this.updateBattlePosition(position);
-
                 }
-                else if (type === 'militaryLeader') {
+                else if (type.label === militaryLeaderType.label) {
                     position.militaryLeader.birthPlace = (await reverseGeoCode(lat, lng)).display_name;
                     this.updateMilitaryLeaderPosition(position);
                 }
+
+            },
+            resetMap() {
 
             },
             getPositions() {
@@ -125,6 +143,9 @@
             };
             this.map = L.map(this.mapId, mapOptions).setView([0, 0], 3);
             this.map.addControl(L.control.zoom({position: 'bottomright'}));
+            this.map.on('zoomstart', () => {this.popup.open = false;});
+
+            this.map.on('mousedown', () => {this.popup.open = false;});
             let options = {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
