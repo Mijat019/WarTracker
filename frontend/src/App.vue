@@ -29,3 +29,12 @@ export default {
     },
 };
 </script>
+
+<style>
+    /*da se ne vidi dosadni skrolbar*/
+    ::-webkit-scrollbar {
+        width: 0 !important;
+        background: transparent !important;
+        overflow: hidden !important;
+    }
+</style>

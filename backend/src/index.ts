@@ -17,7 +17,7 @@ import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
     try {
         await sequelize.authenticate();
         /*
-      To apply changes to the database schema, you need to 
+      To apply changes to the database schema, you need to
       uncomment next two lines
     */
         // await sequelize.sync({ force: true });

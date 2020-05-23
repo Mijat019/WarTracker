@@ -4,7 +4,9 @@ import militaryLeaderMapPositionController from "../Controllers/MilitaryLeaderMa
 const router = express.Router();
 
 router.get("/", militaryLeaderMapPositionController.getAll);
-router.get("/:mapId", militaryLeaderMapPositionController.getAllForMap);
+router.get("/mapId=:mapId", militaryLeaderMapPositionController.getAllForMap);
+router.get("/mapName=:mapName", militaryLeaderMapPositionController.getAllForMapByName);
+
 router.post("/", militaryLeaderMapPositionController.add);
 router.patch("/:id", militaryLeaderMapPositionController.update);
 router.delete("/:id", militaryLeaderMapPositionController.delete);

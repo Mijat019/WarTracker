@@ -4,7 +4,8 @@ import battleMapPositionController from "../Controllers/BattleMapPositionControl
 const router = express.Router();
 
 router.get("/", battleMapPositionController.getAll);
-router.get("/:mapId", battleMapPositionController.getAllForMap);
+router.get("/mapId=:mapId", battleMapPositionController.getAllForMap);
+router.get("/mapName=:mapName", battleMapPositionController.getAllForMapByName);
 router.post("/", battleMapPositionController.add);
 router.patch("/:id", battleMapPositionController.update);
 router.delete("/:id", battleMapPositionController.delete);
