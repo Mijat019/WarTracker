@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import militaryLeaderMapPositionService from "../Services/MilitaryLeaderMapPositionService";
+import MilitaryLeaderService from "../Services/MilitaryLeaderService";
 
 class MilitaryLeaderMapPositionController {
   public async getAllForMap(req: Request, res: Response) {
@@ -49,6 +50,10 @@ class MilitaryLeaderMapPositionController {
   public async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
+
+      const { militaryLeader } = req.body;
+      await MilitaryLeaderService.update(militaryLeader.id, militaryLeader);
+
       const militaryLeaderMapPosition = await militaryLeaderMapPositionService.update(
         id,
         req.body

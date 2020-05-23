@@ -53,8 +53,13 @@
             }
         },
         methods: {
-            ...mapActions('positions', ['getMilitaryLeaderPositions', 'getBattlePositions']),
-
+            ...mapActions('positions',
+                [
+                    'getMilitaryLeaderPositions',
+                    'getBattlePositions',
+                    'updateBattlePosition',
+                    'updateMilitaryLeaderPosition'
+                ]),
 
             placeMarkers(positions, type) {
                 for (let position of positions) {
@@ -64,31 +69,39 @@
             placeMarker(position, type) {
                 let marker = L.marker([position.lat, position.lng], {draggable: true});
                 marker.setIcon(this.determineIcon(position, type));
-                marker.on('dragend', e => this.markerMoved(e, position));
+                marker.on('dragend', e => this.markerMoved(e, position, type));
                 marker.addTo(this.map);
                 this.placed[position.id] = marker;
             },
             determineIcon(position, type) {
                 let iconOptions;
-                if (position.iconUrl) {
-                    iconOptions = customIconOptions(position.iconUrl);
-                } else if (type === 'battle') {
-                    iconOptions = battleIconOptions;
+                if (type === 'battle') {
+                    if (position.battle.iconUrl)
+                        iconOptions = customIconOptions(position.battle.iconUrl);
+                    else iconOptions = battleIconOptions;
                 } else if (type === 'militaryLeader') {
-                    iconOptions = militaryLeaderIconOptions;
+                    if (position.militaryLeader.imageUrl)
+                        iconOptions = customIconOptions(position.militaryLeader.imageUrl);
+                    else iconOptions = militaryLeaderIconOptions;
                 }
-                let i = L.icon(iconOptions);
-                console.log(i);
-                return i;
+                return L.icon(iconOptions);
             },
-            markerMoved(event, position) {
+            async markerMoved(event, position, type) {
                 let {lat, lng} = event.target.getLatLng();
                 position.lat = lat;
                 position.lng = lng;
-                position.militaryLeader.birthPlace = reverseGeoCode(lat, lng);
-                console.log(position);
-            },
+                if (type === 'battle') {
+                    position.battle.place = (await reverseGeoCode(lat, lng)).display_name;
+                    console.log(position.battle.place);
+                    this.updateBattlePosition(position);
 
+                }
+                else if (type === 'militaryLeader') {
+                    position.militaryLeader.birthPlace = (await reverseGeoCode(lat, lng)).display_name;
+                    this.updateMilitaryLeaderPosition(position);
+                }
+
+            },
             getPositions() {
                 this.getMilitaryLeaderPositions(this.mapCode);
                 this.getBattlePositions(this.mapCode);

@@ -33,7 +33,6 @@ export default async () => {
     firstName: "tupan",
     lastName: "glupan",
     dateOfBirth: Date.now(),
-    birthPlace: "TUtin",
     militaryRank: "debilcina",
     school: "gimnazija",
   });
@@ -42,37 +41,32 @@ export default async () => {
     firstName: "majmuncina",
     lastName: "glupa",
     dateOfBirth: Date.now(),
-    birthPlace: "jebemliga odakle je",
     militaryRank: "peder",
     school: "ftn",
   });
 
   const { id: battleId1 } = await Battle.create({
     warId: warId1,
-    name: "Neka bitka boli me kurac koja",
+    name: "Neka bitka boli me !@#!@# koja",
     date: Date.now(),
-    place: "tamo negde",
   });
 
   const { id: battleId2 } = await Battle.create({
     warId: warId1,
-    name: "Jos tamo neka bitka boli me kurac koja",
+    name: "Jos tamo neka bitka boli me !@#!@# koja",
     date: Date.now(),
-    place: "tamo negde",
   });
 
   const { id: battleId3 } = await Battle.create({
     warId: warId2,
     name: "a;slfjasdf",
     date: Date.now(),
-    place: "tamo negde",
   });
 
   const { id: battleId4 } = await Battle.create({
     warId: warId2,
     name: "adsfadsfd",
     date: Date.now(),
-    place: "tamo negde",
   });
 
   await MilitaryLeaderBattle.create({

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import battleMapPositionService from "../Services/BattleMapPositionService";
+import BattleService from "../Services/BattleService";
 
 class BattleMapPositionController {
   public async getAll(req: Request, res: Response) {
@@ -47,7 +48,12 @@ class BattleMapPositionController {
 
   public async update(req: Request, res: Response) {
     try {
+
       const { id } = req.params;
+
+      const { battle } = req.body;
+      await BattleService.update(battle.id, battle);
+
       const battleMapPosition = await battleMapPositionService.update(
         id,
         req.body

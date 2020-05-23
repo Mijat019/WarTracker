@@ -31,6 +31,10 @@ MilitaryLeader.init(
       type: STRING,
       allowNull: false,
     },
+    birthPlace: {
+      type: STRING,
+      allowNull: true,
+    },
     dateOfBirth: {
       type: DATE,
       allowNull: false,
