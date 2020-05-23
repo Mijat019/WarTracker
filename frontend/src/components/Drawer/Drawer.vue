@@ -1,12 +1,14 @@
 <template>
     <v-card width="30%" class="rounded">
         <search-and-filter v-model="drawer"></search-and-filter>
+        <v-fade-transition>
+            <v-divider v-show="drawer"></v-divider>
+        </v-fade-transition>
         <v-expand-transition>
-
             <div v-show="drawer">
                 <v-list color="transparent">
-                    <battles-list :showBattlesList="showBattlesList"/>
-                    <military-leaders-list :showMilitaryLeadersList="showMilitaryLeadersList"/>
+                    <battles-list v-model="showBattlesList"/>
+                    <military-leaders-list v-model="showMilitaryLeadersList"/>
                 </v-list>
             </div>
         </v-expand-transition>
@@ -24,15 +26,7 @@ export default {
         drawer: false,
         showMilitaryLeadersList: false,
         showBattlesList: false,
-    }),
-
-    methods: {
-        closeDrawer() {
-            this.drawer = !this.drawer;
-            this.showMilitaryLeadersList = false;
-            this.showBattlesList = false;
-        },
-    },
+    })
 };
 </script>
 

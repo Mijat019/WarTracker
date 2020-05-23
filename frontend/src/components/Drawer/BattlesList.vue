@@ -1,5 +1,5 @@
 <template>
-    <v-list-group v-model="showBattlesList">
+    <v-list-group :value="value" @input="$emit('input', $event)">
         <template v-slot:activator>
             <v-list-item>
                 <v-list-item-avatar>
@@ -27,7 +27,14 @@ export default {
 
     name: "BattlesList",
 
-    props: ["showBattlesList"],
+    props: {
+        value: {
+            type: Boolean,
+            default() {
+                return false;
+            }
+        }
+    },
 
     methods: {
         openBattlesTable() {},
