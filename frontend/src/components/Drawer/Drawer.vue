@@ -1,30 +1,23 @@
 <template>
-    <v-card>
-        <v-navigation-drawer
-            app
-            v-model="drawer"
-            :mini-variant.sync="drawer"
-            permanent
-            width="40%"
-        >
-            <SearchAndFilter v-on:closeDrawer="closeDrawer" />
+    <v-card width="30%" class="rounded">
+        <search-and-filter @closeDrawer="closeDrawer"></search-and-filter>
+
+        <div v-show="drawer">
             <v-divider></v-divider>
-            <v-list>
-                <BattlesList :showBattlesList="showBattlesList" />
-                <MilitaryLeadersList
-                    :showMilitaryLeadersList="showMilitaryLeadersList"
-                />
+            <v-list color="transparent">
+                <battles-list :showBattlesList="showBattlesList"/>
+                <military-leaders-list :showMilitaryLeadersList="showMilitaryLeadersList"/>
             </v-list>
-        </v-navigation-drawer>
+        </div>
     </v-card>
 </template>
 
 <script>
 import SearchAndFilter from "./SearchAndFilter";
-import MilitaryLeadersList from "./MilitaryLeadersList";
 import BattlesList from "./BattlesList";
+import MilitaryLeadersList from "./MilitaryLeadersList";
 export default {
-    components: { BattlesList, MilitaryLeadersList, SearchAndFilter },
+    components: {MilitaryLeadersList, BattlesList, SearchAndFilter },
 
     data: () => ({
         drawer: false,
@@ -43,8 +36,11 @@ export default {
 </script>
 
 <style>
-.app-bar {
-    border-radius: 1em;
-    margin: 1em;
-}
+    .rounded {
+        border-radius: 20px !important;
+        transition: height 2s !important;
+    }
+    .inner-drawer {
+        background-color: transparent !important;
+    }
 </style>

@@ -1,13 +1,16 @@
 <template>
     <v-list-group v-model="showMilitaryLeadersList">
         <template v-slot:activator>
-            <v-list-item-avatar>
-                <v-icon>mdi-account</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title>Military leaders</v-list-item-title>
-            <v-list-item-action>
-                <MilitaryLeadersTableDialog />
-            </v-list-item-action>
+            <v-list-item>
+
+                <v-list-item-avatar>
+                    <v-icon>mdi-account</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>Military leaders</v-list-item-title>
+                <v-list-item-action>
+                    <MilitaryLeadersTableDialog/>
+                </v-list-item-action>
+            </v-list-item>
         </template>
 
         <v-list-item

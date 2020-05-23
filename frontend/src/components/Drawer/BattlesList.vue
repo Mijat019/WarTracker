@@ -1,13 +1,15 @@
 <template>
     <v-list-group v-model="showBattlesList">
         <template v-slot:activator>
-            <v-list-item-avatar>
-                <v-icon>mdi-sword-cross</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title>Battles</v-list-item-title>
-            <v-list-item-action>
-                <BattlesTableDialog />
-            </v-list-item-action>
+            <v-list-item>
+                <v-list-item-avatar>
+                    <v-icon>mdi-sword-cross</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>Battles</v-list-item-title>
+                <v-list-item-action>
+                    <BattlesTableDialog/>
+                </v-list-item-action>
+            </v-list-item>
         </template>
 
         <v-list-item v-for="(battle, index) in battles" :key="index">
