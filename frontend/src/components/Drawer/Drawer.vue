@@ -1,14 +1,15 @@
 <template>
     <v-card width="30%" class="rounded">
-        <search-and-filter @closeDrawer="closeDrawer"></search-and-filter>
+        <search-and-filter v-model="drawer"></search-and-filter>
+        <v-expand-transition>
 
-        <div v-show="drawer">
-            <v-divider></v-divider>
-            <v-list color="transparent">
-                <battles-list :showBattlesList="showBattlesList"/>
-                <military-leaders-list :showMilitaryLeadersList="showMilitaryLeadersList"/>
-            </v-list>
-        </div>
+            <div v-show="drawer">
+                <v-list color="transparent">
+                    <battles-list :showBattlesList="showBattlesList"/>
+                    <military-leaders-list :showMilitaryLeadersList="showMilitaryLeadersList"/>
+                </v-list>
+            </div>
+        </v-expand-transition>
     </v-card>
 </template>
 
@@ -39,8 +40,5 @@ export default {
     .rounded {
         border-radius: 20px !important;
         transition: height 2s !important;
-    }
-    .inner-drawer {
-        background-color: transparent !important;
     }
 </style>
