@@ -9,7 +9,7 @@
             <v-card>
                 <v-card-title>
                     <span class="headline" v-if="mode === 'add'"
-                        >Add a military leade</span
+                        >Add a military leader</span
                     >
                     <span class="headline" v-else>Update military leader</span>
                 </v-card-title>

@@ -144,14 +144,14 @@ export default {
         },
     },
     methods: {
-        ...mapActions("battle", ["deleteBattle"]),
-        ...mapActions("battle", ["updateBattle"]),
-        ...mapActions("battle", ["addBattle"]),
+        ...mapActions("battles", ["deleteBattle"]),
+        ...mapActions("battles", ["updateBattle"]),
+        ...mapActions("battles", ["addBattle"]),
         closeDialog() {
             this.$emit("input", false);
             if (this.mode === "add") this.$refs.form.reset();
         },
-        submit(fun) {
+        async submit(fun) {
             let valid = this.$refs.form.validate();
             if (valid) {
                 this.battle.name = this.name;
@@ -159,8 +159,7 @@ export default {
                 this.battle.date = this.date;
                 this.battle.description = this.description;
                 this.battle.warId = this.selectedWar.id;
-
-                fun(this.battle);
+                await fun(this.battle);
                 this.closeDialog();
             }
         },
