@@ -8,7 +8,7 @@ class BattleMapPositionController {
             const battleMapPositions = await battleMapPositionService.getAll();
             res.send(battleMapPositions);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -20,7 +20,7 @@ class BattleMapPositionController {
             );
             res.send(battleMapPositions);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -33,7 +33,7 @@ class BattleMapPositionController {
             );
             res.send(battleMapPositions);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -44,7 +44,7 @@ class BattleMapPositionController {
             );
             res.send(battleMapPosition);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -61,7 +61,7 @@ class BattleMapPositionController {
             );
             res.send(battleMapPosition);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -71,7 +71,7 @@ class BattleMapPositionController {
             await battleMapPositionService.delete(id);
             res.send("Deleted");
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 }

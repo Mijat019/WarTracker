@@ -8,7 +8,7 @@ class MilitaryLeaderController {
             const militaryLeaders = await militaryLeaderService.getAll();
             res.send(militaryLeaders);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -17,7 +17,7 @@ class MilitaryLeaderController {
             const militaryLeader = await militaryLeaderService.add(req.body);
             res.send(militaryLeader);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -43,7 +43,7 @@ class MilitaryLeaderController {
             );
             res.send(updatedMilitaryLeader);
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 
@@ -55,7 +55,7 @@ class MilitaryLeaderController {
             );
             res.send("Deleted");
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send(error.message);
         }
     }
 }
