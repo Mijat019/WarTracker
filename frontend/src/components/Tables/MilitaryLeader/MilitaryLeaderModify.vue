@@ -6,7 +6,7 @@
             fullscreen
             persistent
         >
-            <v-card>
+            <v-card min-height="100%">
                 <v-card-title>
                     <span class="headline" v-if="mode === 'add'"
                         >Add a military leader</span
@@ -90,11 +90,6 @@
                                             prepend-icon="mdi-camera"
                                         ></v-file-input>
                                     </v-col>
-                                    <v-img
-                                        aspect-ratio="1.7"
-                                        contain
-                                        v-bind:src="image"
-                                    ></v-img>
                                 </v-row>
                             </template>
                         </v-form>
