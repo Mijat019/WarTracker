@@ -34,13 +34,31 @@
                                             v-model="place"
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col cols="6" md="6" sm="6">
-                                        <v-text-field
-                                            :rules="[rules.required]"
-                                            label="Date"
-                                            required
-                                            v-model="date"
-                                        ></v-text-field>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-menu
+                                                ref="dataPicker"
+                                                v-model="dataPicker"
+                                                :close-on-content-click="false"
+                                                :return-value.sync="date"
+                                                transition="scale-transition"
+                                                offset-y
+                                                min-width="290px"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                        v-model="date"
+                                                        label="Date"
+                                                        prepend-icon="mdi-calendar"
+                                                        readonly
+                                                        v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="date" no-title scrollable>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text color="primary" @click="dataPicker = false">Cancel</v-btn>
+                                                <v-btn text color="primary" @click="$refs.dataPicker.save(date)">OK</v-btn>
+                                            </v-date-picker>
+                                        </v-menu>
                                     </v-col>
                                     <v-col cols="6" md="6" sm="6">
                                         <SelectWar
@@ -101,6 +119,7 @@ export default {
     name: "BattleModify",
     components: { SelectWar },
     data: () => ({
+        dataPicker: false,
         selectedWar: null,
         name: "",
         place: "",
@@ -134,6 +153,7 @@ export default {
                 this.date = this.editBattle.date;
                 this.description = this.editBattle.description;
                 this.selectedWar = this.editBattle.war;
+                this.date = this.editBattle.date.split("T")[0];
             }
         },
     },

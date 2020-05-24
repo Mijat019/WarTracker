@@ -66,19 +66,57 @@
                                             v-model="school"
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col cols="6" md="6" sm="6">
-                                        <v-text-field
-                                            :rules="[rules.required]"
-                                            label="Date Of Birth"
-                                            required
-                                            v-model="dateOfBirth"
-                                        ></v-text-field>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-menu
+                                                ref="dataPicker1"
+                                                v-model="dataPicker1"
+                                                :close-on-content-click="false"
+                                                :return-value.sync="dateOfBirth"
+                                                transition="scale-transition"
+                                                offset-y
+                                                min-width="290px"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                        v-model="dateOfBirth"
+                                                        label="Date Of Birth"
+                                                        prepend-icon="mdi-calendar"
+                                                        readonly
+                                                        v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="dateOfBirth" no-title scrollable>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text color="primary" @click="dataPicker1 = false">Cancel</v-btn>
+                                                <v-btn text color="primary" @click="$refs.dataPicker1.save(dateOfBirth)">OK</v-btn>
+                                            </v-date-picker>
+                                        </v-menu>
                                     </v-col>
-                                    <v-col cols="6" md="6" sm="6">
-                                        <v-text-field
-                                            label="Date Of Death"
-                                            v-model="dateOfDeath"
-                                        ></v-text-field>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-menu
+                                                ref="dataPicker2"
+                                                v-model="dataPicker2"
+                                                :close-on-content-click="false"
+                                                :return-value.sync="dateOfDeath"
+                                                transition="scale-transition"
+                                                offset-y
+                                                min-width="290px"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                        v-model="dateOfDeath"
+                                                        label="Date Of Death"
+                                                        prepend-icon="mdi-calendar"
+                                                        readonly
+                                                        v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="dateOfDeath" no-title scrollable>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text color="primary" @click="dataPicker2 = false">Cancel</v-btn>
+                                                <v-btn text color="primary" @click="$refs.dataPicker2.save(dateOfDeath)">OK</v-btn>
+                                            </v-date-picker>
+                                        </v-menu>
                                     </v-col>
                                     <v-col cols="12" md="12" sm="12">
                                         <v-file-input
@@ -90,6 +128,7 @@
                                             prepend-icon="mdi-camera"
                                         ></v-file-input>
                                     </v-col>
+
                                 </v-row>
                             </template>
                         </v-form>
@@ -128,6 +167,8 @@ export default {
     name: "MilitaryLeaderModify",
     components: {},
     data: () => ({
+        dataPicker1: false,
+        dataPicker2: false,
         dateOfBirth: "",
         dateOfDeath: "",
         dynastyName: "",
@@ -172,8 +213,8 @@ export default {
         value() {
             if (this.editMilitaryLeader) {
                 this.militaryLeader.id = this.editMilitaryLeader.id;
-                this.dateOfBirth = this.editMilitaryLeader.dateOfBirth;
-                this.dateOfDeath = this.editMilitaryLeader.dateOfDeath;
+                this.dateOfBirth = this.editMilitaryLeader.dateOfBirth.split("T")[0];
+                this.dateOfDeath = this.editMilitaryLeader.dateOfDeath.split("T")[0];
                 this.dynastyName = this.editMilitaryLeader.dynastyName;
                 this.firstName = this.editMilitaryLeader.firstName;
                 this.id = this.editMilitaryLeader.id;
