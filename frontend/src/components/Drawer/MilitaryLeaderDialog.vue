@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "MilitaryLeaderDialog",
@@ -86,12 +87,16 @@ export default {
           },
           {
             title: "Birthday",
-            subtitle: militaryLeader.dateOfBirth || "Not provided",
+            subtitle:
+              moment(militaryLeader.dateOfBirth).format("MMMM Do YYYY") ||
+              "Not provided",
             icon: "mdi-party-popper"
           },
           {
             title: "Date of death",
-            subtitle: militaryLeader.dateOfDeath || "Not provided",
+            subtitle:
+              moment(militaryLeader.dateOfDeath).format("MMMM Do YYYY") ||
+              "Not provided",
             icon: "mdi-account-off"
           }
         ],
