@@ -26,6 +26,16 @@
 
                 </v-toolbar>
             </template>
+            <template v-slot:item.avatar="{ item }">
+                <v-list-item-avatar color="pink">
+                    <v-img
+                            v-if="item.imageUrl"
+                            :src="item.imageUrl"
+                    ></v-img><span v-else class="white--text title">{{
+                    `${item.firstName[0].toUpperCase()}${item.lastName[0].toUpperCase()}`
+                }}</span>
+                </v-list-item-avatar>
+            </template>
 
             <template v-slot:item.update="{ item }">
                 <v-icon @click="editItem(item)" color="amber darken-2"
@@ -62,6 +72,8 @@
             editMilitaryLeader: null,
             dialog: false,
             headers: [
+                { text: "", value: "avatar",  sortable: false,
+                    align: "center"},
                 { text: "Name", value: "firstName" },
                 { text: "Last Name", value: "lastName" },
                 { text: "Dynasty Name", value: "dynastyName" },
@@ -103,7 +115,6 @@
             },
 
             addItem() {
-                console.log(this.militaryLeaders);
                 this.addDialog = true;
             },
 
