@@ -21,7 +21,7 @@
             }}
           </span>
         </v-list-item-avatar>
-        <v-list-item-content @click="openDialog(militaryLeader)">
+        <v-list-item-content @click="showDetails(militaryLeader)">
           {{
           `${militaryLeader.firstName} ${militaryLeader.lastName}`
           }}
@@ -55,7 +55,7 @@ export default {
       "setMilitaryLeader"
     ]),
 
-    openDialog(militaryLeader) {
+    showDetails(militaryLeader) {
       this.setMilitaryLeader(militaryLeader);
       this.setShowDialog(true);
     }

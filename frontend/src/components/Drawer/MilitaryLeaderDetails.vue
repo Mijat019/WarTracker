@@ -57,7 +57,7 @@
 import moment from "moment";
 import { mapGetters, mapMutations } from "vuex";
 export default {
-  name: "MilitaryLeaderDialog",
+  name: "MilitaryLeaderDetails",
 
   data: () => ({}),
 

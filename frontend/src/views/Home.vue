@@ -3,19 +3,21 @@
     <drawer class="drawer" />
     <v-content>
       <map-view />
-      <military-leader-dialog class="dialog" />
+      <military-leader-details class="dialog" />
+      <battle-details class="dialog" />
     </v-content>
   </div>
 </template>
 
 <script>
-import MilitaryLeaderDialog from "../components/Drawer/MilitaryLeaderDialog.vue";
+import BattleDetails from "../components/Drawer/BattleDetails";
+import MilitaryLeaderDetails from "../components/Drawer/MilitaryLeaderDetails";
 import Drawer from "../components/Drawer/Drawer";
 import MapView from "../components/Map/MapView";
 
 export default {
   name: "Home",
-  components: { MapView, Drawer, MilitaryLeaderDialog }
+  components: { MapView, Drawer, MilitaryLeaderDetails, BattleDetails }
 };
 </script>
 
