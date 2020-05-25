@@ -10,7 +10,7 @@
           <v-row>
             <v-spacer></v-spacer>
             <v-card-actions>
-              <v-btn text>Edit</v-btn>
+              <v-btn @click="editDialog=true" text>Edit</v-btn>
               <v-btn text>Remove</v-btn>
             </v-card-actions>
           </v-row>
@@ -70,6 +70,7 @@
         </v-card-text>
       </v-container>
     </v-card>
+    <battle-modify :edit-battle="battle" mode="update" v-model="editDialog" />
     <v-dialog v-model="miniDialog">
       <v-card>
         <v-card-title>{{ miniDialogData.title }}</v-card-title>
@@ -77,15 +78,18 @@
       </v-card>
     </v-dialog>
   </v-dialog>
+
 </template>
 
 <script>
 import moment from "moment";
 import { mapGetters, mapMutations } from "vuex";
+import BattleModify from "../Tables/Battles/BattleModify";
 export default {
   name: "BattleDetails",
-
+  components: { BattleModify },
   data: () => ({
+    editDialog: false,
     miniDialog: false,
     miniDialogData: {
       title: "",

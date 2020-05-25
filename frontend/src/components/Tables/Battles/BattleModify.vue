@@ -4,9 +4,10 @@
             :value="value"
             @input="$emit('input', false)"
             max-width="600px"
+            fullscreen
             persistent
         >
-            <v-card>
+            <v-card min-height="100%">
                 <v-card-title>
                     <span class="headline" v-if="mode === 'add'"
                         >Add a battle</span
@@ -153,7 +154,8 @@ export default {
                 this.date = this.editBattle.date;
                 this.description = this.editBattle.description;
                 this.selectedWar = this.editBattle.war;
-                this.date = this.editBattle.date.split("T")[0];
+                if(this.editBattle.date)
+                    this.date = this.editBattle.date.split("T")[0];
             }
         },
     },
