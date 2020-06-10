@@ -77,6 +77,7 @@
                 this.getMapByName(newCode);
             },
             'militaryLeaderPositions.length'(newLength, oldLength) {
+                console.log(this.militaryLeaderPositions);
                 if (oldLength === 0)
                     this.placeMarkers(this.militaryLeaderPositions, militaryLeaderType);
                 else if (newLength > oldLength) { // dodat military leader
@@ -138,7 +139,7 @@
             placeMarker(position, type) {
                 // postavimo marker na odredjenu lokaciju sa odredjenom ikonicom
                 let marker = L.marker([position.lat, position.lng], {draggable: true});
-                marker.setIcon(L.icon(type.determineIcon(position)));
+                marker.setIcon(L.divIcon(type.determineIcon(position)));
                 marker.on('mousedown', () => { this.popup.open = false; });
                 marker.on('dragend', e => this.markerMoved(e, position, type));
                 marker.on('click', e => this.openPopup(e, position, type));
@@ -271,4 +272,5 @@
     }
 </script>
 
-<style></style>
+<style>
+</style>
