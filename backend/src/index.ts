@@ -12,7 +12,7 @@ import battlesRoutes from "./Routes/battleRoutes";
 import militaryLeaderBattleRoutes from "./Routes/militaryLeaderBattleRoutes";
 import militaryLeaderMapPositionRoutes from "./Routes/militaryLeaderMapPositionRoutes";
 import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
-
+import mapRoutes from "./Routes/mapRoutes"
 (async () => {
     try {
         await sequelize.authenticate();
@@ -45,6 +45,7 @@ app.use("/battles", battlesRoutes);
 app.use("/militaryLeaderBattle", militaryLeaderBattleRoutes);
 app.use("/militaryLeaderMapPosition", militaryLeaderMapPositionRoutes);
 app.use("/battleMapPosition", battleMapPositionRoutes);
+app.use("/map", mapRoutes);
 
 app.listen(config.port, () =>
     console.log(`Server listening on port ${config.port}`)

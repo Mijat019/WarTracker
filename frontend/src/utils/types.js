@@ -3,9 +3,12 @@ import {battleIconOptions, customIconOptions, militaryLeaderIconOptions} from ".
 const militaryLeaderType = {
     label: 'militaryLeader',
     determineIcon: function(position) {
+        return this.determineMilitaryLeaderIcon(position.militaryLeader);
+    },
+    determineMilitaryLeaderIcon: function(militaryLeader) {
         let iconOptions;
-        if (position.militaryLeader.imageUrl)
-            iconOptions = customIconOptions(position.militaryLeader.imageUrl);
+        if (militaryLeader.imageUrl)
+            iconOptions = customIconOptions(militaryLeader.imageUrl);
         else iconOptions = militaryLeaderIconOptions;
         return iconOptions;
     },
@@ -20,15 +23,26 @@ const militaryLeaderType = {
     },
     info: function (position) {
         return position.militaryLeader.militaryRank;
+    },
+    empty: {
+        firstName: '',
+        lastName: '',
+        birthPlace: '',
+        dateOfBirth: new Date(),
+        militaryRank: '',
+        school: ''
     }
 };
 
 const battleType = {
     label: 'battle',
-    determineIcon: function(position) {
+    determineIcon(position) {
+        return this.determineBattleIcon(position.battle);
+    },
+    determineBattleIcon: function(battle) {
         let iconOptions;
-        if (position.battle.iconUrl)
-            iconOptions = customIconOptions(position.battle.iconUrl);
+        if (battle.iconUrl)
+            iconOptions = customIconOptions(battle.iconUrl);
         else iconOptions = battleIconOptions;
         return iconOptions;
     },
@@ -44,6 +58,13 @@ const battleType = {
     info: function (position) {
         return position.battle.description;
 
+    },
+    empty: {
+        name: '',
+        date: new Date(),
+        war: {
+            name: '',
+        }
     }
 };
 

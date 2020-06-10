@@ -34,7 +34,7 @@ export default {
 .card {
   border-radius: 1em !important;
   width: 30%;
-  max-height: 90%;
+  /*max-height: 90%;*/
   overflow: auto;
 }
 

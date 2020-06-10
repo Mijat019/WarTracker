@@ -12,13 +12,15 @@
     <v-divider />
 
     <div class="height overflow-y-auto">
-      <v-list-item @click="showDetails(battle)" v-for="(battle, index) in battles" :key="index">
-        <v-list-item-avatar color="grey">
-          <v-img v-if="battle.iconUrl" :src="battle.iconUrl"></v-img>
-          <span v-else class="white--text title">{{battle.name[0].toUpperCase()}}</span>
-        </v-list-item-avatar>
-        <v-list-item-content>{{ battle.name }}</v-list-item-content>
-      </v-list-item>
+      <drag v-for="battle in battles" :data="battle" :key="battle.id">
+        <v-list-item @click="showDetails(battle)">
+          <v-list-item-avatar color="grey">
+            <v-img v-if="battle && battle.iconUrl" :src="battle.iconUrl"></v-img>
+            <span v-else class="white--text title">{{battle.name[0].toUpperCase()}}</span>
+          </v-list-item-avatar>
+          <v-list-item-content>{{ battle.name }}</v-list-item-content>
+        </v-list-item>
+      </drag>
     </div>
     <v-divider />
   </v-list-group>
@@ -27,8 +29,10 @@
 <script>
 import BattlesTableDialog from "../Tables/Battles/BattleTableDialog";
 import { mapGetters, mapMutations } from "vuex";
+import {Drag} from 'vue-easy-dnd';
+
 export default {
-  components: { BattlesTableDialog },
+  components: { BattlesTableDialog, Drag },
 
   name: "BattlesList",
 

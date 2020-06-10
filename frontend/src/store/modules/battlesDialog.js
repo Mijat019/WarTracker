@@ -1,5 +1,7 @@
+import {battleType} from "../../utils/types";
+
 const state = {
-    battle: null,
+    battle: battleType.empty,
     showDialog: false,
 };
 

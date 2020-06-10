@@ -9,7 +9,10 @@ const militaryLeaders = {
 
     mutations: {
         setMilitaryLeaders(state, militaryLeaders) {
-            state.militaryLeaders = militaryLeaders;
+            state.militaryLeaders = militaryLeaders.map(ml => {
+                ml.type = 'militaryLeader';
+                return ml;
+            });
         },
 
         deleteMilitaryLeader(state, militaryLeader) {
@@ -20,6 +23,7 @@ const militaryLeaders = {
         },
 
         updateMilitaryLeader(state, updatedMilitaryLeader) {
+            updatedMilitaryLeader.type = 'militaryLeader';
             const index = state.militaryLeaders.findIndex(
                 (c) => c.id === updatedMilitaryLeader.id
             );
@@ -27,6 +31,7 @@ const militaryLeaders = {
         },
 
         addMilitaryLeader(state, militaryLeader) {
+            militaryLeader.type = 'militaryLeader';
             state.militaryLeaders.push(militaryLeader);
         },
     },

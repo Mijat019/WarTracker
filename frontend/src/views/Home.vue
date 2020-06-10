@@ -2,9 +2,10 @@
   <div>
     <drawer class="drawer" />
     <v-content>
-      <map-view />
+      <map-view/>
       <military-leader-details class="dialog" />
       <battle-details class="dialog" />
+      <snackbar></snackbar>
     </v-content>
   </div>
 </template>
@@ -14,10 +15,11 @@ import BattleDetails from "../components/Drawer/BattleDetails";
 import MilitaryLeaderDetails from "../components/Drawer/MilitaryLeaderDetails";
 import Drawer from "../components/Drawer/Drawer";
 import MapView from "../components/Map/MapView";
+import Snackbar from "../components/Snackbar";
 
 export default {
   name: "Home",
-  components: { MapView, Drawer, MilitaryLeaderDetails, BattleDetails }
+  components: {Snackbar, MapView, Drawer, MilitaryLeaderDetails, BattleDetails }
 };
 </script>
 

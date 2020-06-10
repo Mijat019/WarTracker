@@ -13,7 +13,10 @@ const BattleModule = {
         },
 
         setBattles(state, battles) {
-            state.battles = battles;
+            state.battles = battles.map(b => {
+                b.type = 'battle';
+                return b;
+            });
         },
 
         deleteBattle(state, battle) {
@@ -22,11 +25,13 @@ const BattleModule = {
         },
 
         updateBattle(state, battle) {
+            battle.type = 'battle';
             const index = state.battles.findIndex((c) => c.id === battle.id);
             Object.assign(state.battles[index], battle);
         },
 
         addBattle(state, battle) {
+            battle.type = 'battle';
             state.battles.push(battle);
         },
     },

@@ -27,7 +27,6 @@ class BattleMapPositionController {
     public async getAllForMapByName(req: Request, res: Response) {
         try {
             const { mapName } = req.params;
-            console.log(mapName);
             const battleMapPositions = await battleMapPositionService.getAllForMapName(
                 mapName
             );
@@ -39,8 +38,19 @@ class BattleMapPositionController {
 
     public async add(req: Request, res: Response) {
         try {
+            console.log("DJESI");
+            const { battle } = req.body;
+            await BattleService.update(battle.id, battle);
+            console.log(battle);
+            const toSave = {
+                lat: req.body.lat,
+                lng: req.body.lng,
+                mapId: req.body.map.id,
+                battleId: req.body.battle.id
+            };
+            console.log(toSave);
             const battleMapPosition = await battleMapPositionService.add(
-                req.body
+                toSave
             );
             res.send(battleMapPosition);
         } catch (error) {

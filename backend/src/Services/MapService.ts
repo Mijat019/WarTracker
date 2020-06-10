@@ -5,6 +5,12 @@ class MapService {
     const maps = Map.findAll();
     return maps;
   }
+  public async getMapByName(mapName: string) {
+    const map = await Map.findOne({
+      where: { name: mapName }
+    });
+    return map;
+  }
 }
 
 export default new MapService();

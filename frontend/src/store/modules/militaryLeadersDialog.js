@@ -1,5 +1,7 @@
+import {militaryLeaderType} from "../../utils/types";
+
 const state = {
-    militaryLeader: null,
+    militaryLeader: militaryLeaderType.empty,
     showDialog: false,
 };
 

@@ -18,7 +18,7 @@
           <v-row>
             <v-col cols="4">
               <v-img
-                v-if="battle.iconUrl"
+                v-if="battle && battle.iconUrl"
                 aspect-ratio="1.7"
                 contain
                 min-height="100%"
@@ -28,7 +28,7 @@
                 <v-row class="height">
                   <v-col class="height">
                     <v-row class="height" align="center" justify="center">
-                      <h1 class="initials">{{ battle.name[0].toUpperCase() }}</h1>
+                      <h1 class="initials" v-if="battle.name.length > 0">{{ battle.name[0].toUpperCase() }}</h1>
                     </v-row>
                   </v-col>
                 </v-row>

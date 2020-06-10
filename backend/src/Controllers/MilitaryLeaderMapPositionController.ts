@@ -38,8 +38,20 @@ class MilitaryLeaderMapPositionController {
 
     public async add(req: Request, res: Response) {
         try {
+            const { militaryLeader } = req.body;
+            console.log(militaryLeader);
+            await MilitaryLeaderService.update(
+                militaryLeader.id,
+                militaryLeader
+            );
+            const toSave = {
+                lat: req.body.lat,
+                lng: req.body.lng,
+                mapId: req.body.map.id,
+                militaryLeaderId: req.body.militaryLeader.id,
+            };
             const militaryLeaderMapPosition = await militaryLeaderMapPositionService.add(
-                req.body
+                toSave
             );
             res.send(militaryLeaderMapPosition);
         } catch (error) {

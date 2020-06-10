@@ -17,7 +17,7 @@
           <v-row>
             <v-col cols="4">
               <v-img
-                v-if="militaryLeader.imageUrl"
+                v-if="militaryLeader && militaryLeader.imageUrl"
                 aspect-ratio="1.7"
                 contain
                 min-height="100%"
