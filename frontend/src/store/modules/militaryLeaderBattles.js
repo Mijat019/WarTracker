@@ -1,4 +1,5 @@
 import Vue from "vue";
+import {battleType} from "../../utils/types";
 
 const militaryLeaderBattles = {
     namespaced: true,
@@ -31,6 +32,10 @@ const militaryLeaderBattles = {
             state.newlyAdded = militaryLeaderBattle;
             state.militaryLeaderBattles.push(militaryLeaderBattle);
         },
+        setAdditionalMilitaryLeaderBattles(state, militaryLeaderBattles) {
+            state.newlyAdded = militaryLeaderBattles;
+            state.militaryLeaderBattles.push(militaryLeaderBattles);
+        }
     },
     actions: {
         async getMilitaryLeaderBattlesByMap({ commit }, mapId) {
@@ -41,7 +46,20 @@ const militaryLeaderBattles = {
                 console.log(err);
             }
         },
-
+        async additionalMilitaryLeaderBattles({ commit }, {mapId, position, type}) {
+            try {
+                let res;
+                if(type.label === battleType.label)
+                    res = await Vue.$axios
+                        .get(`/militaryLeaderBattle/additionalBattle/map/${mapId}/battle/${position.battle.id}`);
+                else
+                    res = await Vue.$axios
+                        .get(`/militaryLeaderBattle/additionalMilitaryLeader/map/${mapId}/militaryLeader/${position.militaryLeader.id}`);
+                commit('setAdditionalMilitaryLeaderBattles', res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        },
         async deleteMilitaryLeaderBattle({ commit }, militaryLeaderBattle) {
             try {
                 await Vue.$axios.delete(`/militaryLeaderBattle/${militaryLeaderBattle.id}`);

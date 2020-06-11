@@ -14,6 +14,27 @@ class MilitaryLeaderBattleController {
         try {
             const { mapId } = req.params;
             const militaryLeaderBattles = await militaryLeaderBattlesService.getAllForMap(mapId);
+            console.log(militaryLeaderBattles);
+            res.send(militaryLeaderBattles);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
+    public async additionalBattle(req: Request, res: Response) {
+        try {
+            const { mapId, battleId } = req.params;
+            const militaryLeaderBattles = await militaryLeaderBattlesService.additionalBattle(mapId, battleId);
+            res.send(militaryLeaderBattles);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
+    public async additionalMilitaryLeader(req: Request, res: Response) {
+        try {
+            const { mapId, militaryLeaderId } = req.params;
+            const militaryLeaderBattles = await militaryLeaderBattlesService.additionalMilitaryLeader(mapId, militaryLeaderId);
             res.send(militaryLeaderBattles);
         } catch (error) {
             res.status(400).send(error.message);
@@ -22,6 +43,7 @@ class MilitaryLeaderBattleController {
 
     public async add(req: Request, res: Response) {
         try {
+            console.log(req.body);
             const militaryLeaderBattle = await militaryLeaderBattlesService.add(
                 req.body
             );

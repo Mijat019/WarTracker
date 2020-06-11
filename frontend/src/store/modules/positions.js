@@ -1,4 +1,5 @@
 import Vue from "vue";
+import {battleType, militaryLeaderType} from "../../utils/types";
 
 const PositionsModule = {
     namespaced: true,
@@ -87,10 +88,17 @@ const PositionsModule = {
                 console.log(err);
             }
         },
-        async addMilitaryLeaderPosition({ commit }, position) {
+        async addMilitaryLeaderPosition({ state, commit, dispatch }, position) {
             try {
                 let {data: added} = await Vue.$axios.post('/militaryLeaderMapPosition', position);
                 commit('addMilitaryLeaderPosition', added);
+                dispatch('militaryLeaderBattles/additionalMilitaryLeaderBattles',
+                    {
+                        mapId: state.map.id,
+                        position: added,
+                        type: militaryLeaderType
+                    },
+                    { root: true });
                 commit('snackbar/openSnackbar',
                     {text: 'This military leader was successfully added to the map', color: 'primary'},
                     {root: true})
@@ -102,10 +110,18 @@ const PositionsModule = {
                 } else console.log(err);
             }
         },
-        async addBattlePosition({ commit }, position) {
+        async addBattlePosition({ state, commit, dispatch }, position) {
             try {
                 let {data: added} = await Vue.$axios.post('/battleMapPosition', position);
                 commit('addBattlePosition', added);
+                console.log(state.map);
+                dispatch('militaryLeaderBattles/additionalMilitaryLeaderBattles',
+                    {
+                        mapId: state.map.id,
+                        position: added,
+                        type: battleType
+                    },
+                    { root: true });
                 commit('snackbar/openSnackbar',
                     {text: 'This battle was successfully added to the map', color: 'primary'},
                     {root: true})

@@ -89,7 +89,7 @@
                     this.placeMarkers(this.militaryLeaderPositions, militaryLeaderType);
                 else if (newLength > oldLength) { // dodat military leader
                     let added = this.$store.state.positions.newlyAdded;
-                    this.placeMarker(added, militaryLeaderType);
+                    this.placeMarker([].concat(added), militaryLeaderType);
                 }
             },
 
@@ -99,7 +99,7 @@
                     this.placeMarkers(this.battlePositions, battleType);
                 else if (newLength > oldLength){
                     let added = this.$store.state.positions.newlyAdded;
-                    this.placeMarker(added, battleType);
+                    this.placeMarkers([].concat(added), battleType);
                 }
             },
             'militaryLeaderBattles.length'(newLength, oldLength) {
@@ -107,9 +107,7 @@
                     this.placeLines(this.militaryLeaderBattles);
                 else if (newLength > oldLength) {
                     let added = this.$store.state.militaryLeaderBattles.newlyAdded;
-                    let mlPlaced = this.placed[militaryLeaderType.label + added.militaryLeaderId].element;
-                    let baPlaced = this.placed[battleType.label + added.battleId].element;
-                    this.placeLine(mlPlaced, baPlaced);
+                    this.placeLines([].concat(added));
                 }
             }
         },
@@ -169,8 +167,8 @@
 
                     // todo: ovo ne znam hoce li trebat
                     const connection = {
-                        battleId: this.line.battle.id,
-                        militaryLeaderId: this.line.militaryLeader.id
+                        battleId: this.line.battle.battle.id,
+                        militaryLeaderId: this.line.militaryLeader.militaryLeader.id
                     };
                     this.addMilitaryLeaderBattle(connection);
 
@@ -186,19 +184,19 @@
                     this.placeLine(mlPlaced, baPlaced);
                 }
             },
-            placeLine(militaryLeader, battle) {
+            placeLine(militaryLeaderPosition, battlePosition) {
                 let line = L.polyline([
-                    [militaryLeader.lat, militaryLeader.lng], // nulti je ml
-                    [battle.lat, battle.lng] // prvi je bitka
+                    [militaryLeaderPosition.lat, militaryLeaderPosition.lng], // nulti je ml
+                    [battlePosition.lat, battlePosition.lng] // prvi je bitka
                 ]);
                 line.addTo(this.map);
-                this.placed[battleType.label + battle.id].edges.push({
+                this.placed[battleType.label + battlePosition.battle.id].edges.push({
                     line,
-                    to: militaryLeader
+                    to: militaryLeaderPosition
                 });
-                this.placed[militaryLeaderType.label + militaryLeader.id].edges.push({
+                this.placed[militaryLeaderType.label + militaryLeaderPosition.militaryLeader.id].edges.push({
                     line,
-                    to: battle
+                    to: battlePosition
                 });
             },
             placeMarkers(positions, type) {
@@ -216,8 +214,8 @@
                 marker.on('drag', e => this.markerMoving(e, position, type));
                 marker.on('click', e => this.clicked(e, position, type));
                 marker.addTo(this.map);
-
-                this.placed[type.label + position.id] = {
+                let id = type.label === battleType.label ? position.battle.id : position.militaryLeader.id;
+                this.placed[type.label + id] = {
                     element: position,
                     marker,
                     edges: []
@@ -234,7 +232,9 @@
                 this.popup.y = point.y + POPUP_OFFSET.y;
             },
             setEdgesCoordinates(position, type, lat, lng){
-                this.placed[type.label + position.id].edges.forEach(edge => {
+                let id = type.label === battleType.label ? position.battle.id : position.militaryLeader.id;
+
+                this.placed[type.label + id].edges.forEach(edge => {
                     let line = edge.line;
                     let latLngs = line.getLatLngs();
                     let index = type.label === militaryLeaderType.label ? 0 : 1;
