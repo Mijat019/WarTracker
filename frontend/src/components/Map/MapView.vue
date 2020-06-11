@@ -55,6 +55,10 @@
             line: {
                 militaryLeader: null,
                 battle: null
+            },
+            disconnectLine: {
+                militaryLeader: null,
+                battle: null
             }
         }),
         props: {
@@ -90,6 +94,7 @@
                 else if (newLength > oldLength) { // dodat military leader
                     let added = this.$store.state.positions.newlyAdded;
                     this.placeMarker([].concat(added), militaryLeaderType);
+                    this.$store.commit('positions/resetAdded');
                 }
             },
 
@@ -100,6 +105,7 @@
                 else if (newLength > oldLength){
                     let added = this.$store.state.positions.newlyAdded;
                     this.placeMarkers([].concat(added), battleType);
+                    this.$store.commit('positions/resetAdded');
                 }
             },
             'militaryLeaderBattles.length'(newLength, oldLength) {
@@ -108,6 +114,11 @@
                 else if (newLength > oldLength) {
                     let added = this.$store.state.militaryLeaderBattles.newlyAdded;
                     this.placeLines([].concat(added));
+                    this.$store.commit('militaryLeaderBattles/resetAdded');
+                } else if (oldLength > newLength) {
+                    let deleted = this.$store.state.militaryLeaderBattles.recentlyDeleted;
+                    this.removeLine(deleted);
+                    this.$store.commit('militaryLeaderBattles/resetDeleted');
                 }
             }
         },
@@ -125,7 +136,8 @@
             ...mapActions('militaryLeaderBattles',
                 [
                     'getMilitaryLeaderBattlesByMap',
-                    'addMilitaryLeaderBattle'
+                    'addMilitaryLeaderBattle',
+                    'deleteMilitaryLeaderBattle'
                 ]),
 
 
@@ -153,9 +165,33 @@
                 }
             },
             clicked(event, position, type) {
-                if (event.originalEvent.ctrlKey) {
+                if (event.originalEvent.altKey && event.originalEvent.ctrlKey) {
+                    this.disconnectTwo(event, position, type)
+                } else if (event.originalEvent.ctrlKey) {
                     this.connectTwo(event, position, type);
                 } else this.openPopup(event, position, type);
+            },
+            disconnectTwo(event, position, type) {
+                if(type.label === militaryLeaderType.label) {
+                    this.disconnectLine.militaryLeader = position;
+                } else {
+                    this.disconnectLine.battle = position;
+                }
+                if (this.disconnectLine.militaryLeader && this.disconnectLine.battle) {
+                    let { edges } = this.placed[militaryLeaderType.label + this.disconnectLine.militaryLeader.militaryLeader.id];
+                    let edge = edges.find(edge => edge.to.id === this.disconnectLine.battle.id);
+                    if(!edge) {
+                        this.$store.commit('snackbar/openSnackbar',
+                            {text: `There isn't any connection between selected entities`, color: 'error'});
+                    } else {
+                        this.deleteMilitaryLeaderBattle(edge);
+                    }
+                    // for the sake of equality and standard, we are gonna do it like this
+                    // even though it's slower and more complicated
+
+                    this.disconnectLine.militaryLeader = null;
+                    this.disconnectLine.battle = null;
+                }
             },
             connectTwo(event, position, type) {
                 if (type.label === militaryLeaderType.label) {
@@ -177,24 +213,43 @@
                     this.line.battle = null;
                 }
             },
+            removeLine(militaryLeaderBattle) {
+                let leaderPlaced = this.placed[militaryLeaderType.label + militaryLeaderBattle.militaryLeaderId];
+                for (let [i, edge] of leaderPlaced.edges.entries()) {
+                    if (edge.id === militaryLeaderBattle.id) {
+                        edge.line.remove(this.map);
+                        leaderPlaced.edges.splice(i, 1);
+                        break;
+                    }
+                }
+                let battlePlaced =  this.placed[battleType.label + militaryLeaderBattle.battleId];
+                for (let [i, edge] of battlePlaced.edges.entries()) {
+                    if (edge.id === militaryLeaderBattle.id) {
+                        battlePlaced.edges.splice(i, 1);
+                        break;
+                    }
+                }
+            },
             placeLines(militaryLeaderBattles) {
                 for (let militaryLeaderBattle of militaryLeaderBattles) {
                     let mlPlaced = this.placed[militaryLeaderType.label + militaryLeaderBattle.militaryLeaderId].element;
                     let baPlaced = this.placed[battleType.label + militaryLeaderBattle.battleId].element;
-                    this.placeLine(mlPlaced, baPlaced);
+                    this.placeLine(militaryLeaderBattle.id, mlPlaced, baPlaced);
                 }
             },
-            placeLine(militaryLeaderPosition, battlePosition) {
+            placeLine(id, militaryLeaderPosition, battlePosition) {
                 let line = L.polyline([
                     [militaryLeaderPosition.lat, militaryLeaderPosition.lng], // nulti je ml
                     [battlePosition.lat, battlePosition.lng] // prvi je bitka
                 ]);
                 line.addTo(this.map);
                 this.placed[battleType.label + battlePosition.battle.id].edges.push({
+                    id,
                     line,
                     to: militaryLeaderPosition
                 });
                 this.placed[militaryLeaderType.label + militaryLeaderPosition.militaryLeader.id].edges.push({
+                    id,
                     line,
                     to: battlePosition
                 });
@@ -249,26 +304,36 @@
             async markerMoved(event, position, type) {
                 // na pomeranje markera
                 let {lat, lng} = event.target.getLatLng();
-
+                let [oldLat, oldLng] = [position.lat, position.lng];
                 // ako nema adrese onda se vrati na predjasnju lokaciju
                 let address = (await reverseGeoCode(lat, lng)).display_name;
-                if(!address) {
-                    event.target.setLatLng([position.lat, position.lng]);
-                    this.setEdgesCoordinates(position, type, position.lat, position.lng);
-                    this.$store.commit('snackbar/openSnackbar', {text: 'A marker cannot be placed on water.', color: 'error'});
-                    return;
-                }
-                // update pozicija u bazi
-                position.lat = lat;
-                position.lng = lng;
+
                 this.setEdgesCoordinates(position, type, lat, lng);
                 if (type.label === battleType.label) {
+                    // update pozicija u bazi
+                    position.lat = lat;
+                    position.lng = lng;
+                    if(!address) {
+                        address = 'Ocean';
+                        this.$store.commit('snackbar/openSnackbar', {
+                            text: 'Warning: Battle was placed on international waters.',
+                            color: 'deep-orange'
+                        });
+                    }
                     position.battle.place = address;
                     this.updateBattlePosition(position);
                 }
                 else if (type.label === militaryLeaderType.label) {
+                    if(!address) {
+                        event.target.setLatLng([oldLat, oldLng]);
+                        this.setEdgesCoordinates(position, type, oldLat, oldLng);
+                        this.$store.commit('snackbar/openSnackbar', {text: 'A military leader cannot be placed on international waters.', color: 'error'});
+                        return;
+                    }
+                    // update pozicija u bazi
+                    position.lat = lat;
+                    position.lng = lng;
                     position.militaryLeader.birthPlace = address;
-                    console.log(position);
                     this.updateMilitaryLeaderPosition(position);
                 }
 
@@ -278,11 +343,11 @@
                 let point = L.point(event.position.x, event.position.y);
                 let latLng = this.map.containerPointToLatLng(point);
                 let address = (await reverseGeoCode(latLng.lat, latLng.lng)).display_name;
-                if(!address) {
-                    this.$store.commit('snackbar/openSnackbar', {text: 'A marker cannot be placed on water.', color: 'error'});
-                    return;
-                }
                 if(event.data.type === militaryLeaderType.label) {
+                    if(!address) {
+                        this.$store.commit('snackbar/openSnackbar', {text: 'A military leader cannot be placed on international waters.', color: 'error'});
+                        return;
+                    }
                     let position = {
                         lng: latLng.lng,
                         lat: latLng.lat,
@@ -292,6 +357,9 @@
                     position.militaryLeader.birthPlace = address;
                     this.addMilitaryLeaderPosition(position);
                 } else {
+                    if(!address) {
+                        this.$store.commit('snackbar/openSnackbar', {text: 'Warning: Battle was placed on international waters.', color: 'dark-orange'});
+                    }
                     let position = {
                         lng: latLng.lng,
                         lat: latLng.lat,
@@ -319,7 +387,28 @@
             }
 
         },
+        created() {
+            window.addEventListener('keyup', e => {
+                if(e.code === 'ControlLeft') {
+                    this.line = {
+                        militaryLeader: null,
+                        battle: null
+                    };
+                    this.disconnectLine = {
+                        militaryLeader: null,
+                        battle: null
+                    };
+                } else if (e.code === 'AltLeft') {
+                    this.disconnectLine = {
+                        militaryLeader: null,
+                        battle: null
+                    }
+                }
+            });
+        },
         mounted() {
+
+
             delete L.Icon.Default.prototype._getIconUrl;
             L.Icon.Default.mergeOptions({
                 iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
@@ -369,7 +458,8 @@
             // invalidacija velicine na abdejt
             // this.$nextTick(() => this.map.invalidateSize());
         },
-
+        destroyed() {
+        }
     }
 </script>
 

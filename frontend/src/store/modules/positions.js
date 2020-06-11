@@ -44,6 +44,9 @@ const PositionsModule = {
             state.militaryLeaderPositions.push(militaryLeaderPosition);
             state.newlyAdded = militaryLeaderPosition;
         },
+        resetAdded(state) {
+            state.newlyAdded = null;
+        }
     },
 
     actions: {
@@ -114,7 +117,6 @@ const PositionsModule = {
             try {
                 let {data: added} = await Vue.$axios.post('/battleMapPosition', position);
                 commit('addBattlePosition', added);
-                console.log(state.map);
                 dispatch('militaryLeaderBattles/additionalMilitaryLeaderBattles',
                     {
                         mapId: state.map.id,

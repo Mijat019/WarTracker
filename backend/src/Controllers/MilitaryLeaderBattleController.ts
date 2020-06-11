@@ -14,7 +14,6 @@ class MilitaryLeaderBattleController {
         try {
             const { mapId } = req.params;
             const militaryLeaderBattles = await militaryLeaderBattlesService.getAllForMap(mapId);
-            console.log(militaryLeaderBattles);
             res.send(militaryLeaderBattles);
         } catch (error) {
             res.status(400).send(error.message);
@@ -43,7 +42,6 @@ class MilitaryLeaderBattleController {
 
     public async add(req: Request, res: Response) {
         try {
-            console.log(req.body);
             const militaryLeaderBattle = await militaryLeaderBattlesService.add(
                 req.body
             );
@@ -55,6 +53,11 @@ class MilitaryLeaderBattleController {
     public async delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
+            const exists = await militaryLeaderBattlesService.exists(id);
+            if (!exists) {
+                res.status(400).send(`Does not exist`);
+                return;
+            }
             await militaryLeaderBattlesService.delete(id);
             res.send("Deleted");
         } catch (error) {

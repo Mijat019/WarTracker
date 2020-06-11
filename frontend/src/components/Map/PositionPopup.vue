@@ -27,9 +27,14 @@
                     </v-list-item-content>
 
                     <v-list-item-action>
-                        <v-btn icon>
-                            <v-icon>mdi-account</v-icon>
-                        </v-btn>
+                        <div class="flex flex-column">
+                            <v-btn icon>
+                                <v-icon color="primary">mdi-account</v-icon>
+                            </v-btn>
+                            <v-btn icon>
+                                <v-icon color="red">mdi-delete</v-icon>
+                            </v-btn>
+                        </div>
                     </v-list-item-action>
                 </v-list-item>
             </v-list>

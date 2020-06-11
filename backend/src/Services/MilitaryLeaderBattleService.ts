@@ -30,6 +30,11 @@ class MilitaryLeaderBattleService {
     await MilitaryLeaderBattle.destroy({ where: { id } });
   }
 
+  public async exists(id: string) {
+      const count = await MilitaryLeaderBattle.count({ where: { id } });
+      return !!count;
+  }
+
   /*
    *
    *  Radi se sljedeci query za mapId = 1

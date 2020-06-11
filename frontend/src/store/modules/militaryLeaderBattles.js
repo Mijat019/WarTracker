@@ -7,6 +7,7 @@ const militaryLeaderBattles = {
     state: {
         militaryLeaderBattles: [],
         newlyAdded: null,
+        recentlyDeleted: null
     },
 
     mutations: {
@@ -18,14 +19,8 @@ const militaryLeaderBattles = {
             let index = state.militaryLeaderBattles.findIndex(
                 (c) => c.id === militaryLeaderBattle.id
             );
+            state.recentlyDeleted = state.militaryLeaderBattles[index];
             state.militaryLeaderBattles.splice(index, 1);
-        },
-
-        updateMilitaryLeaderBattle(state, updatedMilitaryLeaderBattle) {
-            const index = state.militaryLeaderBattles.findIndex(
-                (c) => c.id === updatedMilitaryLeaderBattle.id
-            );
-            Object.assign(state.militaryLeaderBattles[index], updatedMilitaryLeaderBattle);
         },
 
         addMilitaryLeaderBattle(state, militaryLeaderBattle) {
@@ -35,6 +30,12 @@ const militaryLeaderBattles = {
         setAdditionalMilitaryLeaderBattles(state, militaryLeaderBattles) {
             state.newlyAdded = militaryLeaderBattles;
             state.militaryLeaderBattles.push(militaryLeaderBattles);
+        },
+        resetAdded(state) {
+            state.newlyAdded = null;
+        },
+        resetDeleted(state) {
+            state.recentlyDeleted = null;
         }
     },
     actions: {
@@ -64,21 +65,13 @@ const militaryLeaderBattles = {
             try {
                 await Vue.$axios.delete(`/militaryLeaderBattle/${militaryLeaderBattle.id}`);
                 commit("deleteMilitaryLeaderBattle", militaryLeaderBattle);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async updateMilitaryLeaderBattle({ commit }, militaryLeaderBattle) {
-            try {
-                const { data: modified } = await Vue.$axios.patch(
-                    `/militaryLeaderBattle/${militaryLeaderBattle.id}`,
-                    militaryLeaderBattle
-                );
-
-                commit("updateMilitaryLeaderBattle", modified);
-            } catch (error) {
-                console.log(error);
+            } catch (err) {
+                console.log(err);
+                if(err.response.status === 400) {
+                    commit('snackbar/openSnackbar',
+                        {text: `There isn't any connection between selected entities`, color: 'error'},
+                        {root: true})
+                } else console.log(err);
             }
         },
 
