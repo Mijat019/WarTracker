@@ -44,6 +44,7 @@
             map: null,
             tileLayer: null,
             placed: {},
+            lines: [],
             popup: {
                 open: false,
                 x: 0,
@@ -51,6 +52,10 @@
                 position: null,
                 type: null
             },
+            line: {
+                militaryLeader: null,
+                battle: null
+            }
         }),
         props: {
             mapId: {
@@ -68,31 +73,43 @@
         },
         computed: {
             ...mapState('positions', ['militaryLeaderPositions', 'battlePositions']),
+            ...mapState('militaryLeaderBattles', ['militaryLeaderBattles']),
             mapObj() {
                 return this.$store.state.positions.map;
             }
         },
         watch: {
             mapCode(newCode) {
+                // Nalazi mapu u bazi po zadatom imenu mape
                 this.getMapByName(newCode);
             },
             'militaryLeaderPositions.length'(newLength, oldLength) {
-                console.log(this.militaryLeaderPositions);
+                // Proverava velicinu pozicija i na taj nacin se abdejtuje
                 if (oldLength === 0)
                     this.placeMarkers(this.militaryLeaderPositions, militaryLeaderType);
                 else if (newLength > oldLength) { // dodat military leader
-                    let added = this.militaryLeaderPositions
-                        .filter(el => !((militaryLeaderType.label + el.id) in this.placed)); // nema ga u postavljenim markerima
-                    this.placeMarkers(added, militaryLeaderType);
+                    let added = this.$store.state.positions.newlyAdded;
+                    this.placeMarker(added, militaryLeaderType);
                 }
             },
 
             'battlePositions.length'(newLength, oldLength) {
+                // Proverava velicinu pozicija i na taj nacin se abdejtuje
                 if(oldLength === 0)
                     this.placeMarkers(this.battlePositions, battleType);
                 else if (newLength > oldLength){
-                    let added = this.battlePositions.filter(el => !((battleType.label + el.id) in this.placed));
-                    this.placeMarkers(added, battleType);
+                    let added = this.$store.state.positions.newlyAdded;
+                    this.placeMarker(added, battleType);
+                }
+            },
+            'militaryLeaderBattles.length'(newLength, oldLength) {
+                if(oldLength === 0)
+                    this.placeLines(this.militaryLeaderBattles);
+                else if (newLength > oldLength) {
+                    let added = this.$store.state.militaryLeaderBattles.newlyAdded;
+                    let mlPlaced = this.placed[militaryLeaderType.label + added.militaryLeaderId].element;
+                    let baPlaced = this.placed[battleType.label + added.battleId].element;
+                    this.placeLine(mlPlaced, baPlaced);
                 }
             }
         },
@@ -107,6 +124,13 @@
                     'addBattlePosition',
                     'getMapByName'
                 ]),
+            ...mapActions('militaryLeaderBattles',
+                [
+                    'getMilitaryLeaderBattlesByMap',
+                    'addMilitaryLeaderBattle'
+                ]),
+
+
             determineInitials(data) {
                 // odredjuju se inicijali za drop
                 if (data.type === militaryLeaderType.label) {
@@ -130,6 +154,53 @@
                     else return "../../assets/defaultIcons/battle.png";
                 }
             },
+            clicked(event, position, type) {
+                if (event.originalEvent.ctrlKey) {
+                    this.connectTwo(event, position, type);
+                } else this.openPopup(event, position, type);
+            },
+            connectTwo(event, position, type) {
+                if (type.label === militaryLeaderType.label) {
+                    this.line.militaryLeader = position;
+                } else if (type.label === battleType.label) {
+                    this.line.battle = position;
+                }
+                if (this.line.militaryLeader && this.line.battle) {
+
+                    // todo: ovo ne znam hoce li trebat
+                    const connection = {
+                        battleId: this.line.battle.id,
+                        militaryLeaderId: this.line.militaryLeader.id
+                    };
+                    this.addMilitaryLeaderBattle(connection);
+
+                    // anuliranje
+                    this.line.militaryLeader = null;
+                    this.line.battle = null;
+                }
+            },
+            placeLines(militaryLeaderBattles) {
+                for (let militaryLeaderBattle of militaryLeaderBattles) {
+                    let mlPlaced = this.placed[militaryLeaderType.label + militaryLeaderBattle.militaryLeaderId].element;
+                    let baPlaced = this.placed[battleType.label + militaryLeaderBattle.battleId].element;
+                    this.placeLine(mlPlaced, baPlaced);
+                }
+            },
+            placeLine(militaryLeader, battle) {
+                let line = L.polyline([
+                    [militaryLeader.lat, militaryLeader.lng], // nulti je ml
+                    [battle.lat, battle.lng] // prvi je bitka
+                ]);
+                line.addTo(this.map);
+                this.placed[battleType.label + battle.id].edges.push({
+                    line,
+                    to: militaryLeader
+                });
+                this.placed[militaryLeaderType.label + militaryLeader.id].edges.push({
+                    line,
+                    to: battle
+                });
+            },
             placeMarkers(positions, type) {
                 // postavljaju se markeri za sve pozicije
                 for (let position of positions) {
@@ -142,10 +213,15 @@
                 marker.setIcon(L.divIcon(type.determineIcon(position)));
                 marker.on('mousedown', () => { this.popup.open = false; });
                 marker.on('dragend', e => this.markerMoved(e, position, type));
-                marker.on('click', e => this.openPopup(e, position, type));
+                marker.on('drag', e => this.markerMoving(e, position, type));
+                marker.on('click', e => this.clicked(e, position, type));
                 marker.addTo(this.map);
 
-                this.placed[type.label + position.id] = marker;
+                this.placed[type.label + position.id] = {
+                    element: position,
+                    marker,
+                    edges: []
+                };
             },
             openPopup(event, position, type) {
                 // otvaranje popupa na klik
@@ -157,6 +233,19 @@
                 this.popup.x = point.x + POPUP_OFFSET.x;
                 this.popup.y = point.y + POPUP_OFFSET.y;
             },
+            setEdgesCoordinates(position, type, lat, lng){
+                this.placed[type.label + position.id].edges.forEach(edge => {
+                    let line = edge.line;
+                    let latLngs = line.getLatLngs();
+                    let index = type.label === militaryLeaderType.label ? 0 : 1;
+                    latLngs[index] = [lat, lng];
+                    line.setLatLngs(latLngs);
+                });
+            },
+            markerMoving(event, position, type) {
+                let {lat, lng} = event.target.getLatLng();
+                this.setEdgesCoordinates(position, type, lat, lng);
+            },
             async markerMoved(event, position, type) {
                 // na pomeranje markera
                 let {lat, lng} = event.target.getLatLng();
@@ -165,18 +254,21 @@
                 let address = (await reverseGeoCode(lat, lng)).display_name;
                 if(!address) {
                     event.target.setLatLng([position.lat, position.lng]);
-                    this.$store.commit('snackbar/openSnackbar', 'A marker cannot be placed on water.');
+                    this.setEdgesCoordinates(position, type, position.lat, position.lng);
+                    this.$store.commit('snackbar/openSnackbar', {text: 'A marker cannot be placed on water.', color: 'error'});
                     return;
                 }
                 // update pozicija u bazi
                 position.lat = lat;
                 position.lng = lng;
+                this.setEdgesCoordinates(position, type, lat, lng);
                 if (type.label === battleType.label) {
                     position.battle.place = address;
                     this.updateBattlePosition(position);
                 }
                 else if (type.label === militaryLeaderType.label) {
                     position.militaryLeader.birthPlace = address;
+                    console.log(position);
                     this.updateMilitaryLeaderPosition(position);
                 }
 
@@ -187,7 +279,7 @@
                 let latLng = this.map.containerPointToLatLng(point);
                 let address = (await reverseGeoCode(latLng.lat, latLng.lng)).display_name;
                 if(!address) {
-                    this.$store.commit('snackbar/openSnackbar', 'A marker cannot be placed on water.');
+                    this.$store.commit('snackbar/openSnackbar', {text: 'A marker cannot be placed on water.', color: 'error'});
                     return;
                 }
                 if(event.data.type === militaryLeaderType.label) {
@@ -213,11 +305,19 @@
             resetMap() {
 
             },
-            getPositions() {
+            async getPositions() {
                 // obe vrste pozicija dobijamo po imenu mape
-                this.getMilitaryLeaderPositions(this.mapCode);
-                this.getBattlePositions(this.mapCode);
+                await this.getMilitaryLeaderPositions(this.mapCode);
+                await this.getBattlePositions(this.mapCode);
+            },
+            async getConnections() {
+                await this.getMilitaryLeaderBattlesByMap(this.mapObj.id)
+            },
+            async setup() {
+                await this.getPositions();
+                await this.getConnections();
             }
+
         },
         mounted() {
             delete L.Icon.Default.prototype._getIconUrl;
@@ -262,7 +362,8 @@
             // trazimo mapu
             this.getMapByName(this.mapCode);
             // postavljamo pozicije
-            this.getPositions();
+
+            this.setup();
         },
         updated() {
             // invalidacija velicine na abdejt
@@ -273,4 +374,6 @@
 </script>
 
 <style>
+    .div-icon {
+    }
 </style>

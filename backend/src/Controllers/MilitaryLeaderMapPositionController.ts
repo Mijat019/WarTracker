@@ -64,11 +64,12 @@ class MilitaryLeaderMapPositionController {
             const { id } = req.params;
 
             const { militaryLeader } = req.body;
+            console.log(militaryLeader);
             await MilitaryLeaderService.update(
                 militaryLeader.id,
                 militaryLeader
             );
-
+            console.log(req.body);
             const militaryLeaderMapPosition = await militaryLeaderMapPositionService.update(
                 id,
                 req.body

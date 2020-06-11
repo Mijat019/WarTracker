@@ -4,6 +4,7 @@ import militaryLeaderBattleController from "../Controllers/MilitaryLeaderBattleC
 const router = express.Router();
 
 router.get("/", militaryLeaderBattleController.getAll);
+router.get("/map/:mapId", militaryLeaderBattleController.getByMap);
 router.post("/", militaryLeaderBattleController.add);
 router.delete("/:id", militaryLeaderBattleController.delete);
 

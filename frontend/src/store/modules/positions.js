@@ -5,7 +5,8 @@ const PositionsModule = {
     state: {
         militaryLeaderPositions: [],
         battlePositions: [],
-        map: null
+        map: null,
+        newlyAdded: null
     },
 
     mutations: {
@@ -25,6 +26,7 @@ const PositionsModule = {
         },
         addBattlePosition(state, battlePosition) {
             state.battlePositions.push(battlePosition);
+            state.newlyAdded = battlePosition;
         },
         setMilitaryLeaderPositions(state, militaryLeaderPositions) {
             state.militaryLeaderPositions = militaryLeaderPositions;
@@ -39,6 +41,7 @@ const PositionsModule = {
         },
         addMilitaryLeaderPosition(state, militaryLeaderPosition) {
             state.militaryLeaderPositions.push(militaryLeaderPosition);
+            state.newlyAdded = militaryLeaderPosition;
         },
     },
 
@@ -88,20 +91,30 @@ const PositionsModule = {
             try {
                 let {data: added} = await Vue.$axios.post('/militaryLeaderMapPosition', position);
                 commit('addMilitaryLeaderPosition', added);
+                commit('snackbar/openSnackbar',
+                    {text: 'This military leader was successfully added to the map', color: 'primary'},
+                    {root: true})
             } catch (err) {
                 if(err.response.status === 400) {
-                    commit('snackbar/openSnackbar', 'This military leader is already placed on the map', {root: true})
-                }
+                    commit('snackbar/openSnackbar',
+                        {text: 'This military leader is already placed on the map', color: 'error'},
+                        {root: true})
+                } else console.log(err);
             }
         },
         async addBattlePosition({ commit }, position) {
             try {
                 let {data: added} = await Vue.$axios.post('/battleMapPosition', position);
                 commit('addBattlePosition', added);
+                commit('snackbar/openSnackbar',
+                    {text: 'This battle was successfully added to the map', color: 'primary'},
+                    {root: true})
             } catch (err) {
                 if(err.response.status === 400) {
-                    commit('snackbar/openSnackbar', 'This battle is already placed on the map', {root: true})
-                }
+                    commit('snackbar/openSnackbar',
+                        {text: 'This battle is already placed on the map', color: 'error'},
+                        {root: true})
+                } else console.log(err);
             }
         }
 

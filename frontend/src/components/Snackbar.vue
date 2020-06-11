@@ -3,7 +3,7 @@
             :value="snackbar"
             @input="setSnackbar($event)"
             :timeout="3000"
-            color="error"
+            :color="snackbarColor"
     >
         {{ snackbarText }}
         <v-btn
@@ -22,7 +22,7 @@
     export default {
         name: "Snackbar",
         computed: {
-            ...mapState('snackbar', ['snackbar', 'snackbarText'])
+            ...mapState('snackbar', ['snackbar', 'snackbarText', 'snackbarColor'])
         },
         methods: {
             ...mapMutations('snackbar', ['closeSnackbar', 'setSnackbar'])

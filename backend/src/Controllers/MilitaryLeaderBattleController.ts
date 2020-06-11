@@ -10,6 +10,16 @@ class MilitaryLeaderBattleController {
             res.status(400).send(error.message);
         }
     }
+    public async getByMap(req: Request, res: Response) {
+        try {
+            const { mapId } = req.params;
+            const militaryLeaderBattles = await militaryLeaderBattlesService.getAllForMap(mapId);
+            res.send(militaryLeaderBattles);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
     public async add(req: Request, res: Response) {
         try {
             const militaryLeaderBattle = await militaryLeaderBattlesService.add(

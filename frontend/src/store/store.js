@@ -6,6 +6,7 @@ import militaryLeaders from "./modules/militaryLeaders";
 import militaryLeadersDialog from "./modules/militaryLeadersDialog";
 import positions from "./modules/positions";
 import snackbar from "./modules/snackbar"
+import militaryLeaderBattles from "./modules/militaryLeaderBattles";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -15,6 +16,7 @@ export default new Vuex.Store({
         battlesDialog,
         positions,
         militaryLeadersDialog,
-        snackbar
+        snackbar,
+        militaryLeaderBattles
     },
 });
