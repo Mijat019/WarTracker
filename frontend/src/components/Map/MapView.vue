@@ -28,8 +28,11 @@
 </template>
 
 <script>
-    import 'leaflet/dist/leaflet.css';
+    require('leaflet/dist/leaflet.css');
     import L from 'leaflet';
+    require('leaflet.markercluster/dist/MarkerCluster.css');
+    require('leaflet.markercluster/dist/MarkerCluster.Default.css');
+    import 'leaflet.markercluster/dist/leaflet.markercluster';
     import {mapActions, mapState} from "vuex";
     import {reverseGeoCode} from "../../utils/geoCoding";
     import {battleType, militaryLeaderType} from "../../utils/types";
@@ -44,7 +47,7 @@
             map: null,
             tileLayer: null,
             placed: {},
-            lines: [],
+            markerCluster: null,
             popup: {
                 open: false,
                 x: 0,
@@ -270,7 +273,7 @@
             removeMarker(position, type) {
                 let id = type.label === battleType.label ? position.battle.id : position.militaryLeader.id;
                 let placed = this.placed[type.label + id];
-                placed.marker.remove(this.map);
+                this.markerCluster.removeLayer(placed.marker);
                 this.$store.commit('militaryLeaderBattles/deleteMultiple', placed.edges);
                 delete placed[type.label + id];
             },
@@ -288,7 +291,8 @@
                 marker.on('dragend', e => this.markerMoved(e, position, type));
                 marker.on('drag', e => this.markerMoving(e, position, type));
                 marker.on('click', e => this.clicked(e, position, type));
-                marker.addTo(this.map);
+                this.markerCluster.addLayer(marker);
+                // marker.addTo(this.map);
                 let id = type.label === battleType.label ? position.battle.id : position.militaryLeader.id;
                 this.placed[type.label + id] = {
                     element: position,
@@ -428,13 +432,6 @@
         },
         mounted() {
 
-
-            delete L.Icon.Default.prototype._getIconUrl;
-            L.Icon.Default.mergeOptions({
-                iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-                iconUrl: require("leaflet/dist/images/marker-icon.png"),
-                shadowUrl: require("leaflet/dist/images/marker-shadow.png")
-            });
             // Granice skrolovanja
             const corner1 = L.latLng(-90, -180);
             const corner2 = L.latLng(90, 180);
@@ -466,6 +463,13 @@
             };
             this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', options)
                 .addTo(this.map);
+
+            this.markerCluster = L.markerClusterGroup({
+                maxClusterRadius: 30
+            });
+
+            this.map.addLayer(this.markerCluster);
+
             this.$nextTick(() => this.map.invalidateSize());
 
             // trazimo mapu
