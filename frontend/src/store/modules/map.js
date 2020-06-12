@@ -17,6 +17,12 @@ const MapModule = {
         },
         setMapCode(state, mapCode) {
             state.mapCode = mapCode;
+        },
+        zoomOut(state) {
+            state.map.zoomOut();
+        },
+        zoomIn(state) {
+            state.map.zoomIn();
         }
     },
     actions: {
@@ -30,8 +36,11 @@ const MapModule = {
         },
     },
     getters: {
-        mapNumber(state) {
-            return state.map.name;
+        isMaxZoom(state) {
+            return state.map.getZoom() === state.map.getMaxZoom();
+        },
+        isMinZoom(state) {
+            return state.map.getZoom() === state.map.getMinZoom();
         }
     }
 };

@@ -1,14 +1,25 @@
 <template>
     <v-card class="map-control">
-        <map-chooser></map-chooser>
+        <v-container fluid class="py-0">
+
+            <div class="d-flex py-1">
+                <map-chooser></map-chooser>
+
+                <v-divider class="my-n1 mx-2" vertical></v-divider>
+
+                <zoom-control></zoom-control>
+
+            </div>
+        </v-container>
     </v-card>
 </template>
 
 <script>
     import MapChooser from "./MapChooser";
+    import ZoomControl from "./ZoomControl";
     export default {
         name: "MapControl",
-        components: {MapChooser}
+        components: {ZoomControl, MapChooser}
     }
 </script>
 
