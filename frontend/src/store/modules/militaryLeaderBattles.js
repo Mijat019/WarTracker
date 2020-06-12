@@ -47,6 +47,10 @@ const militaryLeaderBattles = {
         },
         resetDeleted(state) {
             state.recentlyDeleted = null;
+        },
+        clearAllMilitaryLeaderBattles(state) {
+            state.militaryLeaderBattles = [];
+            state.recentlyDeleted = null;
         }
     },
     actions: {

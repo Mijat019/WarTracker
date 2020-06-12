@@ -6,15 +6,11 @@ const PositionsModule = {
     state: {
         militaryLeaderPositions: [],
         battlePositions: [],
-        map: null,
         newlyAdded: null,
         recentlyDeleted: null
     },
 
     mutations: {
-        setMap(state, map) {
-            state.map = map;
-        },
         setBattlePositions(state, battlePositions) {
             state.battlePositions = battlePositions;
         },
@@ -52,18 +48,16 @@ const PositionsModule = {
         },
         resetDeleted(state) {
             state.recentlyDeleted = null;
+        },
+        clearAllPositions(state) {
+            state.militaryLeaderPositions = [];
+            state.battlePositions = [];
+            state.recentlyDeleted = null;
         }
     },
 
     actions: {
-        async getMapByName({ commit }, mapCode) {
-            try {
-                let {data: map} = await Vue.$axios.get(`/map/mapName=${mapCode}`);
-                commit("setMap", map);
-            } catch(err) {
-                console.log(`An error occurred getting map by name: ${err}`);
-            }
-        },
+
         async getMilitaryLeaderPositions({ commit }, mapCode) {
             try {
                 let {data: militaryLeaderPositions} = await Vue.$axios.get(`/militaryLeaderMapPosition/mapName=${mapCode}`);
@@ -97,13 +91,13 @@ const PositionsModule = {
                 console.log(err);
             }
         },
-        async addMilitaryLeaderPosition({ state, commit, dispatch }, position) {
+        async addMilitaryLeaderPosition({ rootState, commit, dispatch }, position) {
             try {
                 let {data: added} = await Vue.$axios.post('/militaryLeaderMapPosition', position);
                 commit('addMilitaryLeaderPosition', added);
                 dispatch('militaryLeaderBattles/additionalMilitaryLeaderBattles',
                     {
-                        mapId: state.map.id,
+                        mapId: rootState.map.mapObj.id,
                         position: added,
                         type: militaryLeaderType
                     },
@@ -119,13 +113,13 @@ const PositionsModule = {
                 } else console.log(err);
             }
         },
-        async addBattlePosition({ state, commit, dispatch }, position) {
+        async addBattlePosition({ rootState, commit, dispatch }, position) {
             try {
                 let {data: added} = await Vue.$axios.post('/battleMapPosition', position);
                 commit('addBattlePosition', added);
                 dispatch('militaryLeaderBattles/additionalMilitaryLeaderBattles',
                     {
-                        mapId: state.map.id,
+                        mapId: rootState.map.mapObj.id,
                         position: added,
                         type: battleType
                     },
@@ -163,7 +157,7 @@ const PositionsModule = {
                 console.log(err);
             }
         }
-    },
+    }
 };
 
 export default PositionsModule;

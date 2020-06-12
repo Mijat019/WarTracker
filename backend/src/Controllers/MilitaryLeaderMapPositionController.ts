@@ -36,6 +36,21 @@ class MilitaryLeaderMapPositionController {
         }
     }
 
+    public async checkPlacement(req: Request, res: Response) {
+        try{
+            const { militaryLeaderId, mapId } = req.params;
+            const exists = await militaryLeaderMapPositionService.exists(militaryLeaderId, mapId);
+            if(exists) {
+                res.status(400).send('Already placed on this map');
+                return;
+            }
+            const found = await militaryLeaderMapPositionService.findOne(militaryLeaderId);
+            res.send(found);
+        } catch(error) {
+            res.status(400).send(error.message);
+        }
+    }
+
     public async add(req: Request, res: Response) {
         try {
             const { militaryLeader } = req.body;
@@ -52,6 +67,8 @@ class MilitaryLeaderMapPositionController {
             const militaryLeaderMapPosition = await militaryLeaderMapPositionService.add(
                 toSave
             );
+            delete toSave.mapId;
+            await militaryLeaderMapPosition.updateAll(toSave);
             res.send(militaryLeaderMapPosition);
         } catch (error) {
             res.status(400).send(error.message);

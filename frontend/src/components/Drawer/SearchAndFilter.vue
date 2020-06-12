@@ -1,22 +1,23 @@
 <template>
   <v-container fluid class="pl-5 pl-lg-7 pr-7 py-0">
     <v-row align="center" justify="space-between">
-      <v-col cols="1" class="px-0 py-2">
+      <v-col cols="1" class="px-0 py-1">
         <v-btn icon @click="$emit('input', !value)">
-          <v-icon>mdi-menu</v-icon>
+          <v-icon color="grey">mdi-menu</v-icon>
         </v-btn>
       </v-col>
-      <v-col cols="8" class="px-0 py-2">
-        <v-text-field dense outlined placeholder="Search" hide-details></v-text-field>
+      <v-col cols="8" class="px-0 py-1">
+        <v-text-field class="search-field" dense outlined placeholder="Search" hide-details></v-text-field>
       </v-col>
-      <v-col cols="1" class="px-0 py-2">
+      <v-col cols="1" class="px-0 py-1">
         <v-btn icon small>
-          <v-icon>mdi-magnify</v-icon>
+          <v-icon color="grey">mdi-magnify</v-icon>
         </v-btn>
       </v-col>
-      <v-col cols="1" class="px-0 py-2">
+      <v-divider class="my-2" vertical></v-divider>
+      <v-col cols="1" class="px-0 py-1">
         <v-btn icon small>
-          <v-icon>mdi-filter</v-icon>
+          <v-icon color="grey">mdi-filter</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -36,5 +37,10 @@ export default {
   }
 };
 </script>
-
-<style></style>
+<style>
+  .search-field > .v-input__control > .v-input__slot:before,
+  .search-field > .v-input__control > .v-input__slot:after,
+  .search-field > .v-input__control > .v-input__slot > fieldset{
+    border-style: none;
+  }
+</style>

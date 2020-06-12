@@ -47,16 +47,49 @@ class BattleMapPositionService {
   }
 
   public async update(id: string, battleMapPositionUpdate: any) {
-    await BattleMapPosition.update(battleMapPositionUpdate, { where: { id } });
+
+    // posto abdejtujemo samo lng i lat, idemo ovako
+
+    const toUpdate = {
+      lng: battleMapPositionUpdate.lng,
+      lat: battleMapPositionUpdate.lat
+    };
+
+    await BattleMapPosition.update(toUpdate, { where: { battleId: battleMapPositionUpdate.battle.id } });
+
     const updatedBattleMapPosition = await BattleMapPosition.findByPk(id, {
       include,
       attributes,
     });
+    console.log(updatedBattleMapPosition);
     return updatedBattleMapPosition;
   }
 
   public async delete(id: string) {
     await BattleMapPosition.destroy({ where: { id } });
+  }
+
+  public async findOne(battleId: string) {
+    const found = await BattleMapPosition.findOne({
+      where: {battleId},
+      include: [{ model: Battle, as: "battle", required: true }],
+      attributes
+    });
+    return found;
+  }
+
+  public async exists(battleId: string, mapId: string) {
+    const count = await BattleMapPosition.count({
+      where: {battleId, mapId}});
+    return !!count;
+  }
+
+  public async updateAll(battleMapPosition: any) {
+    await BattleMapPosition.update(battleMapPosition, {
+      where: {
+        battleId: battleMapPosition.battleId
+      }
+    })
   }
 }
 

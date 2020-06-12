@@ -30,20 +30,22 @@
 <script>
     require('leaflet/dist/leaflet.css');
     import L from 'leaflet';
-    require('leaflet.markercluster/dist/MarkerCluster.css');
-    require('leaflet.markercluster/dist/MarkerCluster.Default.css');
     import 'leaflet.markercluster/dist/leaflet.markercluster';
-    import {mapActions, mapState} from "vuex";
+    import {mapActions, mapMutations, mapState} from "vuex";
     import {reverseGeoCode} from "../../utils/geoCoding";
     import {battleType, militaryLeaderType} from "../../utils/types";
     import PositionPopup from "./PositionPopup";
     import {Drop} from 'vue-easy-dnd';
+    import Vue from 'vue';
+
+    require('leaflet.markercluster/dist/MarkerCluster.css');
+    require('leaflet.markercluster/dist/MarkerCluster.Default.css');
     const POPUP_OFFSET = {x: 25, y: 12};
     export default {
         name: "MapView",
         components: {PositionPopup, Drop},
         data: () => ({
-            map: null,
+            mapOptions: null,
             tileLayer: null,
             placed: {},
             markerCluster: null,
@@ -69,30 +71,37 @@
                 default() {
                     return 'map';
                 }
-            },
-            mapCode: {
-                type: String,
-                default() {
-                    return 'map1';
-                }
             }
         },
         computed: {
             ...mapState('positions', ['militaryLeaderPositions', 'battlePositions']),
             ...mapState('militaryLeaderBattles', ['militaryLeaderBattles']),
-            mapObj() {
-                return this.$store.state.positions.map;
+            ...mapState('map', ['mapCode', 'mapObj']),
+            map: {
+                get() {
+                    return this.$store.state.map.map;
+                },
+                set(val) {
+                    this.$store.commit('map/setMap', val);
+                }
             }
         },
         watch: {
             mapCode(newCode) {
-                // Nalazi mapu u bazi po zadatom imenu mape
                 this.getMapByName(newCode);
+            },
+            mapObj(newVal, oldVal) {
+                if(!oldVal || !newVal) return;
+                this.clearMap();
+                this.setup();
             },
             'militaryLeaderPositions.length'(newLength, oldLength) {
                 // Proverava velicinu pozicija i na taj nacin se abdejtuje
                 if (oldLength === 0)
                     this.placeMarkers(this.militaryLeaderPositions, militaryLeaderType);
+                else if (newLength === 0 && !this.$store.state.positions.recentlyDeleted) {
+                    return;
+                }
                 else if (newLength > oldLength) { // dodat military leader
                     let added = this.$store.state.positions.newlyAdded;
                     this.placeMarkers([].concat(added), militaryLeaderType);
@@ -108,6 +117,9 @@
                 // Proverava velicinu pozicija i na taj nacin se abdejtuje
                 if(oldLength === 0)
                     this.placeMarkers(this.battlePositions, battleType);
+                else if (newLength === 0 && !this.$store.state.positions.recentlyDeleted) {
+                    return;
+                }
                 else if (newLength > oldLength){
                     let added = this.$store.state.positions.newlyAdded;
                     this.placeMarkers([].concat(added), battleType);
@@ -121,6 +133,9 @@
             'militaryLeaderBattles.length'(newLength, oldLength) {
                 if(oldLength === 0)
                     this.placeLines(this.militaryLeaderBattles);
+                else if (newLength === 0 && !this.$store.state.militaryLeaderBattles.recentlyDeleted) {
+                    return;
+                }
                 else if (newLength > oldLength) {
                     let added = this.$store.state.militaryLeaderBattles.newlyAdded;
                     this.placeLines([].concat(added));
@@ -133,6 +148,9 @@
             }
         },
         methods: {
+            ...mapMutations('positions', ['clearAllPositions']),
+            ...mapMutations('militaryLeaderBattles', ['clearAllMilitaryLeaderBattles']),
+            ...mapMutations('existingPositionDialog', ['setEntity', 'setShowDialog']),
             ...mapActions('positions',
                 [
                     'getMilitaryLeaderPositions',
@@ -141,19 +159,22 @@
                     'updateMilitaryLeaderPosition',
                     'addMilitaryLeaderPosition',
                     'addBattlePosition',
-                    'getMapByName'
                 ]),
             ...mapActions('militaryLeaderBattles',
                 [
                     'getMilitaryLeaderBattlesByMap',
                     'addMilitaryLeaderBattle',
-                    'deleteMilitaryLeaderBattle'
+                    'deleteMilitaryLeaderBattle',
+                ]),
+            ...mapActions('map',
+                [
+                    'getMapByName'
                 ]),
 
 
             determineInitials(data) {
                 // odredjuju se inicijali za drop
-                if (data.type === militaryLeaderType.label) {
+                if (data.type.label === militaryLeaderType.label) {
                     return `${data.firstName[0].toUpperCase()}${data.lastName[0].toUpperCase()}`
                 } else {
                     return `${data.name[0].toUpperCase()}`;
@@ -161,7 +182,7 @@
             },
             determineImageUrl(data) {
                 // odredjuje se slika
-                if (data.type === militaryLeaderType.label) {
+                if (data.type.label === militaryLeaderType.label) {
                     if (data.imageUrl)
                         return data.imageUrl;
                 } else {
@@ -357,12 +378,52 @@
                 }
 
             },
+            async checkDrop(data) {
+                try {
+                    const {data: existing} = await Vue.$axios.get(`${data.type.label}MapPosition/check/${data.id}/mapNot/${this.mapObj.id}`);
+                    return existing;
+                } catch(err) {
+                    return null;
+                }
+            },
             async dropped(event) {
-                // kad dropujemo
+                let existing = await this.checkDrop(event.data);
                 let point = L.point(event.position.x, event.position.y);
                 let latLng = this.map.containerPointToLatLng(point);
                 let address = (await reverseGeoCode(latLng.lat, latLng.lng)).display_name;
-                if(event.data.type === militaryLeaderType.label) {
+                console.log(existing);
+                if(existing) {
+                    let oldPosition = {
+                        lng: existing.lng,
+                        lat: existing.lat,
+                        map: this.mapObj,
+                    };
+                    let newPosition = {
+                        lng: latLng.lng,
+                        lat: latLng.lat,
+                        map: this.mapObj,
+                        address: address,
+                    };
+                    if(event.data.type.label === militaryLeaderType.label) {
+                        oldPosition.address = event.data.birthPlace;
+                        oldPosition.militaryLeader = event.data;
+                        newPosition.militaryLeader = event.data;
+                    } else {
+                        oldPosition.address = event.data.place;
+                        oldPosition.battle = event.data;
+                        newPosition.battle = event.data;
+                    }
+                    this.setEntity({
+                        entity: event.data,
+                        type: event.data.type,
+                        newPosition,
+                        oldPosition
+                    });
+                    this.setShowDialog(true);
+                    return;
+                }
+
+                if(event.data.type.label === militaryLeaderType.label) {
                     if(!address) {
                         this.$store.commit('snackbar/openSnackbar', {text: 'A military leader cannot be placed on international waters.', color: 'error'});
                         return;
@@ -389,9 +450,6 @@
                     this.addBattlePosition(position);
                 }
             },
-            resetMap() {
-
-            },
             async getPositions() {
                 // obe vrste pozicija dobijamo po imenu mape
                 await this.getMilitaryLeaderPositions(this.mapCode);
@@ -403,7 +461,40 @@
             async setup() {
                 await this.getPositions();
                 await this.getConnections();
-            }
+            },
+            createMap() {
+                if(!this.mapOptions) {
+                    console.error("There aren't any map options defined");
+                    return;
+                }
+
+                // kreiranje mape
+                this.map = L.map(this.mapId, this.mapOptions).setView([0, 0], 3);
+
+                // kontrola dolje desno
+                // this.map.addControl(L.control.zoom({position: 'bottomright'}));
+
+                // gasi se popup kad se zumira ili pritisne nedje
+                this.map.on('zoomstart', () => {this.popup.open = false;});
+                this.map.on('mousedown', () => {this.popup.open = false;});
+
+                // opcije za tilelayer
+                let options = {
+                    maxZoom: 19,
+                    noWrap: true
+                };
+                this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', options)
+                    .addTo(this.map);
+            },
+            clearMap() {
+                this.placed = {};
+                this.markerCluster.clearLayers();
+                this.clearAllPositions();
+                this.clearAllMilitaryLeaderBattles();
+                this.map.remove();
+                this.createMap();
+                this.map.addLayer(this.markerCluster);
+            },
 
         },
         created() {
@@ -426,38 +517,20 @@
             });
         },
         mounted() {
-
             // Granice skrolovanja
             const corner1 = L.latLng(-90, -180);
             const corner2 = L.latLng(90, 180);
             const maxBounds = L.latLngBounds(corner1, corner2);
-
             // postavljanje opcija
-            let mapOptions = {
+            this.mapOptions = {
+                attributionControl: false,
                 zoomControl: false,
                 maxBounds,
                 maxBoundsViscosity: 1.0,
                 minZoom: 3,
             };
 
-            // kreiranje mape
-            this.map = L.map(this.mapId, mapOptions).setView([0, 0], 3);
-
-            // kontrola dolje desno
-            this.map.addControl(L.control.zoom({position: 'bottomright'}));
-
-            // gasi se popup kad se zumira ili pritisne nedje
-            this.map.on('zoomstart', () => {this.popup.open = false;});
-            this.map.on('mousedown', () => {this.popup.open = false;});
-
-            // opcije za tilelayer
-            let options = {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                noWrap: true
-            };
-            this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', options)
-                .addTo(this.map);
+            this.createMap();
 
             this.markerCluster = L.markerClusterGroup({
                 maxClusterRadius: 30
@@ -497,5 +570,10 @@
         font-size: 15px; /* 50% of parent */
         line-height: 15px; /* 50% of parent */
         color: #fff;
+    }
+    @media screen and (max-width: 750px) {
+        .leaflet-control-zoom {
+            display: none;
+        }
     }
 </style>

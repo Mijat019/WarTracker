@@ -8,6 +8,8 @@ import positions from "./modules/positions";
 import snackbar from "./modules/snackbar"
 import militaryLeaderBattles from "./modules/militaryLeaderBattles";
 import deletePositionDialog from "./modules/deletePositionDialog";
+import map from "./modules/map"
+import existingPositionDialog from "./modules/existingPositionDialog";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -19,6 +21,8 @@ export default new Vuex.Store({
         militaryLeadersDialog,
         snackbar,
         militaryLeaderBattles,
-        deletePositionDialog
+        deletePositionDialog,
+        map,
+        existingPositionDialog
     },
 });

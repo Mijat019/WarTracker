@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import battleMapPositionService from "../Services/BattleMapPositionService";
 import BattleService from "../Services/BattleService";
+import militaryLeaderMapPositionService from "../Services/MilitaryLeaderMapPositionService";
 
 class BattleMapPositionController {
     public async getAll(req: Request, res: Response) {
@@ -36,8 +37,24 @@ class BattleMapPositionController {
         }
     }
 
+    public async checkPlacement(req: Request, res: Response) {
+        try{
+            const { battleId, mapId } = req.params;
+            const exists = await battleMapPositionService.exists(battleId, mapId);
+            if(exists) {
+                res.status(400).send('Already placed on this map');
+                return;
+            }
+            const found = await battleMapPositionService.findOne(battleId);
+            res.send(found);
+        } catch(error) {
+            res.status(400).send(error.message);
+        }
+    }
+
     public async add(req: Request, res: Response) {
         try {
+
             const { battle } = req.body;
             await BattleService.update(battle.id, battle);
             const toSave = {
@@ -49,6 +66,8 @@ class BattleMapPositionController {
             const battleMapPosition = await battleMapPositionService.add(
                 toSave
             );
+            delete toSave.mapId;
+            await battleMapPositionService.updateAll(toSave);
             res.send(battleMapPosition);
         } catch (error) {
             res.status(400).send(error.message);
@@ -61,7 +80,6 @@ class BattleMapPositionController {
 
             const { battle } = req.body;
             await BattleService.update(battle.id, battle);
-
             const battleMapPosition = await battleMapPositionService.update(
                 id,
                 req.body

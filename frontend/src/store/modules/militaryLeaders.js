@@ -1,4 +1,5 @@
 import Vue from "vue";
+import {militaryLeaderType} from "../../utils/types";
 
 const militaryLeaders = {
     namespaced: true,
@@ -10,7 +11,7 @@ const militaryLeaders = {
     mutations: {
         setMilitaryLeaders(state, militaryLeaders) {
             state.militaryLeaders = militaryLeaders.map(ml => {
-                ml.type = 'militaryLeader';
+                ml.type = militaryLeaderType;
                 return ml;
             });
         },
@@ -23,7 +24,7 @@ const militaryLeaders = {
         },
 
         updateMilitaryLeader(state, updatedMilitaryLeader) {
-            updatedMilitaryLeader.type = 'militaryLeader';
+            updatedMilitaryLeader.type = militaryLeaderType;
             const index = state.militaryLeaders.findIndex(
                 (c) => c.id === updatedMilitaryLeader.id
             );
@@ -31,7 +32,7 @@ const militaryLeaders = {
         },
 
         addMilitaryLeader(state, militaryLeader) {
-            militaryLeader.type = 'militaryLeader';
+            militaryLeader.type = militaryLeaderType;
             state.militaryLeaders.push(militaryLeader);
         },
     },

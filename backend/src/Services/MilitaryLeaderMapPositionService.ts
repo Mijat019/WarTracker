@@ -2,6 +2,8 @@ import MilitaryLeaderMapPosition from "../Models/MilitaryLeaderMapPosition";
 import { IncludeOptions } from "sequelize/types";
 import MilitaryLeader from "../Models/MilitaryLeader";
 import Map from "../Models/Map";
+import BattleMapPosition from "../Models/BattleMapPosition";
+import Battle from "../Models/Battle";
 
 const include: IncludeOptions[] = [
   { model: MilitaryLeader, as: "militaryLeader", required: true },
@@ -49,8 +51,12 @@ class MilitaryLeaderMapPositionService {
   }
 
   public async update(id: string, militaryLeaderMapPositionUpdate: any) {
-    await MilitaryLeaderMapPosition.update(militaryLeaderMapPositionUpdate, {
-      where: { id },
+    const toUpdate = {
+      lng: militaryLeaderMapPositionUpdate.lng,
+      lat: militaryLeaderMapPositionUpdate.lat
+    };
+    await MilitaryLeaderMapPosition.update(toUpdate, {
+      where: { militaryLeaderId: militaryLeaderMapPositionUpdate.militaryLeader.id },
     });
     const militaryLeaderMapPosition = MilitaryLeaderMapPosition.findByPk(id, {
       include,
@@ -63,6 +69,31 @@ class MilitaryLeaderMapPositionService {
     await MilitaryLeaderMapPosition.destroy({
       where: { id },
     });
+  }
+
+  public async exists(militaryLeaderId: string, mapId: string) {
+    const count = await MilitaryLeaderMapPosition.count({
+      where: {militaryLeaderId, mapId}});
+    return !!count;
+  }
+
+  public async findOne(militaryLeaderId: string) {
+    const found = await MilitaryLeaderMapPosition.findOne({
+      where: {
+        militaryLeaderId,
+      },
+      include: [{ model: MilitaryLeader, as: "militaryLeader", required: true }],
+      attributes
+    });
+    return found;
+  }
+
+  public async updateAll(militaryLeaderMapPosition: any) {
+    await MilitaryLeaderMapPosition.update(militaryLeaderMapPosition, {
+      where: {
+        militaryLeaderId: militaryLeaderMapPosition.militaryLeaderId
+      }
+    })
   }
 }
 

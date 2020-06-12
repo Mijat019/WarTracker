@@ -1,4 +1,5 @@
 import Vue from "vue";
+import {battleType} from "../../utils/types";
 
 const BattleModule = {
     namespaced: true,
@@ -14,7 +15,7 @@ const BattleModule = {
 
         setBattles(state, battles) {
             state.battles = battles.map(b => {
-                b.type = 'battle';
+                b.type = battleType;
                 return b;
             });
         },
@@ -25,13 +26,13 @@ const BattleModule = {
         },
 
         updateBattle(state, battle) {
-            battle.type = 'battle';
+            battle.type = battleType;
             const index = state.battles.findIndex((c) => c.id === battle.id);
             Object.assign(state.battles[index], battle);
         },
 
         addBattle(state, battle) {
-            battle.type = 'battle';
+            battle.type = battleType;
             state.battles.push(battle);
         },
     },
