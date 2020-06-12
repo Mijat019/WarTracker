@@ -488,6 +488,19 @@
 </script>
 
 <style>
-    .div-icon {
+    .avatar-circle {
+        background-color: rebeccapurple;
+        text-align: center;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+    }
+    .initials {
+        position: relative;
+        /*posto su velicine ionako zakucane za ikonice*/
+        top: 8px; /* 25% of parent */
+        font-size: 15px; /* 50% of parent */
+        line-height: 15px; /* 50% of parent */
+        color: #fff;
     }
 </style>

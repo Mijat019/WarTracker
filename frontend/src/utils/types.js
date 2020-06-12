@@ -9,7 +9,10 @@ const militaryLeaderType = {
         let iconOptions;
         if (militaryLeader.imageUrl)
             iconOptions = customIconOptions(militaryLeader.imageUrl);
-        else iconOptions = militaryLeaderIconOptions;
+        else {
+            let initials = `${militaryLeader.firstName[0].toUpperCase()}${militaryLeader.lastName[0].toUpperCase()}`;
+            iconOptions = militaryLeaderIconOptions(initials)
+        }
         return iconOptions;
     },
     holderName: function(position) {
