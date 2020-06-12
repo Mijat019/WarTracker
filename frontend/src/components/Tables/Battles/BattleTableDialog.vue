@@ -6,25 +6,26 @@
       </v-btn>
     </template>
     <v-card min-height="100%">
-      <div>
+      <div style="margin-bottom: 1px">
+        <v-toolbar color="white" flat>
+          <v-btn class="ma-2" @click="dialog=false" tile icon>
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Battles</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn @click="addItem" class="my-auto" color="primary" outlined dark>New battle</v-btn>
+        </v-toolbar>
+        <v-divider></v-divider>
+      </div>
+      <v-card-text class="px-0">
         <v-data-table
-          items-per-page="5"
+          :items-per-page="5"
           :headers="headers"
           :items="battles"
           class="elevation-0"
           sort-by="calories"
         >
-          <template v-slot:top>
-            <v-toolbar color="white" flat>
-              <v-btn class="ma-2" @click="dialog=false" tile icon>
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-              <v-toolbar-title>Battles</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-btn @click="addItem" class="mb-2" color="primary" outlined dark>New battle</v-btn>
-            </v-toolbar>
-          </template>
 
           <template v-slot:item.update="{ item }">
             <v-icon @click="editItem(item)" color="amber darken-2">mdi-pencil</v-icon>
@@ -35,7 +36,7 @@
         </v-data-table>
         <battle-modify mode="add" v-model="addDialog" />
         <battle-modify :edit-battle="editBattle" mode="update" v-model="editDialog" />
-      </div>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
@@ -56,7 +57,7 @@ export default {
       { text: "Name", value: "name" },
       { text: "Place", value: "place" },
       { text: "Date", value: "date" },
-      { text: "Description", value: "description" },
+      { text: "Details", value: "description" },
       {
         text: "Update/Details",
         value: "update",
@@ -93,4 +94,5 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

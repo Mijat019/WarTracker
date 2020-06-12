@@ -1,5 +1,5 @@
 const battleUrl = require('../assets/defaultIcons/battle.png');
-const militaryLeaderUrl = require('../assets/defaultIcons/militaryLeader.png');
+
 export const battleIconOptions = {
     html: `<img style="height: 30px; width: 30px;" src="${battleUrl}" alt="battle-icon"/>`,
     className: 'div-icon',

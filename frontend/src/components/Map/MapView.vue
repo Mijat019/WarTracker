@@ -39,7 +39,6 @@
     import PositionPopup from "./PositionPopup";
     import {Drop} from 'vue-easy-dnd';
     const POPUP_OFFSET = {x: 25, y: 12};
-    const militaryLeaderIconUrl = require('../../assets/defaultIcons/militaryLeader.png');
     export default {
         name: "MapView",
         components: {PositionPopup, Drop},
@@ -165,10 +164,6 @@
                 if (data.type === militaryLeaderType.label) {
                     if (data.imageUrl)
                         return data.imageUrl;
-                    else {
-                        console.log(militaryLeaderIconUrl);
-                        return militaryLeaderIconUrl;
-                    }
                 } else {
                     if (data.iconUrl)
                         return data.iconUrl;

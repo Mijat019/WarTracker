@@ -6,24 +6,28 @@
       </v-btn>
     </template>
     <v-card min-height="100%">
-      <div>
+      <div style="margin-bottom: 1px">
+        <v-toolbar color="white" flat>
+          <v-btn class="ma-2" @click="dialog=false" tile icon>
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Military Leaders</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn @click="addItem" outlined class="my-auto" color="primary" dark>New Military Leader</v-btn>
+        </v-toolbar>
+        <v-divider></v-divider>
+      </div>
+      <v-card-text class="px-0">
         <v-data-table
-          items-per-page="5"
+          :items-per-page="5"
           :headers="headers"
           :items="militaryLeaders"
           class="elevation-0"
           sort-by="calories"
         >
           <template v-slot:top>
-            <v-toolbar color="white" flat>
-              <v-btn class="ma-2" @click="dialog=false" tile icon>
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-              <v-toolbar-title>Military Leaders</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-btn @click="addItem" outlined class="mb-2" color="primary" dark>New Military Leader</v-btn>
-            </v-toolbar>
+
           </template>
           <template v-slot:item.avatar="{ item }">
             <v-list-item-avatar color="pink">
@@ -49,7 +53,7 @@
           mode="update"
           v-model="editDialog"
         />
-      </div>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
