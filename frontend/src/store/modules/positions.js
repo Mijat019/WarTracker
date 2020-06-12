@@ -7,7 +7,8 @@ const PositionsModule = {
         militaryLeaderPositions: [],
         battlePositions: [],
         map: null,
-        newlyAdded: null
+        newlyAdded: null,
+        recentlyDeleted: null
     },
 
     mutations: {
@@ -19,6 +20,7 @@ const PositionsModule = {
         },
         deleteBattlePosition(state, battlePosition) {
             let index = state.battlePositions.findIndex(bp => bp.id === battlePosition.id);
+            state.recentlyDeleted = state.battlePositions[index];
             state.battlePositions.splice(index, 1);
         },
         updateBattlePosition(state, battlePosition) {
@@ -34,6 +36,7 @@ const PositionsModule = {
         },
         deleteMilitaryLeaderPosition(state, militaryLeaderPosition) {
             let index = state.militaryLeaderPositions.findIndex(bp => bp.id === militaryLeaderPosition.id);
+            state.recentlyDeleted = state.militaryLeaderPositions[index];
             state.militaryLeaderPositions.splice(index, 1);
         },
         updateMilitaryLeaderPosition(state, militaryLeaderPosition) {
@@ -46,6 +49,9 @@ const PositionsModule = {
         },
         resetAdded(state) {
             state.newlyAdded = null;
+        },
+        resetDeleted(state) {
+            state.recentlyDeleted = null;
         }
     },
 
@@ -134,8 +140,29 @@ const PositionsModule = {
                         {root: true})
                 } else console.log(err);
             }
+        },
+        async deleteMilitaryLeaderPosition({ commit }, position) {
+            try {
+                await Vue.$axios.delete(`/militaryLeaderMapPosition/${position.id}`);
+                commit('deleteMilitaryLeaderPosition', position);
+                commit('snackbar/openSnackbar',
+                    {text: 'The military leader was successfully deleted', color: 'primary'},
+                    {root: true})
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        async deleteBattlePosition({ commit }, position) {
+            try {
+                await Vue.$axios.delete(`/battleMapPosition/${position.id}`);
+                commit('deleteBattlePosition', position);
+                commit('snackbar/openSnackbar',
+                    {text: 'The battle was successfully deleted', color: 'primary'},
+                    {root: true})
+            } catch (err) {
+                console.log(err);
+            }
         }
-
     },
 };
 

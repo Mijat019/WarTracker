@@ -31,38 +31,13 @@
                             <v-btn icon>
                                 <v-icon color="primary">mdi-account</v-icon>
                             </v-btn>
-                            <v-btn icon>
+                            <v-btn @click="deletePosition" icon>
                                 <v-icon color="red">mdi-delete</v-icon>
                             </v-btn>
                         </div>
                     </v-list-item-action>
                 </v-list-item>
             </v-list>
-
-<!--            <v-divider></v-divider>-->
-
-<!--            <v-list>-->
-<!--                <v-list-item>-->
-<!--                    <v-list-item-action>-->
-<!--                        <v-switch v-model="message" color="purple"></v-switch>-->
-<!--                    </v-list-item-action>-->
-<!--                    <v-list-item-title>Enable messages</v-list-item-title>-->
-<!--                </v-list-item>-->
-
-<!--                <v-list-item>-->
-<!--                    <v-list-item-action>-->
-<!--                        <v-switch v-model="hints" color="purple"></v-switch>-->
-<!--                    </v-list-item-action>-->
-<!--                    <v-list-item-title>Enable hints</v-list-item-title>-->
-<!--                </v-list-item>-->
-<!--            </v-list>-->
-
-<!--            <v-card-actions>-->
-<!--                <v-spacer></v-spacer>-->
-
-<!--                <v-btn text @click="menu = false">Cancel</v-btn>-->
-<!--                <v-btn color="primary" text @click="menu = false">Save</v-btn>-->
-<!--            </v-card-actions>-->
         </v-card>
     </v-menu>
 </template>
@@ -112,6 +87,17 @@
                 if (!this.type) return '';
                 if (!this.position) return '';
                 return this.type.info(this.position);
+            }
+        },
+        methods: {
+            deletePosition() {
+                this.$store.commit('deletePositionDialog/setPosition',
+                    {
+                        position: this.position,
+                        type: this.type
+                    }
+                );
+                this.$store.commit('deletePositionDialog/setShowDialog', true);
             }
         }
     }

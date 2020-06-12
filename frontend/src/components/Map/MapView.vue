@@ -93,8 +93,12 @@
                     this.placeMarkers(this.militaryLeaderPositions, militaryLeaderType);
                 else if (newLength > oldLength) { // dodat military leader
                     let added = this.$store.state.positions.newlyAdded;
-                    this.placeMarker([].concat(added), militaryLeaderType);
+                    this.placeMarkers([].concat(added), militaryLeaderType);
                     this.$store.commit('positions/resetAdded');
+                } else if (oldLength > newLength) {
+                    let deleted = this.$store.state.positions.recentlyDeleted;
+                    this.removeMarker(deleted, militaryLeaderType);
+                    this.$store.commit('positions/resetDeleted');
                 }
             },
 
@@ -106,6 +110,10 @@
                     let added = this.$store.state.positions.newlyAdded;
                     this.placeMarkers([].concat(added), battleType);
                     this.$store.commit('positions/resetAdded');
+                } else if (oldLength > newLength) {
+                    let deleted = this.$store.state.positions.recentlyDeleted;
+                    this.removeMarker(deleted, battleType);
+                    this.$store.commit('positions/resetDeleted');
                 }
             },
             'militaryLeaderBattles.length'(newLength, oldLength) {
@@ -117,7 +125,7 @@
                     this.$store.commit('militaryLeaderBattles/resetAdded');
                 } else if (oldLength > newLength) {
                     let deleted = this.$store.state.militaryLeaderBattles.recentlyDeleted;
-                    this.removeLine(deleted);
+                    this.removeLines([].concat(deleted));
                     this.$store.commit('militaryLeaderBattles/resetDeleted');
                 }
             }
@@ -213,6 +221,11 @@
                     this.line.battle = null;
                 }
             },
+            removeLines(militaryLeaderBattles) {
+                for(let militaryLeaderBattle of militaryLeaderBattles) {
+                    this.removeLine(militaryLeaderBattle);
+                }
+            },
             removeLine(militaryLeaderBattle) {
                 let leaderPlaced = this.placed[militaryLeaderType.label + militaryLeaderBattle.militaryLeaderId];
                 for (let [i, edge] of leaderPlaced.edges.entries()) {
@@ -253,6 +266,13 @@
                     line,
                     to: battlePosition
                 });
+            },
+            removeMarker(position, type) {
+                let id = type.label === battleType.label ? position.battle.id : position.militaryLeader.id;
+                let placed = this.placed[type.label + id];
+                placed.marker.remove(this.map);
+                this.$store.commit('militaryLeaderBattles/deleteMultiple', placed.edges);
+                delete placed[type.label + id];
             },
             placeMarkers(positions, type) {
                 // postavljaju se markeri za sve pozicije

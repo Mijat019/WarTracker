@@ -23,13 +23,24 @@ const militaryLeaderBattles = {
             state.militaryLeaderBattles.splice(index, 1);
         },
 
+        deleteMultiple(state, militaryLeaderBattles) {
+            // ovo je malo glupo al mi se zuri :D
+            state.recentlyDeleted = [];
+            for(let mlb of militaryLeaderBattles) {
+                let index = state.militaryLeaderBattles.findIndex(
+                    (c) => c.id === mlb.id
+                );
+                state.recentlyDeleted.push(state.militaryLeaderBattles[index]);
+                state.militaryLeaderBattles.splice(index, 1);
+            }
+        },
         addMilitaryLeaderBattle(state, militaryLeaderBattle) {
             state.newlyAdded = militaryLeaderBattle;
             state.militaryLeaderBattles.push(militaryLeaderBattle);
         },
         setAdditionalMilitaryLeaderBattles(state, militaryLeaderBattles) {
             state.newlyAdded = militaryLeaderBattles;
-            state.militaryLeaderBattles.push(militaryLeaderBattles);
+            state.militaryLeaderBattles = [...state.militaryLeaderBattles, ...militaryLeaderBattles];
         },
         resetAdded(state) {
             state.newlyAdded = null;

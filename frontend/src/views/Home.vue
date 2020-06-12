@@ -5,7 +5,8 @@
       <map-view/>
       <military-leader-details class="dialog" />
       <battle-details class="dialog" />
-      <snackbar></snackbar>
+      <snackbar/>
+      <delete-position-dialog/>
     </v-content>
   </div>
 </template>
@@ -16,10 +17,11 @@ import MilitaryLeaderDetails from "../components/Drawer/MilitaryLeaderDetails";
 import Drawer from "../components/Drawer/Drawer";
 import MapView from "../components/Map/MapView";
 import Snackbar from "../components/Snackbar";
+import DeletePositionDialog from "../components/DeletePositionDialog";
 
 export default {
   name: "Home",
-  components: {Snackbar, MapView, Drawer, MilitaryLeaderDetails, BattleDetails }
+  components: {DeletePositionDialog, Snackbar, MapView, Drawer, MilitaryLeaderDetails, BattleDetails }
 };
 </script>
 
