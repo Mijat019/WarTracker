@@ -2,8 +2,6 @@ import MilitaryLeaderMapPosition from "../Models/MilitaryLeaderMapPosition";
 import { IncludeOptions } from "sequelize/types";
 import MilitaryLeader from "../Models/MilitaryLeader";
 import Map from "../Models/Map";
-import BattleMapPosition from "../Models/BattleMapPosition";
-import Battle from "../Models/Battle";
 
 const include: IncludeOptions[] = [
   { model: MilitaryLeader, as: "militaryLeader", required: true },
@@ -58,10 +56,12 @@ class MilitaryLeaderMapPositionService {
     await MilitaryLeaderMapPosition.update(toUpdate, {
       where: { militaryLeaderId: militaryLeaderMapPositionUpdate.militaryLeader.id },
     });
+    console.log("Updated all of them");
     const militaryLeaderMapPosition = MilitaryLeaderMapPosition.findByPk(id, {
       include,
       attributes,
     });
+    console.log("Found by pk")
     return militaryLeaderMapPosition;
   }
 
@@ -78,6 +78,7 @@ class MilitaryLeaderMapPositionService {
   }
 
   public async findOne(militaryLeaderId: string) {
+    console.log("INFINDONE " + militaryLeaderId)
     const found = await MilitaryLeaderMapPosition.findOne({
       where: {
         militaryLeaderId,

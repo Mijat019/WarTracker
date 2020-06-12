@@ -92,6 +92,7 @@
             },
             mapObj(newVal, oldVal) {
                 if(!oldVal || !newVal) return;
+                console.info("CLEARING MAP");
                 this.clearMap();
                 this.setup();
             },

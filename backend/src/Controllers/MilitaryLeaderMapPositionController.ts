@@ -68,7 +68,7 @@ class MilitaryLeaderMapPositionController {
                 toSave
             );
             delete toSave.mapId;
-            await militaryLeaderMapPosition.updateAll(toSave);
+            await militaryLeaderMapPositionService.updateAll(toSave);
             res.send(militaryLeaderMapPosition);
         } catch (error) {
             res.status(400).send(error.message);
@@ -84,10 +84,12 @@ class MilitaryLeaderMapPositionController {
                 militaryLeader.id,
                 militaryLeader
             );
+            console.log("Enter service update")
             const militaryLeaderMapPosition = await militaryLeaderMapPositionService.update(
                 id,
                 req.body
             );
+            console.log("Exit service update")
             res.send(militaryLeaderMapPosition);
         } catch (error) {
             res.status(400).send(error.message);
