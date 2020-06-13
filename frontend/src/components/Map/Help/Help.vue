@@ -1,102 +1,41 @@
 <template>
-    <div>
-        <v-dialog :value="value" @input="$emit('input', false)" fullscreen persistent>
-            <v-card>
-                <v-card-title>
-                    <span class="headline" >Help</span>
-                    <v-btn @click="closeAddDialog" color="blue darken-1" text>Close</v-btn>
-                </v-card-title>
-                <v-card>
-                    <search-and-filter></search-and-filter>
-                    <v-fade-transition>
-                    <v-divider v-show="true"></v-divider>
-                </v-fade-transition>
-                    <v-expand-transition>
-                        <div v-show="true">
-                            <v-list color="transparent">
-                                <v-list-group v-show="true">
-                                    <template v-slot:activator>
-                                        <v-list-item-avatar>
-                                            <v-icon>mdi-account</v-icon>
-                                        </v-list-item-avatar>
-                                        <v-list-item-title>Create a military leader</v-list-item-title>
-                                    </template>
-                                    <v-divider />
-                                    <div class="height overflow-y-auto">
-                                    <v-card-text>
-                                        1. Click Menu <v-icon>mdi-menu</v-icon>
-                                    </v-card-text>
-                                    </div>
-                                    <v-divider />
-                                </v-list-group>
-
-                                <v-list-group v-show="true">
-                                    <template v-slot:activator>
-                                        <v-list-item-avatar>
-                                            <v-icon>mdi-sword-cross</v-icon>
-                                        </v-list-item-avatar>
-                                        <v-list-item-title>Create a battle</v-list-item-title>
-                                    </template>
-                                    <v-divider />
-                                    <div class="height overflow-y-auto">
-                                        <v-card-text class="black--text">
-                                            1. Click Menu <v-icon>mdi-menu</v-icon>
-                                        </v-card-text>
-                                    </div>
-                                    <v-divider />
-                                </v-list-group>
-
-                                <v-list-group v-show="true">
-                                    <template v-slot:activator>
-                                        <v-list-item-avatar>
-                                            <v-icon>mdi-sync</v-icon>
-                                        </v-list-item-avatar>
-                                        <v-list-item-title>Join the battle and military leader</v-list-item-title>
-                                    </template>
-                                    <v-divider />
-                                    <div class="height overflow-y-auto">
-                                        <v-card-text class="black--text"  >
-                                            Morbi mattis ullamcorper velit.  <v-icon>mdi-sync</v-icon> <br> Donec orci lectus, aliquam ut, faucibus non, euismod id, nulla. Fusce convallis metus id felis luctus adipiscing. Aenean massa. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy id, metus.
-
-                                            Nulla consequat massa quis enim. Praesent venenatis metus at tortor pulvinar varius. Donec venenatis vulputate lorem. Phasellus accumsan cursus velit. Pellentesque ut neque.
-                                        </v-card-text>
-                                    </div>
-                                    <v-divider />
-                                </v-list-group>
-                            </v-list>
-                        </div>
-                    </v-expand-transition>
-                </v-card>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+    <div class="d-flex">
+        <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn @click="toggleShowHelp" height="20px" width="20px" icon v-on="on" v-bind="attrs">
+                    <v-icon
+                            :color="showHelp ? 'primary' : 'grey'"
+                            class="ml-1"
+                            size="20"
+                    >
+                        mdi-help
+                    </v-icon>
+                </v-btn>
+            </template>
+            <span>Help</span>
+        </v-tooltip>
+        <help-bar v-model="showHelp"></help-bar>
     </div>
 </template>
 
 <script>
-    import SearchAndFilter from "../../Drawer/SearchAndFilter";
+    import HelpBar from "./HelpBar";
 
     export default {
-        components: {SearchAndFilter },
-        name: "HelpBar",
-        drawer: true,
+        name: "Help",
+        components: {HelpBar},
         data: () => ({
-            showMilitaryLeadersList: false,
-            showBattlesList: false
+            showHelp: false,
         }),
-        props: {
-            value: null,
-        },
         methods: {
-            closeAddDialog() {
-                this.$emit("input", false);
+            toggleShowHelp() {
+                this.showHelp = !this.showHelp;
             },
 
         }
-    };
+    }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
