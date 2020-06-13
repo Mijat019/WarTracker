@@ -648,12 +648,15 @@
     .leaflet-marker-icon {
         outline: none;
         transition: all .5s;
+        transition-property: height, width, left, top;
     }
     .leaflet-marker-icon > img {
         transition: all .5s;
+
     }
     .leaflet-marker-icon > .initials {
         transition: all .5s;
+
     }
     .outlined {
         height: 40px !important;
@@ -661,6 +664,8 @@
         left: -5px;
         top: -5px;
         transition: all .5s;
+        transition-property: height, width, left, top;
+
     }
     .outlined > .initials {
         top: 13px;
