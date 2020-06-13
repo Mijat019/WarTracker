@@ -5,8 +5,20 @@
         <v-icon>mdi-account</v-icon>
       </v-list-item-avatar>
       <v-list-item-title>Military leaders</v-list-item-title>
-      <v-list-item-action>
-        <MilitaryLeadersTableDialog />
+      <v-list-item-action >
+        <div class="d-flex flex-row">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn @click="addDialog = true" class="my-auto" icon v-on="on" v-bind="attrs">
+                <v-icon>
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>New military leader</span>
+          </v-tooltip>
+          <military-leaders-table-dialog/>
+        </div>
       </v-list-item-action>
     </template>
     <v-divider />
@@ -31,18 +43,24 @@
       </drag>
     </div>
     <v-divider />
+    <military-leader-modify mode="add" v-model="addDialog" />
   </v-list-group>
 </template>
 
 <script>
 import MilitaryLeadersTableDialog from "../Tables/MilitaryLeader/MilitaryLeadersTableDialog";
+import MilitaryLeaderModify from "../Tables/MilitaryLeader/MilitaryLeaderModify";
 import { mapGetters, mapMutations } from "vuex"
 import {Drag} from 'vue-easy-dnd';
 
 export default {
-  components: { MilitaryLeadersTableDialog, Drag },
+  components: { MilitaryLeaderModify, MilitaryLeadersTableDialog, Drag },
 
   name: "MilitaryLeadersList",
+
+  data: () => ({
+    addDialog: false,
+  }),
 
   props: {
     value: {

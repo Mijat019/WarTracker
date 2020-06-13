@@ -69,6 +69,8 @@ const BattleModule = {
                     battle
                 );
                 commit("updateBattle", modified);
+                commit("positions/updateBattle", modified, {root: true});
+
             } catch (err) {
                 console.log(err);
             }

@@ -78,7 +78,13 @@
             }
         },
         computed: {
-            ...mapState('positions', ['militaryLeaderPositions', 'battlePositions']),
+            ...mapState('positions',
+                [
+                    'militaryLeaderPositions',
+                    'battlePositions',
+                    'updatedMilitaryLeader',
+                    'updatedBattle'
+                ]),
             ...mapState('militaryLeaderBattles', ['militaryLeaderBattles']),
             ...mapState('map', ['mapCode', 'mapObj', 'lineAdding', 'lineRemoving']),
 
@@ -101,16 +107,48 @@
                 this.clearMap();
                 this.setup();
             },
+            updatedMilitaryLeader(newVal) {
+                if (!newVal) return;
+                let marker = this.placed[militaryLeaderType.label + newVal.militaryLeader.id].marker;
+                this.markerCluster.removeLayer(marker);
+                marker.remove();
+                let oldEdges = this.placed[militaryLeaderType.label + newVal.militaryLeader.id].edges;
+                this.placeMarker(newVal, militaryLeaderType);
+                this.placed[militaryLeaderType.label + newVal.militaryLeader.id].edges = oldEdges;
+                this.$store.commit('positions/resetUpdatedMilitaryLeader');
+            },
+            updatedBattle(newVal) {
+                if (!newVal) return;
+                let marker = this.placed[battleType.label + newVal.battle.id].marker;
+                this.markerCluster.removeLayer(marker);
+                marker.remove();
+                let oldEdges = this.placed[battleType.label + newVal.battle.id].edges;
+                this.placeMarker(newVal, battleType);
+                this.placed[battleType.label + newVal.battle.id].edges = oldEdges;
+                this.$store.commit('positions/resetUpdatedBattle')
+            },
             lineAdding(val) {
                 if(!val) {
                     this.line.elementMilitaryLeader?.classList.remove('outlined');
                     this.line.elementBattle?.classList.remove('outlined');
+                    this.line = {
+                        militaryLeader: null,
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
+                    };
                 }
             },
             lineRemoving(val) {
                 if(!val) {
                     this.disconnectLine.elementMilitaryLeader?.classList.remove('outlined');
                     this.disconnectLine.elementBattle?.classList.remove('outlined');
+                    this.disconnectLine = {
+                        militaryLeader: null,
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
+                    };
                 }
             },
             'militaryLeaderPositions.length'(newLength, oldLength) {

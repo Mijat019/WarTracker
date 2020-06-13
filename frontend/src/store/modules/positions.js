@@ -7,7 +7,10 @@ const PositionsModule = {
         militaryLeaderPositions: [],
         battlePositions: [],
         newlyAdded: null,
-        recentlyDeleted: null
+        recentlyDeleted: null,
+        updatedMilitaryLeader: null,
+        updatedBattle: null
+
     },
 
     mutations: {
@@ -22,6 +25,11 @@ const PositionsModule = {
         updateBattlePosition(state, battlePosition) {
             const index = state.battlePositions.findIndex(bp => bp.id === battlePosition.id);
             state.battlePositions[index] = battlePosition;
+        },
+        updateBattle(state, battle) {
+            const index = state.battlePositions.findIndex(mlp => mlp.battle.id === battle.id);
+            Object.assign(state.battlePositions[index].battle, battle);
+            state.updatedBattle = state.battlePositions[index];
         },
         addBattlePosition(state, battlePosition) {
             state.battlePositions.push(battlePosition);
@@ -39,6 +47,11 @@ const PositionsModule = {
             const index = state.militaryLeaderPositions.findIndex(bp => bp.id === militaryLeaderPosition.id);
             Object.assign(state.militaryLeaderPositions[index], militaryLeaderPosition);
         },
+        updateMilitaryLeader(state, militaryLeader) {
+            const index = state.militaryLeaderPositions.findIndex(mlp => mlp.militaryLeader.id === militaryLeader.id);
+            Object.assign(state.militaryLeaderPositions[index].militaryLeader, militaryLeader);
+            state.updatedMilitaryLeader = state.militaryLeaderPositions[index];
+        },
         addMilitaryLeaderPosition(state, militaryLeaderPosition) {
             state.militaryLeaderPositions.push(militaryLeaderPosition);
             state.newlyAdded = militaryLeaderPosition;
@@ -48,6 +61,12 @@ const PositionsModule = {
         },
         resetDeleted(state) {
             state.recentlyDeleted = null;
+        },
+        resetUpdatedMilitaryLeader(state) {
+            state.updatedMilitaryLeader = null;
+        },
+        resetUpdatedBattle(state) {
+            state.updatedBattle = null;
         },
         clearAllPositions(state) {
             state.militaryLeaderPositions = [];

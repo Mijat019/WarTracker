@@ -76,6 +76,7 @@ const militaryLeaders = {
                 }
 
                 commit("updateMilitaryLeader", modified);
+                commit("positions/updateMilitaryLeader", modified, {root: true})
             } catch (error) {
                 console.log(error);
             }
@@ -120,6 +121,7 @@ const militaryLeaders = {
                     formData
                 );
                 commit("updateMilitaryLeader", newMilitaryLeader);
+                commit("positions/updateMilitaryLeader", newMilitaryLeader, {root: true})
             } catch (error) {
                 console.log(error);
             }

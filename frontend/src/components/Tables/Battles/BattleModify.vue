@@ -72,12 +72,11 @@
                                         <v-textarea
                                             :rules="[rules.required]"
                                             auto-grow
-                                            filled
+                                            outlined
                                             label="Description"
                                             required
                                             row-height="30"
                                             rows="4"
-                                            shaped
                                             v-model="description"
                                         ></v-textarea>
                                     </v-col>
