@@ -1,6 +1,12 @@
 <template>
     <div class="d-flex align-center">
-        <v-btn @click="zoomOut" height="15px" width="15px" icon :ripple="false">
+        <v-btn
+                @click="zoomOut"
+                height="15px"
+                width="15px"
+                icon
+                :ripple="false"
+        >
             <v-icon
                     size="15"
                     :color="isMinZoom ? 'grey' : 'primary lighten-2'"
@@ -12,7 +18,13 @@
 
         <v-divider class="py-1 mx-2" vertical></v-divider>
 
-        <v-btn @click="zoomIn" height="15px" width="15px" icon :ripple="false">
+        <v-btn
+                @click="zoomIn"
+                height="15px"
+                width="15px"
+                icon
+                :ripple="false"
+        >
             <v-icon
                     size="15"
                     :color="isMaxZoom ? 'grey' : 'primary lighten-2'"
@@ -28,6 +40,9 @@
 
     export default {
         name: "ZoomControl",
+        data: () => ({
+            disabled: false
+        }),
         computed: {
             ...mapState('map', ['map']),
             ...mapGetters('map', ['isMinZoom', 'isMaxZoom'])

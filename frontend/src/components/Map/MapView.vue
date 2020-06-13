@@ -58,12 +58,16 @@
             },
             line: {
                 militaryLeader: null,
-                battle: null
+                battle: null,
+                elementMilitaryLeader: null,
+                elementBattle: null
             },
             disconnectLine: {
                 militaryLeader: null,
-                battle: null
-            }
+                battle: null,
+                elementMilitaryLeader: null,
+                elementBattle: null
+            },
         }),
         props: {
             mapId: {
@@ -76,7 +80,8 @@
         computed: {
             ...mapState('positions', ['militaryLeaderPositions', 'battlePositions']),
             ...mapState('militaryLeaderBattles', ['militaryLeaderBattles']),
-            ...mapState('map', ['mapCode', 'mapObj']),
+            ...mapState('map', ['mapCode', 'mapObj', 'lineAdding', 'lineRemoving']),
+
             map: {
                 get() {
                     return this.$store.state.map.map;
@@ -95,6 +100,18 @@
                 console.info("CLEARING MAP");
                 this.clearMap();
                 this.setup();
+            },
+            lineAdding(val) {
+                if(!val) {
+                    this.line.elementMilitaryLeader?.classList.remove('outlined');
+                    this.line.elementBattle?.classList.remove('outlined');
+                }
+            },
+            lineRemoving(val) {
+                if(!val) {
+                    this.disconnectLine.elementMilitaryLeader?.classList.remove('outlined');
+                    this.disconnectLine.elementBattle?.classList.remove('outlined');
+                }
             },
             'militaryLeaderPositions.length'(newLength, oldLength) {
                 // Proverava velicinu pozicija i na taj nacin se abdejtuje
@@ -193,7 +210,11 @@
                 }
             },
             clicked(event, position, type) {
-                if (event.originalEvent.altKey && event.originalEvent.ctrlKey) {
+                if (this.lineRemoving) {
+                    this.disconnectTwo(event, position, type)
+                } else if (this.lineAdding) {
+                    this.connectTwo(event, position, type);
+                } else if (event.originalEvent.altKey && event.originalEvent.ctrlKey) {
                     this.disconnectTwo(event, position, type)
                 } else if (event.originalEvent.ctrlKey) {
                     this.connectTwo(event, position, type);
@@ -202,8 +223,18 @@
             disconnectTwo(event, position, type) {
                 if(type.label === militaryLeaderType.label) {
                     this.disconnectLine.militaryLeader = position;
+                    this.disconnectLine.elementMilitaryLeader?.classList.remove('outlined');
+                    let element = event.target.getElement();
+                    element.classList.add('outlined');
+                    this.disconnectLine.elementMilitaryLeader = element;
+                    event.target.update();
                 } else {
                     this.disconnectLine.battle = position;
+                    this.disconnectLine.elementBattle?.classList.remove('outlined');
+                    let element = event.target.getElement();
+                    element.classList.add('outlined');
+                    this.disconnectLine.elementBattle = element;
+                    event.target.update();
                 }
                 if (this.disconnectLine.militaryLeader && this.disconnectLine.battle) {
                     let { edges } = this.placed[militaryLeaderType.label + this.disconnectLine.militaryLeader.militaryLeader.id];
@@ -217,15 +248,33 @@
                     // for the sake of equality and standard, we are gonna do it like this
                     // even though it's slower and more complicated
 
-                    this.disconnectLine.militaryLeader = null;
-                    this.disconnectLine.battle = null;
+                    this.disconnectLine.elementMilitaryLeader?.classList.remove('outlined');
+                    this.disconnectLine.elementBattle?.classList.remove('outlined');
+
+                    this.disconnectLine = {
+                        militaryLeader: null,
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
+                    };
                 }
             },
             connectTwo(event, position, type) {
                 if (type.label === militaryLeaderType.label) {
                     this.line.militaryLeader = position;
+                    this.line.elementMilitaryLeader?.classList.remove('outlined');
+                    let element = event.target.getElement();
+                    element.classList.add('outlined');
+                    this.line.elementMilitaryLeader = element;
+                    event.target.update();
                 } else if (type.label === battleType.label) {
                     this.line.battle = position;
+                    this.line.elementBattle?.classList.remove('outlined');
+                    let element = event.target.getElement();
+                    element.classList.add('outlined');
+                    this.line.elementBattle = element;
+                    event.target.update();
+
                 }
                 if (this.line.militaryLeader && this.line.battle) {
 
@@ -237,8 +286,16 @@
                     this.addMilitaryLeaderBattle(connection);
 
                     // anuliranje
-                    this.line.militaryLeader = null;
-                    this.line.battle = null;
+
+                    this.line.elementMilitaryLeader?.classList.remove('outlined');
+                    this.line.elementBattle?.classList.remove('outlined');
+
+                    this.line = {
+                        militaryLeader: null,
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
+                    };
                 }
             },
             removeLines(militaryLeaderBattles) {
@@ -392,7 +449,6 @@
                 let point = L.point(event.position.x, event.position.y);
                 let latLng = this.map.containerPointToLatLng(point);
                 let address = (await reverseGeoCode(latLng.lat, latLng.lng)).display_name;
-                console.log(existing);
                 if(existing) {
                     let oldPosition = {
                         lng: existing.lng,
@@ -501,18 +557,30 @@
         created() {
             window.addEventListener('keyup', e => {
                 if(e.code === 'ControlLeft') {
+                    this.line.elementMilitaryLeader?.classList.remove('outlined');
+                    this.line.elementBattle?.classList.remove('outlined');
+                    this.disconnectLine.elementMilitaryLeader?.classList.remove('outlined');
+                    this.disconnectLine.elementBattle?.classList.remove('outlined');
                     this.line = {
                         militaryLeader: null,
-                        battle: null
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
                     };
                     this.disconnectLine = {
                         militaryLeader: null,
-                        battle: null
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
                     };
                 } else if (e.code === 'AltLeft') {
+                    this.disconnectLine.elementMilitaryLeader?.classList.remove('outlined');
+                    this.disconnectLine.elementBattle?.classList.remove('outlined');
                     this.disconnectLine = {
                         militaryLeader: null,
-                        battle: null
+                        battle: null,
+                        elementMilitaryLeader: null,
+                        elementBattle: null
                     }
                 }
             });
@@ -576,5 +644,31 @@
         .leaflet-control-zoom {
             display: none;
         }
+    }
+    .leaflet-marker-icon {
+        outline: none;
+        transition: all .5s;
+    }
+    .leaflet-marker-icon > img {
+        transition: all .5s;
+    }
+    .leaflet-marker-icon > .initials {
+        transition: all .5s;
+    }
+    .outlined {
+        height: 40px !important;
+        width: 40px !important;
+        left: -5px;
+        top: -5px;
+        transition: all .5s;
+    }
+    .outlined > .initials {
+        top: 13px;
+        transition: all .5s;
+    }
+    .outlined > img {
+        height: 40px !important;
+        width: 40px !important;
+        transition: all .5s;
     }
 </style>

@@ -5,7 +5,9 @@ const MapModule = {
     state: {
         mapObj: null,
         map: null,
-        mapCode: 'map1'
+        mapCode: 'map1',
+        lineAdding: false,
+        lineRemoving: false
     },
 
     mutations: {
@@ -23,6 +25,14 @@ const MapModule = {
         },
         zoomIn(state) {
             state.map.zoomIn();
+        },
+        setLineAdding(state, val) {
+            state.lineAdding = val;
+            if(val) state.lineRemoving = !val;
+        },
+        setLineRemoving(state, val) {
+            state.lineRemoving = val;
+            if(val) state.lineAdding = !val;
         }
     },
     actions: {
@@ -37,9 +47,11 @@ const MapModule = {
     },
     getters: {
         isMaxZoom(state) {
+            if(!state.map) return false;
             return state.map.getZoom() === state.map.getMaxZoom();
         },
         isMinZoom(state) {
+            if(!state.map) return false;
             return state.map.getZoom() === state.map.getMinZoom();
         }
     }
