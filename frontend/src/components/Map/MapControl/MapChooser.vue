@@ -1,6 +1,17 @@
 <template>
 
     <div class="d-flex">
+        <v-btn @click="toggleShowHelp" height="20px" width="20px" icon>
+            <v-icon
+                    :color="showHelp ? 'primary' : 'grey'"
+                    class="ml-1"
+                    size="20"
+            >
+                mdi-help
+            </v-icon>
+        </v-btn>
+        <help-bar v-model="showHelp"></help-bar>
+        <v-divider class="py-1 mx-2" vertical></v-divider>
         <v-btn @click="toggleShowPanel" height="20px" width="20px" icon>
             <v-icon
                     :color="showPanel ? 'primary' : 'grey'"
@@ -60,11 +71,14 @@
 
 <script>
     import {mapMutations, mapState} from "vuex";
+    import HelpBar from "../Help/Help";
 
     export default {
         name: "MapChooser",
+        components: {HelpBar},
         data: () => ({
             showPanel: false,
+            showHelp: false,
         }),
         computed: {
             ...mapState('map', ['mapCode'])
@@ -74,6 +88,9 @@
                 [
                     'setMapCode'
                 ]),
+            toggleShowHelp() {
+                this.showHelp = !this.showHelp;
+            },
             toggleShowPanel() {
                 this.showPanel = !this.showPanel;
             },
