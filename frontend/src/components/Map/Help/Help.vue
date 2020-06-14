@@ -30,6 +30,7 @@
         methods: {
             toggleShowHelp() {
                 this.showHelp = !this.showHelp;
+
             },
 
         }
