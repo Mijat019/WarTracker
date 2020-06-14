@@ -9,8 +9,8 @@
                 <v-card>
                     <search-and-filter></search-and-filter>
                     <v-fade-transition>
-                    <v-divider v-show="true"></v-divider>
-                </v-fade-transition>
+                        <v-divider v-show="true"></v-divider>
+                    </v-fade-transition>
                     <v-expand-transition>
                         <div v-show="true">
                             <v-list color="transparent">

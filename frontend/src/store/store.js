@@ -10,6 +10,7 @@ import militaryLeaderBattles from "./modules/militaryLeaderBattles";
 import deletePositionDialog from "./modules/deletePositionDialog";
 import map from "./modules/map"
 import existingPositionDialog from "./modules/existingPositionDialog";
+import positionPopup from "./modules/positionPopup";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         militaryLeaderBattles,
         deletePositionDialog,
         map,
-        existingPositionDialog
+        existingPositionDialog,
+        positionPopup
     },
 });

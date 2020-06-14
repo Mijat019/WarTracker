@@ -14,13 +14,7 @@
             <div :id="mapId"
                  style="min-width: 100vh; min-height: 100vh; z-index: 0;"
             >
-                <position-popup
-                        v-model="popup.open"
-                        :position-x="popup.x"
-                        :position-y="popup.y"
-                        :position="popup.position"
-                        :type="popup.type"
-                />
+                <position-popup/>
             </div>
         </drop>
 
@@ -49,13 +43,6 @@
             tileLayer: null,
             placed: {},
             markerCluster: null,
-            popup: {
-                open: false,
-                x: 0,
-                y: 0,
-                position: null,
-                type: null
-            },
             line: {
                 militaryLeader: null,
                 battle: null,
@@ -87,6 +74,7 @@
                 ]),
             ...mapState('militaryLeaderBattles', ['militaryLeaderBattles']),
             ...mapState('map', ['mapCode', 'mapObj', 'lineAdding', 'lineRemoving']),
+            ...mapState('positionPopup', ['popup']),
 
             map: {
                 get() {
@@ -207,6 +195,7 @@
             ...mapMutations('positions', ['clearAllPositions']),
             ...mapMutations('militaryLeaderBattles', ['clearAllMilitaryLeaderBattles']),
             ...mapMutations('existingPositionDialog', ['setEntity', 'setShowDialog']),
+            ...mapMutations('positionPopup', ['setPopup', 'setOpenPopup']),
             ...mapActions('positions',
                 [
                     'getMilitaryLeaderPositions',
@@ -399,7 +388,7 @@
                 // postavimo marker na odredjenu lokaciju sa odredjenom ikonicom
                 let marker = L.marker([position.lat, position.lng], {draggable: true});
                 marker.setIcon(L.divIcon(type.determineIcon(position)));
-                marker.on('mousedown', () => { this.popup.open = false; });
+                // marker.on('mousedown', () => { this.setOpenPopup(false); });
                 marker.on('dragend', e => this.markerMoved(e, position, type));
                 marker.on('drag', e => this.markerMoving(e, position, type));
                 marker.on('click', e => this.clicked(e, position, type));
@@ -416,11 +405,13 @@
                 // otvaranje popupa na klik
                 let marker = event.target;
                 let point = this.map.latLngToContainerPoint(marker.getLatLng()).round();
-                this.popup.open = true;
-                this.popup.position = position;
-                this.popup.type = type;
-                this.popup.x = point.x + POPUP_OFFSET.x;
-                this.popup.y = point.y + POPUP_OFFSET.y;
+                this.setPopup({
+                    open: true,
+                    position,
+                    type,
+                    x: point.x + POPUP_OFFSET.x,
+                    y: point.y + POPUP_OFFSET.y
+                });
             },
             setEdgesCoordinates(position, type, lat, lng){
                 let id = type.label === battleType.label ? position.battle.id : position.militaryLeader.id;
@@ -570,8 +561,8 @@
                 // this.map.addControl(L.control.zoom({position: 'bottomright'}));
 
                 // gasi se popup kad se zumira ili pritisne nedje
-                this.map.on('zoomstart', () => {this.popup.open = false;});
-                this.map.on('mousedown', () => {this.popup.open = false;});
+                this.map.on('zoomstart', () => {this.setOpenPopup(false);});
+                this.map.on('mousedown', () => {this.setOpenPopup(false);}); // odradjeno u cijeloj aplikaciji
 
                 // opcije za tilelayer
                 let options = {

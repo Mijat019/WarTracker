@@ -1,11 +1,11 @@
 <template>
     <v-menu
             absolute
-            :position-x="positionX"
-            :position-y="positionY"
+            :position-x="popup.x"
+            :position-y="popup.y"
             z-index="500"
             :close-on-click="false"
-            :value="value"
+            :value="popup.open"
     >
 
         <v-card>
@@ -28,12 +28,22 @@
 
                     <v-list-item-action>
                         <div class="flex flex-column">
-                            <v-btn icon>
-                                <v-icon color="primary">mdi-account</v-icon>
-                            </v-btn>
-                            <v-btn @click="deletePosition" icon>
-                                <v-icon color="red">mdi-delete</v-icon>
-                            </v-btn>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-on="on" v-bind="attrs">
+                                        <v-icon color="primary">mdi-account</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Details</span>
+                            </v-tooltip>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn @click="deletePosition" icon v-on="on" v-bind="attrs">
+                                        <v-icon color="red">mdi-delete</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Delete position</span>
+                            </v-tooltip>
                         </div>
                     </v-list-item-action>
                 </v-list-item>
@@ -43,58 +53,51 @@
 </template>
 
 <script>
+    import {militaryLeaderType} from "../../utils/types";
+    import {mapMutations, mapState} from "vuex";
+
     export default {
         name: "PositionPopup",
-        props: {
-            position: null,
-            type: null,
-            value: {
-                type: Boolean,
-                default() {
-                    return false;
-                }
-            },
-            positionX: {
-                type: Number,
-                default() {
-                    return 0;
-                }
-            },
-            positionY: {
-                type: Number,
-                default() {
-                    return 0;
-                }
-            }
-        },
         computed: {
+            ...mapState('positionPopup', ['popup']),
             name() {
-                if (!this.type) return '';
-                if (!this.position) return '';
-                return this.type.holderName(this.position);
+                if (!this.popup.type) return '';
+                if (!this.popup.position) return '';
+                return this.popup.type.holderName(this.popup.position);
             },
             imageUrl() {
-                if (!this.type) return '';
-                if (!this.position) return '';
-                return this.type.imageUrl(this.position);
+                if (!this.popup.type) return '';
+                if (!this.popup.position) return '';
+                return this.popup.type.imageUrl(this.popup.position);
             },
             initials() {
-                if (!this.type) return '';
-                if (!this.position) return '';
-                return this.type.symbol(this.position);
+                if (!this.popup.type) return '';
+                if (!this.popup.position) return '';
+                return this.popup.type.symbol(this.popup.position);
             },
             subtitle() {
-                if (!this.type) return '';
-                if (!this.position) return '';
-                return this.type.info(this.position);
+                if (!this.popup.type) return '';
+                if (!this.popup.position) return '';
+                return this.popup.type.info(this.popup.position);
             }
         },
         methods: {
+            ...mapMutations('positionPopup', ['setPopup', 'setOpenPopup']),
+            showDetails() {
+                if (this.popup.type.label === militaryLeaderType.label) {
+                    this.$store.commit('militaryLeadersDialog/setMilitaryLeader', this.popup.position.militaryLeader);
+                    this.$store.commit('militaryLeadersDialog/setShowDialog', true);
+                } else {
+                    this.$store.commit('battlesDialog/setBattle', this.popup.position.battle);
+                    this.$store.commit('battlesDialog/setShowDialog', true);
+                }
+            },
+
             deletePosition() {
                 this.$store.commit('deletePositionDialog/setPosition',
                     {
-                        position: this.position,
-                        type: this.type
+                        position: this.popup.position,
+                        type: this.popup.type
                     }
                 );
                 this.$store.commit('deletePositionDialog/setShowDialog', true);

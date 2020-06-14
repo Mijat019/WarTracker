@@ -1,7 +1,7 @@
 const battleUrl = require('../assets/defaultIcons/battle.png');
 
 export const battleIconOptions = {
-    html: `<img style="height: 30px; width: 30px;" src="${battleUrl}" alt="battle-icon"/>`,
+    html: `<img style="height: 30px; width: 30px;" src="${battleUrl}" class="map-icon" alt="battle-icon"/>`,
     className: 'div-icon',
     iconSize: [30, 30], // size of the icon
     iconAnchor: [15, 15],
@@ -17,7 +17,7 @@ export const militaryLeaderIconOptions = initials => ({
 });
 
 export const customIconOptions = url => ({
-    html: `<img style="height: 30px; width: 30px;  border-radius: 50%;" src="${url}" alt="military-icon"/>`,
+    html: `<img style="height: 30px; width: 30px;  border-radius: 50%;" src="${url}" class="map-icon" alt="military-icon"/>`,
     className: 'div-icon',
     iconSize: [30, 30], // size of the icon
     iconAnchor: [15, 15],

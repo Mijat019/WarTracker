@@ -23,6 +23,12 @@ export default {
     },
 
     created() {
+        window.addEventListener('mousedown', e => {
+            if(e.target.classList.contains('initials') ||
+                e.target.classList.contains('avatar-circle') ||
+                e.target.classList.contains('map-icon')) return;
+            this.$store.commit('positionPopup/setOpenPopup', false);
+        });
         this.getBattles();
         this.getWars();
         this.getMilitaryLeaders();
