@@ -124,57 +124,62 @@ const PositionsModule = {
             }
         },
         async searchPositions({ commit }, { mapCode, searchQuery, battleFilter, filterMilitaryLeaders }) {
-            let { data: militaryLeaderPositions } = await Vue.$axios.get(
-                `/militaryLeaderMapPosition/mapName=${mapCode}`
-            );
-            militaryLeaderPositions = militaryLeaderPositions.filter(
-                (mlp) =>
-                    mlp.militaryLeader.firstName
-                        .toLocaleLowerCase()
-                        .includes(searchQuery.toLocaleLowerCase()) ||
-                    mlp.militaryLeader.lastName
+            try {
+                let {data: militaryLeaderPositions} = await Vue.$axios.get(
+                    `/militaryLeaderMapPosition/mapName=${mapCode}`
+                );
+                militaryLeaderPositions = militaryLeaderPositions.filter(
+                    (mlp) =>
+                        mlp.militaryLeader.firstName
+                            .toLocaleLowerCase()
+                            .includes(searchQuery.toLocaleLowerCase()) ||
+                        mlp.militaryLeader.lastName
+                            .toLocaleLowerCase()
+                            .includes(searchQuery.toLocaleLowerCase())
+                );
+
+                if (filterMilitaryLeaders)
+                    militaryLeaderPositions = militaryLeaderPositions.filter(mlp => {
+                        let and = true;
+                        if (filterMilitaryLeaders.birthPlace) and = and && filterMilitaryLeaders.birthPlace.includes(mlp.militaryLeader.birthPlace);
+                        if (!and) return false;
+                        if (filterMilitaryLeaders.militaryRank) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.militaryRank);
+                        if (!and) return false;
+                        if (filterMilitaryLeaders.school) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.school);
+                        if (!and) return false;
+                        if (filterMilitaryLeaders.dynastyName) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.dynastyName);
+                        if (!and) return false;
+                        if (filterMilitaryLeaders.title) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.title);
+                        return and;
+                    });
+                console.log("FILTERML");
+                console.log(militaryLeaderPositions);
+                commit("setMilitaryLeaderPositions", militaryLeaderPositions);
+
+                let {data: battlePositions} = await Vue.$axios.get(
+                    `/battleMapPosition/mapName=${mapCode}`
+                );
+                console.log(battlePositions);
+                battlePositions = battlePositions.filter((bp) =>
+                    bp.battle.name
                         .toLocaleLowerCase()
                         .includes(searchQuery.toLocaleLowerCase())
-            );
-
-            if (filterMilitaryLeaders)
-                militaryLeaderPositions = militaryLeaderPositions.filter(mlp => {
-                    let and = true;
-                    if(filterMilitaryLeaders.birthPlace) and = and && filterMilitaryLeaders.birthPlace.includes(mlp.militaryLeader.birthPlace);
-                    if(!and) return false;
-                    if(filterMilitaryLeaders.militaryRank) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.militaryRank);
-                    if(!and) return false;
-                    if(filterMilitaryLeaders.school) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.school);
-                    if(!and) return false;
-                    if(filterMilitaryLeaders.dynastyName) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.dynastyName);
-                    if(!and) return false;
-                    if(filterMilitaryLeaders.title) and = and && filterMilitaryLeaders.militaryRank.includes(mlp.militaryLeader.title);
-                    return and;
-                });
-
-            commit("setMilitaryLeaderPositions", militaryLeaderPositions);
-
-            let { data: battlePositions } = await Vue.$axios.get(
-                `/battleMapPosition/mapName=${mapCode}`
-            );
-            console.log(battlePositions);
-            battlePositions = battlePositions.filter((bp) =>
-                bp.battle.name
-                    .toLocaleLowerCase()
-                    .includes(searchQuery.toLocaleLowerCase())
-            );
-            if (battleFilter)
-                battlePositions = battlePositions.filter(bp => {
-                    let and = true;
-                    console.log(bp.battle.place);
-                    if(battleFilter.place) and = and && battleFilter.place.includes(bp.battle.place);
-                    if(!and) return false;
-                    if(battleFilter.warId) and = and && battleFilter.warId.includes(bp.battle.war.id);
-                    return and;
-                });
-            console.log("ISFILTRIRANO");
-            console.log(battlePositions);
-            commit("setBattlePositions", battlePositions);
+                );
+                if (battleFilter)
+                    battlePositions = battlePositions.filter(bp => {
+                        let and = true;
+                        console.log(bp.battle.place);
+                        if (battleFilter.place) and = and && battleFilter.place.includes(bp.battle.place);
+                        if (!and) return false;
+                        if (battleFilter.warId) and = and && battleFilter.warId.includes(bp.battle.war.id);
+                        return and;
+                    });
+                console.log("ISFILTRIRANO");
+                console.log(battlePositions);
+                commit("setBattlePositions", battlePositions);
+            } catch(err) {
+                console.log(err);
+            }
         },
 
         async filterPositions(

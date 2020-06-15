@@ -107,8 +107,10 @@
                 this.setup(this.searchQuery, this.battleFilter, this.filterMilitaryLeaders);
             },
             filterChanged() {
+                console.log("FiltersChanged");
                 this.clearMap();
                 if(this.searchQuery || this.battleFilter || this.filterMilitaryLeaders) {
+                    console.log( this.filterMilitaryLeaders);
                     this.setup(this.searchQuery, this.battleFilter, this.filterMilitaryLeaders);
                 } else {
                     this.setup();
@@ -653,6 +655,7 @@
                     await this.getPositions();
                     await this.getConnections();
                 } else {
+                    console.log("DRUGO");
                     await this.searchPositions({mapCode: this.mapCode, searchQuery, filterMilitaryLeaders, battleFilter});
                     await this.searchMilitaryLeaderBattles({mapId: this.mapObj.id});
                 }

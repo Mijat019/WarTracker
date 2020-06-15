@@ -46,6 +46,7 @@ const MapModule = {
             state.battleFilter = battleFilter;
             state.filterMilitaryLeaders = filterMilitaryLeaders;
             state.filterChanged = `${new Date()}`;
+            console.log(state.filterChanged);
         }
     },
     actions: {

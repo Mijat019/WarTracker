@@ -320,6 +320,7 @@ export default {
       await this.searchMilitaryLeaders({ searchQuery: this.searchQuery, filterMilitaryLeaders: this.militaryLeaders }); // ja bih i filter metnuo tu
       await this.searchBattles({ searchQuery: this.searchQuery, battleFilter: this.battles  });
       this.setFilters({battleFilter: this.battles, filterMilitaryLeaders: this.militaryLeaders});
+      this.setSearch({searchQuery: this.searchQuery});
     },
 
     async search() {
