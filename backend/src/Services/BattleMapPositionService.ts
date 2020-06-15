@@ -2,6 +2,7 @@ import BattleMapPosition from "../Models/BattleMapPosition";
 import { IncludeOptions } from "sequelize/types";
 import Map from "../Models/Map";
 import Battle from "../Models/Battle";
+import sequelize from "../Models/database";
 
 const include: IncludeOptions[] = [
   { model: Map, as: "map", required: true },

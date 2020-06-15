@@ -1,6 +1,7 @@
 import Battle from "../Models/Battle";
 import { IncludeOptions } from "sequelize/types";
 import War from "../Models/War";
+import sequelize from "../Models/database"
 
 const include: IncludeOptions[] = [{ model: War, as: "war", required: true }];
 const attributes: string[] = [
@@ -17,6 +18,7 @@ class BattleService {
     const battles = await Battle.findAll({ include, attributes });
     return battles;
   }
+
 
   public async add(battlePayload: any) {
     const battle = await Battle.create(battlePayload);

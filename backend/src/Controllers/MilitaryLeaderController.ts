@@ -1,6 +1,7 @@
 import fs from "fs";
 import { Request, Response } from "express";
 import militaryLeaderService from "../Services/MilitaryLeaderService";
+import battleService from "../Services/BattleService";
 
 class MilitaryLeaderController {
     public async getAll(req: Request, res: Response) {
@@ -8,9 +9,11 @@ class MilitaryLeaderController {
             const militaryLeaders = await militaryLeaderService.getAll();
             res.send(militaryLeaders);
         } catch (error) {
+            console.log(error);
             res.status(400).send(error.message);
         }
     }
+
 
     public async add(req: Request, res: Response) {
         try {

@@ -27,6 +27,7 @@ class MilitaryLeaderMapPositionController {
         }
     }
 
+
     public async getAll(req: Request, res: Response) {
         try {
             const militaryLeaderMapPositions = await militaryLeaderMapPositionService.getAll();

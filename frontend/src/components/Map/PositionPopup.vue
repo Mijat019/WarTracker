@@ -3,15 +3,17 @@
             absolute
             :position-x="popup.x"
             :position-y="popup.y"
-            z-index="500"
+            z-index="100"
             :close-on-click="false"
+            :close-on-content-click="false"
             :value="popup.open"
     >
 
         <v-card>
-            <v-list>
-                <v-list-item>
-                    <v-list-item-avatar color="primary">
+            <div id="position-popup">
+                <v-list>
+                    <v-list-item>
+                        <v-list-item-avatar color="primary">
                             <v-img
                                     v-if="imageUrl"
                                     :src="imageUrl"
@@ -19,35 +21,36 @@
                             <span v-else class="white--text title">
                                 {{initials}}
                             </span>
-                    </v-list-item-avatar>
+                        </v-list-item-avatar>
 
-                    <v-list-item-content>
-                        <v-list-item-title>{{ name }}</v-list-item-title>
-                        <v-list-item-subtitle> {{ subtitle }} </v-list-item-subtitle>
-                    </v-list-item-content>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ name }}</v-list-item-title>
+                            <v-list-item-subtitle> {{ subtitle }}</v-list-item-subtitle>
+                        </v-list-item-content>
 
-                    <v-list-item-action>
-                        <div class="flex flex-column">
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-on="on" v-bind="attrs">
-                                        <v-icon color="primary">mdi-account</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Details</span>
-                            </v-tooltip>
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn @click="deletePosition" icon v-on="on" v-bind="attrs">
-                                        <v-icon color="red">mdi-delete</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Delete position</span>
-                            </v-tooltip>
-                        </div>
-                    </v-list-item-action>
-                </v-list-item>
-            </v-list>
+                        <v-list-item-action>
+                            <div class="flex flex-column">
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn icon v-on="on" v-bind="attrs">
+                                            <v-icon color="primary">mdi-account</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Details</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn @click="deletePosition" icon v-on="on" v-bind="attrs">
+                                            <v-icon color="red">mdi-delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Delete position</span>
+                                </v-tooltip>
+                            </div>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-list>
+            </div>
         </v-card>
     </v-menu>
 </template>

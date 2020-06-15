@@ -54,6 +54,16 @@ const BattleModule = {
                 console.log(err);
             }
         },
+        async searchBattles({ commit }, {searchQuery}) {
+            try {
+                let {data} = await Vue.$axios.get("/battles");
+                if(searchQuery)
+                    data = data.filter(b => b.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()));
+                commit("setBattles", data);
+            } catch (err) {
+                console.log(err);
+            }
+        },
         async deleteBattle({ commit }, battle) {
             try {
                 await Vue.$axios.delete(`/battles/${battle.id}`);
@@ -88,6 +98,7 @@ const BattleModule = {
     getters: {
         wars: (state) => state.wars,
         battles: (state) => state.battles,
+        battlesLength: (state) => state.battles.length
     },
 };
 

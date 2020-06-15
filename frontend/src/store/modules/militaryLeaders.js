@@ -46,6 +46,19 @@ const militaryLeaders = {
             }
         },
 
+        async searchMilitaryLeaders({ commit }, { searchQuery }) {
+            try {
+                let { data } = await Vue.$axios.get("/militaryLeader");
+                if(searchQuery) {
+                    data = data.filter(ml => ml.firstName.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()) ||
+                        ml.lastName.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()));
+                }
+                commit("setMilitaryLeaders", data);
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
         async deleteMilitaryLeader({ commit }, militaryLeader) {
             try {
                 await Vue.$axios.delete(`/militaryLeader/${militaryLeader.id}`);
@@ -130,6 +143,7 @@ const militaryLeaders = {
 
     getters: {
         militaryLeaders: (state) => state.militaryLeaders,
+        militaryLeadersLength: (state) => state.militaryLeaders.length
     },
 };
 

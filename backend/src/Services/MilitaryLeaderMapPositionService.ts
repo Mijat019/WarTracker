@@ -1,8 +1,9 @@
 import MilitaryLeaderMapPosition from "../Models/MilitaryLeaderMapPosition";
-import { IncludeOptions } from "sequelize/types";
+import {IncludeOptions} from "sequelize/types";
 import MilitaryLeader from "../Models/MilitaryLeader";
 import Map from "../Models/Map";
-
+import sequelize from "../Models/database";
+import {Op} from "sequelize";
 const include: IncludeOptions[] = [
   { model: MilitaryLeader, as: "militaryLeader", required: true },
   { model: Map, as: "map", required: true },

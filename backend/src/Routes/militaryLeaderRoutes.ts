@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/", militaryLeaderController.getAll);
 router.post("/", militaryLeaderController.add);
-
 const upload = multer({ dest: "uploads/ml/" });
 router.post(
     "/:id",

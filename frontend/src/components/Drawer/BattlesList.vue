@@ -4,7 +4,12 @@
       <v-list-item-avatar>
         <v-icon>mdi-sword-cross</v-icon>
       </v-list-item-avatar>
-      <v-list-item-title>Battles</v-list-item-title>
+      <v-list-item-title>
+        <div class="d-flex flex-column">
+          <div>Battles</div>
+          <div class="grey--text subtitle-2">{{battlesLength}} results</div>
+        </div>
+      </v-list-item-title>
       <v-list-item-action>
         <div class="d-flex flex-row">
           <v-tooltip bottom>
@@ -40,7 +45,7 @@
 <script>
 import BattlesTableDialog from "../Tables/Battles/BattleTableDialog";
 import BattleModify from "../Tables/Battles/BattleModify";
-import { mapGetters, mapMutations } from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import {Drag} from 'vue-easy-dnd';
 
 export default {
@@ -60,6 +65,7 @@ export default {
       }
     }
   },
+
   methods: {
     ...mapMutations("battlesDialog", ["setShowDialog", "setBattle"]),
 
@@ -70,7 +76,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("battles", ["battles"])
+    ...mapGetters("battles", ["battles", "battlesLength"])
   }
 };
 </script>

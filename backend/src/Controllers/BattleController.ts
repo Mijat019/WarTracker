@@ -11,6 +11,7 @@ class BattleController {
         }
     }
 
+
     public async add(req: Request, res: Response) {
         try {
             const battle = await battleService.add(req.body);

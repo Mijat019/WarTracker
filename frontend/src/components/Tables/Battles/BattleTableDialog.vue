@@ -1,14 +1,9 @@
 <template>
   <v-dialog v-model="dialog" scrollable fullscreen>
     <template v-slot:activator="{ on }">
-      <v-tooltip v-on="on" bottom>
-        <template v-slot:activator="{ onBtn, attrs }">
-            <v-btn icon v-on="onBtn" v-bind="attrs">
-              <v-icon>mdi-table</v-icon>
-            </v-btn>
-        </template>
-        <span>Battles</span>
-      </v-tooltip>
+      <v-btn icon v-on="on">
+        <v-icon>mdi-table</v-icon>
+      </v-btn>
     </template>
     <v-card min-height="100%">
       <div style="margin-bottom: 1px">

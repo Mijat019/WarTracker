@@ -4,8 +4,12 @@
       <v-list-item-avatar>
         <v-icon>mdi-account</v-icon>
       </v-list-item-avatar>
-      <v-list-item-title>Military leaders</v-list-item-title>
-      <v-list-item-action >
+      <v-list-item-title>
+        <div class="d-flex flex-column">
+          <div>Military leaders</div>
+          <div class="grey--text subtitle-2">{{militaryLeadersLength}} results</div>
+        </div>
+      </v-list-item-title>      <v-list-item-action >
         <div class="d-flex flex-row">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -84,7 +88,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("militaryLeaders", ["militaryLeaders"]),
+    ...mapGetters("militaryLeaders", ["militaryLeaders", "militaryLeadersLength"]),
   }
 };
 </script>

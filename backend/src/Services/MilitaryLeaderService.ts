@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import MilitaryLeader from "../Models/MilitaryLeader";
-
+import sequelize from "../Models/database";
+import {Op} from "sequelize";
 class MilitaryLeaderService {
     public async getAll() {
         const militaryLeaders = await MilitaryLeader.findAll();
