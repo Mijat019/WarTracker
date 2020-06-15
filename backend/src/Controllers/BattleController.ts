@@ -11,6 +11,20 @@ class BattleController {
         }
     }
 
+    public async search(req: Request, res: Response) {
+        try {
+            const { searchQuery } = req.body;
+            let battles;
+            if(!searchQuery)
+                battles = await battleService.getAll();
+            else
+                battles = await battleService.search(searchQuery);
+            res.send(battles);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
     public async add(req: Request, res: Response) {
         try {
             const battle = await battleService.add(req.body);

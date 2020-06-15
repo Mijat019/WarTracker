@@ -23,7 +23,7 @@
                         <v-btn @click="setLineRemoving(!lineRemoving)" icon height="17px" width="17px" v-on="on" v-bind="attrs">
                             <v-icon
                                     size="17"
-                                    :color="lineRemoving ? 'primary lighten-1' : 'grey'"
+                                    :color="lineRemoving ? 'red lighten-1' : 'grey'"
                             >
                                 mdi-vector-polyline-minus
                             </v-icon>

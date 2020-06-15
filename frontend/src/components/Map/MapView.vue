@@ -562,7 +562,7 @@
 
                 // gasi se popup kad se zumira ili pritisne nedje
                 this.map.on('zoomstart', () => {this.setOpenPopup(false);});
-                this.map.on('mousedown', () => {this.setOpenPopup(false);}); // odradjeno u cijeloj aplikaciji
+                // this.map.on('mousedown', () => {this.setOpenPopup(false);}); // odradjeno u cijeloj aplikaciji
 
                 // opcije za tilelayer
                 let options = {

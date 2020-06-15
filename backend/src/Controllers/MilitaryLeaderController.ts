@@ -1,6 +1,7 @@
 import fs from "fs";
 import { Request, Response } from "express";
 import militaryLeaderService from "../Services/MilitaryLeaderService";
+import battleService from "../Services/BattleService";
 
 class MilitaryLeaderController {
     public async getAll(req: Request, res: Response) {
@@ -11,6 +12,21 @@ class MilitaryLeaderController {
             res.status(400).send(error.message);
         }
     }
+
+    public async search(req: Request, res: Response) {
+        try {
+            const { searchQuery } = req.body;
+            let militaryLeaders;
+            if (!searchQuery)
+                militaryLeaders = await militaryLeaderService.getAll();
+            else
+                militaryLeaders = await militaryLeaderService.search(searchQuery);
+            res.send(militaryLeaders);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
 
     public async add(req: Request, res: Response) {
         try {

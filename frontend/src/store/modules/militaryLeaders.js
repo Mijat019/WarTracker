@@ -46,6 +46,18 @@ const militaryLeaders = {
             }
         },
 
+        async searchMilitaryLeaders({ commit }, searchQuery) {
+            try {
+                const { data } = await Vue.$axios.post(
+                    "/militaryLeader/search",
+                    searchQuery
+                );
+                commit("setMilitaryLeaders", data);
+            } catch (err) {
+                console.log(err)
+            }
+        },
+
         async deleteMilitaryLeader({ commit }, militaryLeader) {
             try {
                 await Vue.$axios.delete(`/militaryLeader/${militaryLeader.id}`);

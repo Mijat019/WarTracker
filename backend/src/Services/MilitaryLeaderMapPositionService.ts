@@ -1,8 +1,9 @@
 import MilitaryLeaderMapPosition from "../Models/MilitaryLeaderMapPosition";
-import { IncludeOptions } from "sequelize/types";
+import {IncludeOptions} from "sequelize/types";
 import MilitaryLeader from "../Models/MilitaryLeader";
 import Map from "../Models/Map";
-
+import sequelize from "../Models/database";
+import {Op} from "sequelize";
 const include: IncludeOptions[] = [
   { model: MilitaryLeader, as: "militaryLeader", required: true },
   { model: Map, as: "map", required: true },
@@ -31,6 +32,28 @@ class MilitaryLeaderMapPositionService {
   public async getAllForMapByName(mapName: string) {
     const militaryLeaderMapPositions = await MilitaryLeaderMapPosition.findAll({
       where: { '$map.name$': mapName },
+      include,
+      attributes
+    });
+    return militaryLeaderMapPositions;
+  }
+
+  public async search(mapName: string, nameQuery: string) {
+    const s = sequelize.Sequelize;
+    const militaryLeaderMapPositions = await MilitaryLeaderMapPosition.findAll({
+      where: {
+        '$map.name$': mapName,
+         [Op.or]: [ // firstName ima query or lastName ima query
+            {
+              '$militaryLeader.firstName$':
+                  s.where(s.fn('LOWER', s.col('MilitaryLeader.firstName')), 'LIKE', '%' + nameQuery + '%'),
+            },
+            {
+              '$militaryLeader.lastName$':
+                  s.where(s.fn('LOWER', s.col('MilitaryLeader.lastName')), 'LIKE', '%' + nameQuery + '%')
+            }
+          ]
+      },
       include,
       attributes
     });

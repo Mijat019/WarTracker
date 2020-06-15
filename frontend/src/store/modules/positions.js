@@ -85,6 +85,16 @@ const PositionsModule = {
                 console.log(`An error occurred while acquiring leaders: ${err}`);
             }
         },
+        async searchMilitaryLeaderPositions({ commit }, { mapCode, searchQuery }) {
+            try {
+                let {data: militaryLeaderPositions} = await Vue.$axios.post(
+                    `/militaryLeaderMapPosition/search/mapName=${mapCode}`,
+                    searchQuery);
+                commit("setMilitaryLeaderPositions", militaryLeaderPositions);
+            } catch (err) {
+                console.log(`An error occurred while searching for leaders: ${err}`);
+            }
+        },
         async getBattlePositions({ commit }, mapCode) {
             try {
                 let {data: battlePositions} = await Vue.$axios.get(`/battleMapPosition/mapName=${mapCode}`);
@@ -92,6 +102,16 @@ const PositionsModule = {
             } catch (err) {
                 console.log(`An error occurred while acquiring battles: ${err}`);
 
+            }
+        },
+        async searchBattlePositions({ commit }, { mapCode, searchQuery }) {
+            try {
+                let {data: militaryLeaderPositions} = await Vue.$axios.post(
+                    `/battleMapPosition/search/mapName=${mapCode}`,
+                    searchQuery);
+                commit("setBattlePositions", militaryLeaderPositions);
+            } catch (err) {
+                console.log(`An error occurred while searching for leaders: ${err}`);
             }
         },
         async updateBattlePosition({ commit }, position) {

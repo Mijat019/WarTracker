@@ -54,6 +54,17 @@ const BattleModule = {
                 console.log(err);
             }
         },
+        async searchBattles({ commit }, searchQuery) {
+            try {
+                const { data } = await Vue.$axios.post(
+                    "/battles/search",
+                    searchQuery
+                );
+                commit("setBattles", data);
+            } catch (err) {
+                console.log(err)
+            }
+        },
         async deleteBattle({ commit }, battle) {
             try {
                 await Vue.$axios.delete(`/battles/${battle.id}`);

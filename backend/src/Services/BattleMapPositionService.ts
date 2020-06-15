@@ -2,6 +2,7 @@ import BattleMapPosition from "../Models/BattleMapPosition";
 import { IncludeOptions } from "sequelize/types";
 import Map from "../Models/Map";
 import Battle from "../Models/Battle";
+import sequelize from "../Models/database";
 
 const include: IncludeOptions[] = [
   { model: Map, as: "map", required: true },
@@ -31,6 +32,19 @@ class BattleMapPositionService {
   public async getAllForMapName(mapName: string) {
     const battleMapPositions = await BattleMapPosition.findAll({
       where: { '$map.name$': mapName },
+      include,
+      attributes,
+    });
+    return battleMapPositions;
+  }
+
+  public async search(mapName: string, nameQuery: string) {
+    const s = sequelize.Sequelize;
+    const battleMapPositions = await BattleMapPosition.findAll({
+      where: {
+        '$map.name$': mapName,
+        '$battle.name$': s.where(s.fn('LOWER', s.col('Battle.name')), 'LIKE', '%' + nameQuery + '%')
+      },
       include,
       attributes,
     });

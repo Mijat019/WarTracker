@@ -37,6 +37,20 @@ class BattleMapPositionController {
         }
     }
 
+    public async search(req: Request, res: Response) {
+        try {
+            const { mapName } = req.params;
+            const { searchQuery } = req.body;
+            const battleMapPositions = await battleMapPositionService.search(
+                mapName,
+                searchQuery
+            );
+            res.send(battleMapPositions);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
     public async checkPlacement(req: Request, res: Response) {
         try{
             const { battleId, mapId } = req.params;

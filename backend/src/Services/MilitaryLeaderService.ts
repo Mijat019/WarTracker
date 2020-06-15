@@ -1,11 +1,29 @@
 import { promises as fs } from "fs";
 import MilitaryLeader from "../Models/MilitaryLeader";
-
+import sequelize from "../Models/database";
+import {Op} from "sequelize";
 class MilitaryLeaderService {
     public async getAll() {
         const militaryLeaders = await MilitaryLeader.findAll();
         return militaryLeaders;
     }
+
+    public async search(nameQuery: string) {
+        const s = sequelize.Sequelize;
+        const militaryLeaders = await MilitaryLeader.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        firstName: s.where(s.fn('LOWER', s.col('MilitaryLeader.firstName')), 'LIKE', '%' + nameQuery + '%')
+                    },
+                    {
+                        lastName: s.where(s.fn('LOWER', s.col('MilitaryLeader.lastName')), 'LIKE', '%' + nameQuery + '%')
+                    }]
+            }
+        });
+        return militaryLeaders;
+    }
+
 
     public async add(militaryLeadersPayload: any) {
         const { id } = await MilitaryLeader.create(militaryLeadersPayload);
