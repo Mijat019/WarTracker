@@ -9,7 +9,8 @@
           <div>Military leaders</div>
           <div class="grey--text subtitle-2">{{militaryLeadersLength}} results</div>
         </div>
-      </v-list-item-title>      <v-list-item-action >
+      </v-list-item-title>
+      <v-list-item-action >
         <div class="d-flex flex-row">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -54,7 +55,7 @@
 <script>
 import MilitaryLeadersTableDialog from "../Tables/MilitaryLeader/MilitaryLeadersTableDialog";
 import MilitaryLeaderModify from "../Tables/MilitaryLeader/MilitaryLeaderModify";
-import { mapGetters, mapMutations } from "vuex"
+import {mapMutations, mapState} from "vuex"
 import {Drag} from 'vue-easy-dnd';
 
 export default {
@@ -88,7 +89,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters("militaryLeaders", ["militaryLeaders", "militaryLeadersLength"]),
+    ...mapState('tutorial', ['ongoingTutorial']),
+    militaryLeaders() {
+      if(this.ongoingTutorial) {
+        return this.$store.state.tutorial.militaryLeaders;
+      } else {
+        return this.$store.state.militaryLeaders.militaryLeaders;
+      }
+    },
+    militaryLeadersLength() {
+      return this.militaryLeaders.length;
+    }
   }
 };
 </script>

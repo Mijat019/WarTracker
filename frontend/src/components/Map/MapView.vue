@@ -82,6 +82,7 @@
                     'searchQuery'
                 ]),
             ...mapState('positionPopup', ['popup']),
+            ...mapState('tutorial', ['ongoingTutorial']),
 
             map: {
                 get() {
@@ -205,7 +206,24 @@
                     this.removeLines([].concat(deleted));
                     this.$store.commit('militaryLeaderBattles/resetDeleted');
                 }
+            },
+            '$store.state.tutorial.battlePositions.length'(newLength, oldLength) {
+                if(oldLength === 0)
+                    this.placeMarkers(this.battlePositions, battleType);
+                else if (newLength === 0 && !this.$store.state.positions.recentlyDeleted) {
+                    return;
+                }
+                else if (newLength > oldLength){
+                    let added = this.$store.state.positions.newlyAdded;
+                    this.placeMarkers([].concat(added), battleType);
+                    this.$store.commit('positions/resetAdded');
+                } else if (oldLength > newLength) {
+                    let deleted = this.$store.state.positions.recentlyDeleted;
+                    this.removeMarker(deleted, battleType);
+                    this.$store.commit('positions/resetDeleted');
+                }
             }
+
         },
         methods: {
             ...mapMutations('positions', ['clearAllPositions']),
@@ -539,7 +557,12 @@
                         militaryLeader: event.data
                     };
                     position.militaryLeader.birthPlace = address;
-                    this.addMilitaryLeaderPosition(position);
+                    if(this.ongoingTutorial) {
+                        console.log("Macak")
+                    } else {
+
+                        this.addMilitaryLeaderPosition(position);
+                    }
                 } else {
                     if(!address) {
                         this.$store.commit('snackbar/openSnackbar', {text: 'Warning: Battle was placed on international waters.', color: 'dark-orange'});
@@ -551,7 +574,12 @@
                         battle: event.data
                     };
                     position.battle.place = address;
-                    this.addBattlePosition(position);
+                    if(this.ongoingTutorial) {
+                        await this.$store.dispatch('tutorial/addBattlePosition', position);
+                    } else {
+
+                        this.addBattlePosition(position);
+                    }
                 }
             },
             async getPositions() {
@@ -663,12 +691,15 @@
             this.map.addLayer(this.markerCluster);
 
             this.$nextTick(() => this.map.invalidateSize());
+            if(this.ongoingTutorial) {
+                console.log("odjeoo");
+            } else {
+                // trazimo mapu
+                this.getMapByName(this.mapCode);
+                // postavljamo pozicije
 
-            // trazimo mapu
-            this.getMapByName(this.mapCode);
-            // postavljamo pozicije
-
-            this.setup();
+                this.setup();
+            }
         },
         updated() {
             // invalidacija velicine na abdejt

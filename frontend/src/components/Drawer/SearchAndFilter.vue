@@ -8,6 +8,18 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
+                      x-small
+                      v-if="ongoingTutorial && tutorialStep === 2"
+                      @click="tutorialOpenDrawer"
+                      v-on="on"
+                      v-bind="attrs"
+                      type="button"
+                      style="z-index: 1005"
+              >
+                <v-icon color="grey">mdi-menu</v-icon>
+              </v-btn>
+              <v-btn
+                      v-else
                       icon
                       @click="$emit('input', !value)"
                       v-on="on"
@@ -71,7 +83,7 @@
 </template>
 
 <script>
-  import {mapActions, mapMutations} from "vuex";
+  import {mapActions, mapMutations, mapState} from "vuex";
 
 export default {
   name: "SearchAndFilter",
@@ -92,6 +104,10 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState('tutorial', ['ongoingTutorial','tutorialStep']),
+
+  },
   methods: {
     ...mapActions('battles', ['searchBattles']),
     ...mapActions('militaryLeaders', ['searchMilitaryLeaders']),
@@ -104,7 +120,12 @@ export default {
       this.$emit('update:loading', false);
       // da otvori drawer
       this.$emit('input', true)
+    },
+    tutorialOpenDrawer() {
+      this.$emit('input', true);
+      this.$store.commit('tutorial/increaseStep');
     }
+
   }
 };
 </script>

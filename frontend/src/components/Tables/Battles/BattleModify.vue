@@ -14,6 +14,9 @@
                     >
                     <span class="headline" v-else>Update battle</span>
                 </v-card-title>
+                <v-card-subtitle v-if="ongoingTutorial">
+                    Click on the add button to finish this part of the tutorial
+                </v-card-subtitle>
                 <v-card-text>
                     <v-container>
                         <v-form ref="form">
@@ -89,8 +92,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn @click="closeDialog" color="blue darken-1" text
-                        >Close</v-btn
-                    >
+                        >Close</v-btn>
                     <v-btn
                         @click="submit(addBattle)"
                         color="blue darken-1"
@@ -113,7 +115,7 @@
 
 <script>
 import SelectWar from "./SelectWar";
-import { mapActions } from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
     name: "BattleModify",
@@ -143,6 +145,9 @@ export default {
             type: String,
             default: "add",
         },
+    },
+    computed: {
+        ...mapState('tutorial', ['ongoingTutorial']),
     },
     watch: {
         value() {
@@ -180,7 +185,12 @@ export default {
                 this.battle.date = this.date;
                 this.battle.description = this.description;
                 this.battle.warId = this.selectedWar.id;
-                await fun(this.battle);
+                if(this.ongoingTutorial) {
+                    this.$store.commit('tutorial/addBattle', this.battle);
+                    this.$store.commit('tutorial/increaseStep');
+                } else {
+                    await fun(this.battle);
+                }
                 this.closeDialog();
             }
         },

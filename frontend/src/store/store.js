@@ -11,6 +11,7 @@ import deletePositionDialog from "./modules/deletePositionDialog";
 import map from "./modules/map"
 import existingPositionDialog from "./modules/existingPositionDialog";
 import positionPopup from "./modules/positionPopup";
+import tutorial from "./modules/tutorial";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -25,6 +26,7 @@ export default new Vuex.Store({
         deletePositionDialog,
         map,
         existingPositionDialog,
-        positionPopup
+        positionPopup,
+        tutorial
     },
 });
