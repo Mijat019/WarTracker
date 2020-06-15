@@ -54,14 +54,16 @@
             ...mapState('militaryLeaderDeleteDialog', ['showDialog', 'militaryLeader']),
         },
         methods:{
-            ...mapMutations('militaryLeaderDeleteDialog', ['setShowDialog']),
+            ...mapMutations('militaryLeaderDeleteDialog', ['setShowDeleteDialog']),
+            ...mapMutations("militaryLeadersDialog", ["setShowDialog"]),
             ...mapActions("militaryLeaders", ["deleteMilitaryLeader"]),
             close(){
-                this.setShowDialog(false);
+                this.setShowDeleteDialog(false);
             },
             deleteLeader(){
                 this.deleteMilitaryLeader(this.militaryLeader)
-                this.close();
+                this.setShowDialog(false);
+                this.setShowDeleteDialog(false);
             }
         }
     }

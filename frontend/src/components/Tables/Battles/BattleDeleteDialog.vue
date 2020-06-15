@@ -54,14 +54,16 @@
             ...mapState('battleDeleteDialog', ['showDialog', 'battle']),
         },
         methods:{
-            ...mapMutations('battleDeleteDialog', ['setShowDialog']),
+            ...mapMutations("battlesDialog", ["setShowDialog"]),
+            ...mapMutations('battleDeleteDialog', ['setShowDeleteDialog']),
             ...mapActions("battles", ["deleteBattle"]),
             close(){
-                this.setShowDialog(false);
+                this.setShowDeleteDialog(false);
             },
             deleteLeader(){
-                this.deleteBattle(this.battle)
-                this.close();
+                this.deleteBattle(this.battle);
+                this.setShowDeleteDialog(false);
+                this.setShowDialog(false);
             }
         }
     }

@@ -84,8 +84,15 @@ const militaryLeaders = {
             try {
                 await Vue.$axios.delete(`/militaryLeader/${militaryLeader.id}`);
                 commit("deleteMilitaryLeader", militaryLeader);
+                commit('snackbar/openSnackbar',
+                    {text: `The military leader was successfully removed.`, color: 'green'},
+                    {root: true})
             } catch (error) {
-                console.log(error);
+                if(error.response.status === 400) {
+                    commit('snackbar/openSnackbar',
+                        {text: `The military leader cannot be deleted. The military leader is a participant in some battle. `, color: 'error'},
+                        {root: true})
+                } else console.log(error);
             }
         },
 
@@ -99,7 +106,9 @@ const militaryLeaders = {
                     `/militaryLeader/${militaryLeader.id}`,
                     militaryLeader
                 );
-
+                commit('snackbar/openSnackbar',
+                    {text: `The military leader was successfully updated.`, color: 'green'},
+                    {root: true})
                 // upload the image if its provided
                 if (image) {
                     dispatch("uploadImage", {

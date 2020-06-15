@@ -10,6 +10,9 @@ const mutations = {
     setShowDialog(state, showDialog) {
         state.showDialog = showDialog;
     },
+    setShowDeleteDialog(state, showDialog) {
+        state.showDialog = showDialog;
+    },
 };
 
 export default {

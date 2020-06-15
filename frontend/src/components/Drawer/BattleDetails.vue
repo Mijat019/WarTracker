@@ -11,7 +11,7 @@
             <v-spacer></v-spacer>
             <v-card-actions>
               <v-btn @click="editDialog=true" text>Edit</v-btn>
-              <v-btn text>Remove</v-btn>
+              <v-btn @click="deleteDialog()" text>Remove</v-btn>
             </v-card-actions>
           </v-row>
 
@@ -71,6 +71,7 @@
       </v-container>
     </v-card>
     <battle-modify :edit-battle="battle" mode="update" v-model="editDialog" />
+    <battle-delete-dialog></battle-delete-dialog>
     <v-dialog v-model="miniDialog">
       <v-card>
         <v-card-title>{{ miniDialogData.title }}</v-card-title>
@@ -85,9 +86,10 @@
 import moment from "moment";
 import { mapGetters, mapMutations } from "vuex";
 import BattleModify from "../Tables/Battles/BattleModify";
+import BattleDeleteDialog from "../Tables/Battles/BattleDeleteDialog";
 export default {
   name: "BattleDetails",
-  components: { BattleModify },
+  components: {BattleDeleteDialog, BattleModify },
   data: () => ({
     editDialog: false,
     miniDialog: false,
@@ -99,11 +101,15 @@ export default {
 
   methods: {
     ...mapMutations("battlesDialog", ["setShowDialog"]),
-
+    ...mapMutations('battleDeleteDialog', ['setShowDeleteDialog', 'setBattle']),
     openMiniDialog(item) {
       this.miniDialog = true;
       this.miniDialogData.title = item.title;
       this.miniDialogData.text = item.subtitle;
+    },
+    deleteDialog(){
+      this.setBattle(this.battle);
+      this.setShowDeleteDialog(true);
     }
   },
 

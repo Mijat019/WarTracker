@@ -133,12 +133,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations('militaryLeaderDeleteDialog', ['setShowDialog', 'setMilitaryLeader']),
+    ...mapMutations('militaryLeaderDeleteDialog', ['setShowDeleteDialog', 'setMilitaryLeader']),
     ...mapMutations("militaryLeadersDialog", ["setShowDialog"]),
     deleteDialog(){
       this.setMilitaryLeader(this.militaryLeader);
-      console.log(this.militaryLeader)
-      this.setShowDialog(true)
+      this.setShowDeleteDialog(true)
     }
   }
 };
