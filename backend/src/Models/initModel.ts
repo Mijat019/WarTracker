@@ -30,182 +30,97 @@ export default async () => {
     const { id: mapId4 } = await Map.create({ name: "map4" });
 
     const { id: militaryLeaderId1 } = await MilitaryLeader.create({
-        firstName: "tupan",
-        lastName: "glupan",
+        firstName: "Tihomir",
+        lastName: "Stojkovic",
         dateOfBirth: Date.now(),
-        militaryRank: "debilcina",
-        school: "gimnazija",
+        militaryRank: "krokodilas",
+        school: "nije ckolovao",
+        birthPlace: "Stajkovce",
     });
 
     const { id: militaryLeaderId2 } = await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
+        firstName: "Zivadin",
+        lastName: "Jaric",
         dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
+        militaryRank: "kamiondzija",
+        school: "nije ckolovao",
+        birthPlace: "Beograd",
     });
 
     await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
+        firstName: "Paja",
+        lastName: "Čutura",
         dateOfBirth: Date.now(),
-        militaryRank: "peder",
+        militaryRank: "kamiondzija",
+        birthPlace: "Beograd",
+        school: "nocna",
+    });
+    await MilitaryLeader.create({
+        firstName: "Srecko",
+        lastName: "Sojic",
+        dateOfBirth: Date.now(),
+        militaryRank: "politicar",
+        school: "nije ckolovao",
+        birthPlace: "Neko selo",
+    });
+    await MilitaryLeader.create({
+        firstName: "Haris",
+        lastName: "Gegic",
+        dateOfBirth: Date.now(),
+        militaryRank: "ne stavlja enter izmedju funkcija",
+        school: "ftn",
+        birthPlace: "Tutin",
+    });
+    await MilitaryLeader.create({
+        firstName: "Mijat",
+        lastName: "Miletic",
+        dateOfBirth: Date.now(),
+        militaryRank: "Firer",
+        school: "ftn",
+        birthPlace: "Zajecar",
+    });
+    await MilitaryLeader.create({
+        firstName: "Damjan",
+        lastName: "Manojlovic",
+        dateOfBirth: Date.now(),
+        militaryRank: "zanimljivo mu da slusa",
+        birthPlace: "Ufff, ne secam se",
         school: "ftn",
     });
     await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
+        firstName: "Dora",
+        lastName: "Nemaprezime",
         dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
-    });
-    await MilitaryLeader.create({
-        firstName: "majmuncina",
-        lastName: "glupa",
-        dateOfBirth: Date.now(),
-        militaryRank: "peder",
-        school: "ftn",
+        militaryRank: "Istrazitelj",
+        birthPlace: "Ufff, ne secam se",
+        school: "nije ckolovao",
     });
     const { id: battleId1 } = await Battle.create({
         warId: warId1,
-        name: "Neka bitka boli me !@#!@# koja",
+        place: "Tutin",
+        name: "Bitka kod Tutina",
         date: Date.now(),
     });
 
     const { id: battleId2 } = await Battle.create({
         warId: warId1,
-        name: "Jos tamo neka bitka boli me !@#!@# koja",
+        place: "Zajecar",
+        name: "Bitka sa Bugarima",
         date: Date.now(),
     });
 
     const { id: battleId3 } = await Battle.create({
         warId: warId2,
-        name: "a;slfjasdf",
+        place: "Zajecar",
+        name:
+            "Zajecar vs Tutin, Zajecar pobedjuje, Tutin ni vodu nema a kamoli net, omegalol",
         date: Date.now(),
     });
 
     const { id: battleId4 } = await Battle.create({
         warId: warId2,
-        name: "adsfadsfd",
+        place: "Tunguzija",
+        name: "Ne znam ni ja vise",
         date: Date.now(),
     });
 

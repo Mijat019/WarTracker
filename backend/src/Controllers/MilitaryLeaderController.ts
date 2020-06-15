@@ -1,7 +1,6 @@
 import fs from "fs";
 import { Request, Response } from "express";
 import militaryLeaderService from "../Services/MilitaryLeaderService";
-import battleService from "../Services/BattleService";
 
 class MilitaryLeaderController {
     public async getAll(req: Request, res: Response) {
@@ -13,7 +12,6 @@ class MilitaryLeaderController {
             res.status(400).send(error.message);
         }
     }
-
 
     public async add(req: Request, res: Response) {
         try {
@@ -57,6 +55,15 @@ class MilitaryLeaderController {
                 id
             );
             res.send("Deleted");
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
+    public async getFilters(req: Request, res: Response) {
+        try {
+            const filters = await militaryLeaderService.getFilters();
+            res.send(filters);
         } catch (error) {
             res.status(400).send(error.message);
         }

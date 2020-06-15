@@ -12,14 +12,14 @@ import battlesRoutes from "./Routes/battleRoutes";
 import militaryLeaderBattleRoutes from "./Routes/militaryLeaderBattleRoutes";
 import militaryLeaderMapPositionRoutes from "./Routes/militaryLeaderMapPositionRoutes";
 import battleMapPositionRoutes from "./Routes/battleMapPositionRoutes";
-import mapRoutes from "./Routes/mapRoutes"
+import mapRoutes from "./Routes/mapRoutes";
 (async () => {
     try {
         await sequelize.authenticate();
         /*
-      To apply changes to the database schema, you need to
-      uncomment next two lines
-    */
+        To apply changes to the database schema, you need to
+        uncomment next two lines
+        */
         // await sequelize.sync({ force: true });
         // await initModel();
         console.log("Connected to the database.");

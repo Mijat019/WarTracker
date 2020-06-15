@@ -11,7 +11,6 @@ class BattleController {
         }
     }
 
-
     public async add(req: Request, res: Response) {
         try {
             const battle = await battleService.add(req.body);
@@ -36,6 +35,15 @@ class BattleController {
             const { id } = req.params;
             await battleService.delete(id);
             res.send("Deleted");
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
+    public async getFilters(req: Request, res: Response) {
+        try {
+            const filters = await battleService.getFilters();
+            res.send(filters);
         } catch (error) {
             res.status(400).send(error.message);
         }

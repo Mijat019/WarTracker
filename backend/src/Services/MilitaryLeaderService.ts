@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import MilitaryLeader from "../Models/MilitaryLeader";
 import sequelize from "../Models/database";
-import {Op} from "sequelize";
+import { Op } from "sequelize";
 class MilitaryLeaderService {
     public async getAll() {
         const militaryLeaders = await MilitaryLeader.findAll();
@@ -36,6 +36,43 @@ class MilitaryLeaderService {
             imageUrl: `${baseUrl}${newFileName}`,
         });
         return militaryLeader;
+    }
+
+    public async getFilters() {
+        let filters: any = {};
+        const birthPlaces = await MilitaryLeader.findAll({
+            attributes: ["birthPlace"],
+            group: "birthPlace",
+        });
+
+        const schools = await MilitaryLeader.findAll({
+            attributes: ["school"],
+            group: "school",
+        });
+
+        const dynastyNames = await MilitaryLeader.findAll({
+            attributes: ["dynastyName"],
+            group: "dynastyName",
+        });
+        const titles = await MilitaryLeader.findAll({
+            attributes: ["title"],
+            group: "title",
+        });
+
+        const militaryRanks = await MilitaryLeader.findAll({
+            attributes: ["militaryRank"],
+            group: "militaryRank",
+        });
+
+        filters.birthPlace = birthPlaces.map((el: any) => el?.birthPlace);
+        filters.school = schools.map((el: any) => el?.school);
+        filters.dynastyName = dynastyNames.map((el: any) => el.dynastyName);
+        filters.title = titles.map((el: any) => el?.title);
+        filters.militaryRanks = militaryRanks.map(
+            (el: any) => el?.militaryRank
+        );
+
+        return filters;
     }
 }
 export default new MilitaryLeaderService();
