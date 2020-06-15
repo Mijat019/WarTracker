@@ -8,7 +8,7 @@
     <v-card min-height="100%">
       <div style="margin-bottom: 1px">
         <v-toolbar color="white" flat>
-          <v-btn class="ma-2" @click="dialog=false" tile icon>
+          <v-btn class="ma-2" @click="close()" tile icon>
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Military Leaders</v-toolbar-title>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from "vuex";
+  import {mapActions, mapState, mapMutations} from "vuex";
 import MilitaryLeaderModify from "./MilitaryLeaderModify";
 
 export default {
@@ -91,6 +91,14 @@ export default {
       }
     ]
   }),
+  props: {
+    value: null,
+    show : null,
+    mode: {
+      type: String,
+      default: "add"
+    }
+  },
   computed: {
     ...mapState('tutorial', ['ongoingTutorial', 'tutorialStep']),
     militaryLeaders() {
@@ -104,13 +112,22 @@ export default {
 
   created() {
     this.getMilitaryLeaders();
+    if(this.show)
+      this.dialog = this.show;
   },
 
   methods: {
+    ...mapMutations('militaryLeaderTableDialog', ['setShowMilitaryLeaderTableDialog']),
     ...mapActions("militaryLeaders", [
       "getMilitaryLeaders",
       "deleteMilitaryLeader"
     ]),
+
+    close(){
+      this.setShowMilitaryLeaderTableDialog(false);
+      this.dialog= false;
+
+    },
 
     initialize() {},
 

@@ -115,7 +115,7 @@
 
 <script>
 import SelectWar from "./SelectWar";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapState, mapMutations} from "vuex";
 
 export default {
     name: "BattleModify",
@@ -170,11 +170,13 @@ export default {
         },
     },
     methods: {
+        ...mapMutations('battleModifyDialog', ['setShowBattleModifyDialog']),
         ...mapActions("battles", ["deleteBattle"]),
         ...mapActions("battles", ["updateBattle"]),
         ...mapActions("battles", ["addBattle"]),
         closeDialog() {
             this.$emit("input", false);
+            this.setShowBattleModifyDialog(false);
             if (this.mode === "add") this.$refs.form.reset();
         },
         async submit(fun) {
