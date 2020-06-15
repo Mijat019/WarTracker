@@ -1,0 +1,20 @@
+{
+    "name": "wartracker",
+    "version": "1.0.0",
+    "description": "This is a web application (done for a Human Computer Interaction course project) for keeping track of birth places of military leaders on the map, where battles took place on the map and which military leader was in which battle.",
+    "main": "index.js",
+    "scripts": {
+        "start": "cd backend && npm start",
+        "build": "cd backend && npm install && npm run build && cd ../frontend && npm install && npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Mijat019/WarTracker.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Mijat019/WarTracker/issues"
+    },
+    "homepage": "https://github.com/Mijat019/WarTracker#readme"
+}
