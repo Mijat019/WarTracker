@@ -286,6 +286,23 @@
                             </div>
                             <v-divider />
                         </v-list-group>
+                        <v-list-group v-show="true">
+                            <template v-slot:activator>
+                                <v-list-item-avatar>
+                                    <v-icon>mdi-run-fast</v-icon>
+                                </v-list-item-avatar>
+                                <v-list-item-title>List of shortcuts</v-list-item-title>
+                            </template>
+                            <v-divider />
+                            <div class="height overflow-y-auto">
+                                <v-data-table
+                                    :headers="headers"
+                                    :items="shortcuts"
+                                    class="elevation-1"
+                                ></v-data-table>
+                            </div>
+                            <v-divider />
+                        </v-list-group>
 
                     </v-list>
                 </div>
@@ -308,7 +325,19 @@
         drawer: true,
         data: () => ({
             showMilitaryLeadersList: false,
-            showBattlesList: false
+            showBattlesList: false,
+            headers: [
+                { text: 'Meaning', value: 'meaning' },
+                { text: 'Keys', value: 'keys' }
+            ],
+            shortcuts: [
+                {meaning: "Go to the battle addition dialog", keys: "CTRL + B"},
+                {meaning: "Go to the military leader dialog", keys: "CTRL + M"},
+                {meaning: "Go to the battle table", keys: "ALT + B"},
+                {meaning: "Go to the military leader table", keys: "ALT + M"},
+                {meaning: "Connect the military leader and the battle", keys: "CTRL (holding)"},
+                {meaning: "Disconnect the military leader and the battle", keys: "CTRL + ALT (holding)"},
+            ],
         }),
         props: {
             value: null,

@@ -14,7 +14,7 @@
                   <v-col cols="6" md="6" sm="6">
                     <v-text-field
                       :rules="[rules.required]"
-                      label="First Name"
+                      label="*First Name"
                       required
                       v-model="firstName"
                     ></v-text-field>
@@ -22,7 +22,7 @@
                   <v-col cols="6" md="6" sm="6">
                     <v-text-field
                       :rules="[rules.required]"
-                      label="Last Name"
+                      label="*Last Name"
                       required
                       v-model="lastName"
                     ></v-text-field>
@@ -35,7 +35,6 @@
                   </v-col>
                   <v-col cols="6" md="6" sm="6">
                     <v-text-field
-                      :rules="[rules.required]"
                       label="Military Rank"
                       required
                       v-model="militaryRank"
@@ -43,7 +42,6 @@
                   </v-col>
                   <v-col cols="6" md="6" sm="6">
                     <v-text-field
-                      :rules="[rules.required]"
                       label="School"
                       required
                       v-model="school"
@@ -61,14 +59,16 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
+                                :rules="[rules.required]"
                           v-model="dateOfBirth"
-                          label="Date Of Birth"
+                          label="*Date Of Birth  (YYYY-MM-DD)"
                           prepend-icon="mdi-calendar"
                           readonly
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="dateOfBirth"
+                      <v-date-picker  :rules="[rules.required]"
+                                     v-model="dateOfBirth"
                                      v-bind:max="addYears(dateOfDeath,-4)"
                                      no-title scrollable>
                         <v-spacer></v-spacer>
@@ -90,7 +90,7 @@
                       <template v-slot:activator="{ on }">
                         <v-text-field
                           v-model="dateOfDeath"
-                          label="Date Of Death"
+                          label="Date Of Death  (YYYY-MM-DD)"
                           prepend-icon="mdi-calendar"
                           readonly
                           v-on="on"

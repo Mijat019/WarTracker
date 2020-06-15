@@ -42,10 +42,12 @@ export default {
             getWars: "battles/getWars",
             getMilitaryLeaders: "militaryLeaders/getMilitaryLeaders",
         }),
-        ...mapMutations('battleModifyDialog', ['setShowBattleModifyDialog']),
-        ...mapMutations('battlesTableDialog', ['setShowBattlesTableDialog']),
-        ...mapMutations('militaryLeaderModifyDialog', ['setShowMilitaryLeaderModifyDialog']),
-        ...mapMutations('militaryLeaderTableDialog', ['setShowMilitaryLeaderTableDialog'])
+        ...mapMutations({
+            setShowBattleModifyDialog :'battleModifyDialog/setShowBattleModifyDialog',
+            setShowBattlesTableDialog :'battlesTableDialog/setShowBattlesTableDialog',
+            setShowMilitaryLeaderModifyDialog : 'militaryLeaderModifyDialog/setShowMilitaryLeaderModifyDialog',
+            setShowMilitaryLeaderTableDialog : 'militaryLeaderTableDialog/setShowMilitaryLeaderTableDialog'
+        }),
     },
 
     created() {
@@ -57,6 +59,12 @@ export default {
         window.addEventListener('keydown', (zEvent) => {
             if (zEvent.ctrlKey   &&   zEvent.key === "b") {  // case sensitive
                 this.setShowBattleModifyDialog(true);
+
+            }
+        });
+        window.addEventListener('keydown', (zEvent) => {
+            if (zEvent.ctrlKey   &&   zEvent.key === "m") {  // case sensitive
+                this.setShowMilitaryLeaderModifyDialog(true);
 
             }
         });
