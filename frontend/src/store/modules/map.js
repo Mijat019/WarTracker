@@ -62,6 +62,8 @@ const MapModule = {
         },
 
         mapObj: (state) => state.mapObj,
+
+        getSearch: (state) => state.searchQuery,
     },
 };
 

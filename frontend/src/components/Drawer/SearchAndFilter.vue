@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pl-5 pl-lg-7 pr-7 py-0">
-    <v-form @submit.prevent="search">
+    <v-form>
       <v-row align="center" justify="space-between">
         <v-col cols="1" class="px-0 py-1">
           <v-tooltip bottom>
@@ -44,7 +44,7 @@
         <v-col cols="1" class="px-0 py-1">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn icon small v-on="on" v-bind="attrs" type="submit">
+              <v-btn icon small @click="applyFilters" v-on="on" v-bind="attrs">
                 <v-icon color="grey">mdi-magnify</v-icon>
               </v-btn>
             </template>
@@ -222,6 +222,7 @@ export default {
 
   data: () => ({
     searchQuery: "",
+    test: "asfdasfadsfadsfadsfadsf",
     filterDialog: false,
     militaryLeaders: {},
     battles: {}
@@ -248,7 +249,7 @@ export default {
 
     ...mapGetters("militaryLeaderFilters", ["militaryLeaderFilters"]),
 
-    ...mapGetters("map", ["mapObj"]),
+    ...mapGetters("map", ["mapObj", "getSearch"]),
     ...mapState("tutorial", ["ongoingTutorial", "tutorialStep"])
   },
 
@@ -311,12 +312,21 @@ export default {
     },
 
     async applyFilters() {
-      this.filterBattles(this.battles);
+      // reset the map
+      this.setSearch(`${Date.now()}`);
+
+      this.filterBattles({ filter: this.battles, search: this.searchQuery });
+      this.filterMilitaryLeaders({
+        filter: this.militaryLeaders,
+        search: this.searchQuery
+      });
+
       this.filterPositions({
         militaryLeaderFilters: this.militaryLeaders,
-        mapId: this.mapObj.id
+        mapId: this.mapObj.id,
+        search: this.searchQuery,
+        battleFilters: this.battles
       });
-      this.filterMilitaryLeaders(this.militaryLeaders);
       this.filterDialog = false;
     },
 

@@ -66,12 +66,14 @@ const militaryLeaders = {
             }
         },
 
-        async filterMilitaryLeaders({ commit }, militaryLeaderFilters) {
+        async filterMilitaryLeaders({ commit }, { search, filter }) {
             try {
-                const { data: militaryLeaders } = await Vue.$axios.post(
-                    "/militaryLeader/filter",
-                    militaryLeaderFilters
-                );
+                const {
+                    data: militaryLeaders,
+                } = await Vue.$axios.post("/militaryLeader/filter", {
+                    search,
+                    filter,
+                });
                 commit("setMilitaryLeaders", militaryLeaders);
             } catch (error) {
                 console.log(error);

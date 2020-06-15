@@ -33,8 +33,20 @@ class MilitaryLeaderMapPositionService {
         return militaryLeaderMapPositions;
     }
 
-    public async getAllForMapAndFilter(mapId: string, filters: any) {
+    public async getAllForMapAndFilter(
+        mapId: string,
+        filters: any,
+        search: any
+    ) {
         let where: any = {};
+
+        if (search) {
+            where[Op.or] = [
+                { firstName: { [Op.like]: `%${search}%` } },
+                { lastName: { [Op.like]: `%${search}%` } },
+            ];
+        }
+
         for (let filter in filters) {
             where[filter] = { [Op.in]: filters[filter] };
         }

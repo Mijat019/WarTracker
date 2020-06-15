@@ -73,8 +73,15 @@ class MilitaryLeaderService {
         return filters;
     }
 
-    public async getAndFilter(filters: any) {
+    public async getAndFilter(search: any, filters: any) {
         let where: any = {};
+
+        if (search) {
+            where[Op.or] = [
+                { firstName: { [Op.like]: `%${search}%` } },
+                { lastName: { [Op.like]: `%${search}%` } },
+            ];
+        }
 
         for (let filter in filters) {
             where[filter] = { [Op.in]: filters[filter] };

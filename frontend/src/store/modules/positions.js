@@ -147,13 +147,26 @@ const PositionsModule = {
             commit("setBattlePositions", battlePositions);
         },
 
-        async filterPositions({ commit }, { mapId, militaryLeaderFilters }) {
+        async filterPositions(
+            { commit },
+            { mapId, militaryLeaderFilters, battleFilters, search }
+        ) {
             try {
-                const { data } = await Vue.$axios.post(
+                const {
+                    data,
+                } = await Vue.$axios.post(
                     `/militaryLeaderMapPosition/filter/${mapId}`,
-                    militaryLeaderFilters
+                    { filter: militaryLeaderFilters, search }
                 );
                 commit("setMilitaryLeaderPositions", data);
+
+                const {
+                    data: data2,
+                } = await Vue.$axios.post(
+                    `/battleMapPosition/filter/${mapId}`,
+                    { filter: battleFilters, search }
+                );
+                commit("setBattlePositions", data2);
             } catch (error) {
                 console.log(error);
             }

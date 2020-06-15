@@ -72,11 +72,14 @@ const BattleModule = {
             }
         },
 
-        async filterBattles({ commit }, battleFilters) {
+        async filterBattles({ commit }, { filter, search }) {
             try {
                 const { data: battles } = await Vue.$axios.post(
                     "/battles/filter",
-                    battleFilters
+                    {
+                        filter,
+                        search,
+                    }
                 );
                 commit("setBattles", battles);
             } catch (error) {

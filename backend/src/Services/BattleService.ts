@@ -47,14 +47,22 @@ class BattleService {
         return filters;
     }
 
-    public async getAndFilter(filters: any) {
+    public async getAndFilter(filters: any, search: string) {
         let where: any = {};
+        if (search) {
+            where.name = {
+                [Op.like]: `%${search}%`,
+            };
+        }
 
         for (let filter in filters) {
             where[filter] = { [Op.in]: filters[filter] };
         }
 
-        const battles = await Battle.findAll({ where });
+        const battles = await Battle.findAll({
+            where,
+            include,
+        });
         return battles;
     }
 }

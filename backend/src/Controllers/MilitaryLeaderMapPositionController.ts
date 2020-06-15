@@ -18,9 +18,11 @@ class MilitaryLeaderMapPositionController {
     public async getAllForMapAndFilter(req: Request, res: Response) {
         try {
             const { mapId } = req.params;
+            const { search, filter } = req.body;
             const militaryLeaderMapPositions = await militaryLeaderMapPositionService.getAllForMapAndFilter(
                 mapId,
-                req.body
+                filter,
+                search
             );
             res.send(militaryLeaderMapPositions);
         } catch (error) {

@@ -6,7 +6,11 @@ const router = express.Router();
 router.get("/", battleMapPositionController.getAll);
 router.get("/mapId=:mapId", battleMapPositionController.getAllForMap);
 router.get("/mapName=:mapName", battleMapPositionController.getAllForMapByName);
-router.get("/check/:battleId/mapNot/:mapId", battleMapPositionController.checkPlacement);
+router.get(
+    "/check/:battleId/mapNot/:mapId",
+    battleMapPositionController.checkPlacement
+);
+router.post("/filter/:mapId", battleMapPositionController.getAndFilter);
 router.post("/", battleMapPositionController.add);
 router.patch("/:id", battleMapPositionController.update);
 router.delete("/:id", battleMapPositionController.delete);

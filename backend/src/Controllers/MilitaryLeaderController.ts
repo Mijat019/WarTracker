@@ -71,8 +71,10 @@ class MilitaryLeaderController {
 
     public async getAndFilter(req: Request, res: Response) {
         try {
+            const { search, filter } = req.body;
             const militaryLeaders = await militaryLeaderService.getAndFilter(
-                req.body
+                search,
+                filter
             );
             res.send(militaryLeaders);
         } catch (error) {

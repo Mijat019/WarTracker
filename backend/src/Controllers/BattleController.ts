@@ -51,7 +51,8 @@ class BattleController {
 
     public async getAndFilter(req: Request, res: Response) {
         try {
-            const battles = await battleService.getAndFilter(req.body);
+            const { filter, search } = req.body;
+            const battles = await battleService.getAndFilter(filter, search);
             res.send(battles);
         } catch (error) {
             res.status(400).send(error.message);
