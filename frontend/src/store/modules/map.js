@@ -9,7 +9,9 @@ const MapModule = {
         lineAdding: false,
         lineRemoving: false,
         searchQuery: "",
-        filterOptions: null
+        battleFilter: null,
+        filterMilitaryLeaders: null,
+        filterChanged: '',
     },
 
     mutations: {
@@ -36,11 +38,14 @@ const MapModule = {
             state.lineRemoving = val;
             if (val) state.lineAdding = !val;
         },
-        setSearch(state, searchQuery) {
+        setSearch(state, {searchQuery}) {
+            console.log(searchQuery);
             state.searchQuery = searchQuery;
         },
-        setFilter(state, filterObj) {
-            state.filterOptions = filterObj;
+        setFilters(state, {battleFilter, filterMilitaryLeaders}) {
+            state.battleFilter = battleFilter;
+            state.filterMilitaryLeaders = filterMilitaryLeaders;
+            state.filterChanged = `${new Date()}`;
         }
     },
     actions: {
