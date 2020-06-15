@@ -62,6 +62,16 @@ const militaryLeaderBattles = {
                 console.log(err);
             }
         },
+
+        async searchMilitaryLeaderBattles({commit}, {mapId, battleIds, militaryLeaderIds}) {
+            let { data } = await Vue.$axios.get(`/militaryLeaderBattle/map/${mapId}`);
+
+            data = data.filter(
+                mlb => battleIds.includes(mlb.battleId) && militaryLeaderIds.includes(mlb.militaryLeaderId)
+            );
+            commit("setMilitaryLeaderBattles", data);
+        },
+
         async additionalMilitaryLeaderBattles({ commit }, {mapId, position, type}) {
             try {
                 let res;

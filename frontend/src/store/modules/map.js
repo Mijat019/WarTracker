@@ -7,7 +7,8 @@ const MapModule = {
         map: null,
         mapCode: 'map1',
         lineAdding: false,
-        lineRemoving: false
+        lineRemoving: false,
+        searchQuery: '',
     },
 
     mutations: {
@@ -33,6 +34,9 @@ const MapModule = {
         setLineRemoving(state, val) {
             state.lineRemoving = val;
             if(val) state.lineAdding = !val;
+        },
+        setSearch(state, searchQuery) {
+            state.searchQuery = searchQuery;
         }
     },
     actions: {

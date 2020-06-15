@@ -7,7 +7,6 @@ router.get("/", militaryLeaderMapPositionController.getAll);
 router.get("/mapId=:mapId", militaryLeaderMapPositionController.getAllForMap);
 router.get("/mapName=:mapName", militaryLeaderMapPositionController.getAllForMapByName);
 router.get("/check/:militaryLeaderId/mapNot/:mapId", militaryLeaderMapPositionController.checkPlacement);
-router.post("/search/mapName=:mapName", militaryLeaderMapPositionController.search);
 router.post("/", militaryLeaderMapPositionController.add);
 router.patch("/:id", militaryLeaderMapPositionController.update);
 router.delete("/:id", militaryLeaderMapPositionController.delete);

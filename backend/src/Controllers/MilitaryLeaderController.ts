@@ -9,20 +9,7 @@ class MilitaryLeaderController {
             const militaryLeaders = await militaryLeaderService.getAll();
             res.send(militaryLeaders);
         } catch (error) {
-            res.status(400).send(error.message);
-        }
-    }
-
-    public async search(req: Request, res: Response) {
-        try {
-            const { searchQuery } = req.body;
-            let militaryLeaders;
-            if (!searchQuery)
-                militaryLeaders = await militaryLeaderService.getAll();
-            else
-                militaryLeaders = await militaryLeaderService.search(searchQuery);
-            res.send(militaryLeaders);
-        } catch (error) {
+            console.log(error);
             res.status(400).send(error.message);
         }
     }

@@ -9,7 +9,8 @@ const PositionsModule = {
         newlyAdded: null,
         recentlyDeleted: null,
         updatedMilitaryLeader: null,
-        updatedBattle: null
+        updatedBattle: null,
+        searched: false,
 
     },
 
@@ -72,6 +73,9 @@ const PositionsModule = {
             state.militaryLeaderPositions = [];
             state.battlePositions = [];
             state.recentlyDeleted = null;
+        },
+        setSearched(state, searched) {
+            state.searched = searched;
         }
     },
 
@@ -85,16 +89,6 @@ const PositionsModule = {
                 console.log(`An error occurred while acquiring leaders: ${err}`);
             }
         },
-        async searchMilitaryLeaderPositions({ commit }, { mapCode, searchQuery }) {
-            try {
-                let {data: militaryLeaderPositions} = await Vue.$axios.post(
-                    `/militaryLeaderMapPosition/search/mapName=${mapCode}`,
-                    searchQuery);
-                commit("setMilitaryLeaderPositions", militaryLeaderPositions);
-            } catch (err) {
-                console.log(`An error occurred while searching for leaders: ${err}`);
-            }
-        },
         async getBattlePositions({ commit }, mapCode) {
             try {
                 let {data: battlePositions} = await Vue.$axios.get(`/battleMapPosition/mapName=${mapCode}`);
@@ -104,15 +98,18 @@ const PositionsModule = {
 
             }
         },
-        async searchBattlePositions({ commit }, { mapCode, searchQuery }) {
-            try {
-                let {data: militaryLeaderPositions} = await Vue.$axios.post(
-                    `/battleMapPosition/search/mapName=${mapCode}`,
-                    searchQuery);
-                commit("setBattlePositions", militaryLeaderPositions);
-            } catch (err) {
-                console.log(`An error occurred while searching for leaders: ${err}`);
-            }
+        async searchPositions({commit}, {mapCode, searchQuery}) {
+            let {data: militaryLeaderPositions} = await Vue.$axios.get(`/militaryLeaderMapPosition/mapName=${mapCode}`);
+            militaryLeaderPositions = militaryLeaderPositions.filter(
+                mlp => mlp.militaryLeader.firstName.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()) ||
+                    mlp.militaryLeader.lastName.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+            );
+            commit("setMilitaryLeaderPositions", militaryLeaderPositions);
+            let {data: battlePositions} = await Vue.$axios.get(`/battleMapPosition/mapName=${mapCode}`);
+            battlePositions = battlePositions.filter(
+                bp => bp.battle.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+            );
+            commit("setBattlePositions", battlePositions);
         },
         async updateBattlePosition({ commit }, position) {
             try {

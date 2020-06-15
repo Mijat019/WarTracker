@@ -27,22 +27,6 @@ class MilitaryLeaderMapPositionController {
         }
     }
 
-    public async search(req: Request, res: Response) {
-        try {
-            const { mapName } = req.params;
-            const { searchQuery } = req.body;
-            console.log(mapName);
-            console.log(searchQuery);
-            const militaryLeaderMapPositions = await militaryLeaderMapPositionService.search(
-                mapName,
-                searchQuery
-            );
-            res.send(militaryLeaderMapPositions);
-        } catch (error) {
-            console.log(error);
-            res.status(400).send(error);
-        }
-    }
 
     public async getAll(req: Request, res: Response) {
         try {

@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+  import {mapActions, mapMutations} from "vuex";
 
 export default {
   name: "SearchAndFilter",
@@ -88,18 +88,12 @@ export default {
   methods: {
     ...mapActions('battles', ['searchBattles']),
     ...mapActions('militaryLeaders', ['searchMilitaryLeaders']),
-    ...mapActions('positions', ['searchMilitaryLeaderPositions', 'searchBattlePositions']),
-    search() {
-      this.searchBattles({ searchQuery: this.searchQuery });
-      this.searchMilitaryLeaders({ searchQuery: this.searchQuery });
-      this.searchMilitaryLeaderPositions({
-        mapCode: this.$store.state.map.mapCode,
-        searchQuery: this.searchQuery
-      });
-      this.searchBattlePositions({
-        mapCode: this.$store.state.map.mapCode,
-        searchQuery: this.searchQuery
-      });
+    ...mapMutations('map', ['setSearch']),
+    async search() {
+      console.log("SRCUJEM")
+      await this.searchMilitaryLeaders({searchQuery: this.searchQuery}); // ja bih i filter metnuo tu
+      await this.searchBattles({searchQuery: this.searchQuery});
+      this.setSearch(this.searchQuery);
       // da otvori drawer
       this.$emit('input', true)
     }

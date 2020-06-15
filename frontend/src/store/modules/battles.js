@@ -54,15 +54,14 @@ const BattleModule = {
                 console.log(err);
             }
         },
-        async searchBattles({ commit }, searchQuery) {
+        async searchBattles({ commit }, {searchQuery}) {
             try {
-                const { data } = await Vue.$axios.post(
-                    "/battles/search",
-                    searchQuery
-                );
+                let {data} = await Vue.$axios.get("/battles");
+                if(searchQuery)
+                    data = data.filter(b => b.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()));
                 commit("setBattles", data);
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         },
         async deleteBattle({ commit }, battle) {

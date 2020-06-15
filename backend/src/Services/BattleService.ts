@@ -19,16 +19,6 @@ class BattleService {
     return battles;
   }
 
-  public async search(nameQuery: string) {
-    const s = sequelize.Sequelize;
-    const battles = await Battle.findAll({
-      where: {
-        name: s.where(s.fn('LOWER', s.col('Battle.name')), 'LIKE', '%' + nameQuery + '%')
-      },
-      include, attributes
-    });
-    return battles;
-  }
 
   public async add(battlePayload: any) {
     const battle = await Battle.create(battlePayload);

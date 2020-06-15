@@ -38,19 +38,6 @@ class BattleMapPositionService {
     return battleMapPositions;
   }
 
-  public async search(mapName: string, nameQuery: string) {
-    const s = sequelize.Sequelize;
-    const battleMapPositions = await BattleMapPosition.findAll({
-      where: {
-        '$map.name$': mapName,
-        '$battle.name$': s.where(s.fn('LOWER', s.col('Battle.name')), 'LIKE', '%' + nameQuery + '%')
-      },
-      include,
-      attributes,
-    });
-    return battleMapPositions;
-  }
-
   public async add(battleMapPositionPayload: any) {
     const { id } = await BattleMapPosition.create(battleMapPositionPayload);
     const battleMapPosition = await BattleMapPosition.findByPk(id, {

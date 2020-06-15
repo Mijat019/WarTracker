@@ -70,10 +70,17 @@
                     'militaryLeaderPositions',
                     'battlePositions',
                     'updatedMilitaryLeader',
-                    'updatedBattle'
+                    'updatedBattle',
                 ]),
             ...mapState('militaryLeaderBattles', ['militaryLeaderBattles']),
-            ...mapState('map', ['mapCode', 'mapObj', 'lineAdding', 'lineRemoving']),
+            ...mapState('map',
+                [
+                    'mapCode',
+                    'mapObj',
+                    'lineAdding',
+                    'lineRemoving',
+                    'searchQuery'
+                ]),
             ...mapState('positionPopup', ['popup']),
 
             map: {
@@ -91,9 +98,18 @@
             },
             mapObj(newVal, oldVal) {
                 if(!oldVal || !newVal) return;
-                console.info("CLEARING MAP");
+                console.info("CLEARING THE MAP");
                 this.clearMap();
                 this.setup();
+            },
+            searchQuery(val) {
+                console.info("CLEARING MAP");
+                this.clearMap();
+                if(val) {
+                    this.setup(val);
+                } else {
+                    this.setup();
+                }
             },
             updatedMilitaryLeader(newVal) {
                 if (!newVal) return;
@@ -204,12 +220,14 @@
                     'updateMilitaryLeaderPosition',
                     'addMilitaryLeaderPosition',
                     'addBattlePosition',
+                    'searchPositions'
                 ]),
             ...mapActions('militaryLeaderBattles',
                 [
                     'getMilitaryLeaderBattlesByMap',
                     'addMilitaryLeaderBattle',
                     'deleteMilitaryLeaderBattle',
+                    'searchMilitaryLeaderBattles'
                 ]),
             ...mapActions('map',
                 [
@@ -544,9 +562,16 @@
             async getConnections() {
                 await this.getMilitaryLeaderBattlesByMap(this.mapObj.id)
             },
-            async setup() {
-                await this.getPositions();
-                await this.getConnections();
+            async setup(searchQuery) {
+                if (!searchQuery){
+                    await this.getPositions();
+                    await this.getConnections();
+                } else {
+                    await this.searchPositions({mapCode: this.mapCode, searchQuery});
+                    const militaryLeaderIds = this.militaryLeaderPositions.map(mlp => mlp.militaryLeader.id);
+                    const battleIds = this.battlePositions.map(bp => bp.battle.id);
+                    await this.searchMilitaryLeaderBattles({mapId: this.mapObj.id, militaryLeaderIds, battleIds});
+                }
             },
             createMap() {
                 if(!this.mapOptions) {
@@ -573,14 +598,17 @@
                     .addTo(this.map);
             },
             clearMap() {
-                this.placed = {};
-                this.markerCluster.clearLayers();
+                this.clearMapLayer();
                 this.clearAllPositions();
                 this.clearAllMilitaryLeaderBattles();
+            },
+            clearMapLayer() {
+                this.placed = {};
+                this.markerCluster.clearLayers();
                 this.map.remove();
                 this.createMap();
                 this.map.addLayer(this.markerCluster);
-            },
+            }
 
         },
         created() {

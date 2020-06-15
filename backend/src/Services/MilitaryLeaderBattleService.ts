@@ -101,7 +101,7 @@ class MilitaryLeaderBattleService {
                 .selectQuery(table, {
                     attributes: [column],
                     where: {
-                        mapId
+                        mapId,
                     }
                 }).slice(0, -1);
     }

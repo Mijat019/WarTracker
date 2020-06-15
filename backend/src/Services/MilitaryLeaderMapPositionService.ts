@@ -38,28 +38,6 @@ class MilitaryLeaderMapPositionService {
     return militaryLeaderMapPositions;
   }
 
-  public async search(mapName: string, nameQuery: string) {
-    const s = sequelize.Sequelize;
-    const militaryLeaderMapPositions = await MilitaryLeaderMapPosition.findAll({
-      where: {
-        '$map.name$': mapName,
-         [Op.or]: [ // firstName ima query or lastName ima query
-            {
-              '$militaryLeader.firstName$':
-                  s.where(s.fn('LOWER', s.col('MilitaryLeader.firstName')), 'LIKE', '%' + nameQuery + '%'),
-            },
-            {
-              '$militaryLeader.lastName$':
-                  s.where(s.fn('LOWER', s.col('MilitaryLeader.lastName')), 'LIKE', '%' + nameQuery + '%')
-            }
-          ]
-      },
-      include,
-      attributes
-    });
-    return militaryLeaderMapPositions;
-  }
-
   public async add(militaryLeaderMapPositionPayload: any) {
     const { id } = await MilitaryLeaderMapPosition.create(
       militaryLeaderMapPositionPayload
