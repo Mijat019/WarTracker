@@ -4,17 +4,21 @@ This is a web application (done for a Human Computer Interaction course project)
 
 ### Team members
 
-- [Haris Gegić](https://github.com/gegic)
-- [Damjan Manojlović](https://github.com/Damjan032)
-- [Mijat Miletić (me)](https://github.com/Mijat019)
+-   [Haris Gegić](https://github.com/gegic)
+-   [Damjan Manojlović](https://github.com/Damjan032)
+-   [Mijat Miletić (me)](https://github.com/Mijat019)
 
 ### Technology stack
 
-- Express.js
-- Vue.js
-- Node.js
-- Sqlite
+-   Express.js
+-   Vue.js
+-   Node.js
+-   Sqlite
 
-### Setup
+### Run the application on your local machine
 
-To start this project clone this repository and follow instructions in frontend and backend folders.
+1. Install [node](https://nodejs.org/en/)
+2. Clone this repository
+3. Run `npm run build`
+4. Run `npm run start`
+5. Go to http://localhost:4200
