@@ -3,7 +3,7 @@
             absolute
             :position-x="popup.x"
             :position-y="popup.y"
-            z-index="500"
+            z-index="100"
             :close-on-click="false"
             :close-on-content-click="false"
             :value="popup.open"

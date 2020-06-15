@@ -143,6 +143,7 @@ const militaryLeaders = {
 
     getters: {
         militaryLeaders: (state) => state.militaryLeaders,
+        militaryLeadersLength: (state) => state.militaryLeaders.length
     },
 };
 

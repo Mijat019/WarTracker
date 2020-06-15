@@ -1,7 +1,15 @@
 <template>
     <div class="d-flex flex-row">
         <v-card class="card">
-            <search-and-filter v-model="drawer"></search-and-filter>
+            <search-and-filter v-model="drawer" :loading.sync="loading"></search-and-filter>
+            <v-progress-linear
+                    :active="loading"
+                    height="6"
+                    rotate="90"
+                    indeterminate
+                    size="20"
+                    color="primary lighten-1"
+            ></v-progress-linear>
             <v-fade-transition>
                 <v-divider v-show="drawer"></v-divider>
             </v-fade-transition>
@@ -31,7 +39,8 @@ export default {
   data: () => ({
     drawer: false,
     showMilitaryLeadersList: false,
-    showBattlesList: false
+    showBattlesList: false,
+    loading: false
   })
 };
 </script>

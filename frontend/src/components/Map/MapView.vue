@@ -568,9 +568,7 @@
                     await this.getConnections();
                 } else {
                     await this.searchPositions({mapCode: this.mapCode, searchQuery});
-                    const militaryLeaderIds = this.militaryLeaderPositions.map(mlp => mlp.militaryLeader.id);
-                    const battleIds = this.battlePositions.map(bp => bp.battle.id);
-                    await this.searchMilitaryLeaderBattles({mapId: this.mapObj.id, militaryLeaderIds, battleIds});
+                    await this.searchMilitaryLeaderBattles({mapId: this.mapObj.id});
                 }
             },
             createMap() {

@@ -29,7 +29,8 @@
                   hide-details
                   v-model="searchQuery"
                   autocomplete="off"
-          ></v-text-field>
+          >
+          </v-text-field>
         </v-col>
         <v-col cols="1" class="px-0 py-1">
           <v-tooltip bottom>
@@ -83,6 +84,12 @@ export default {
       default() {
         return false;
       }
+    },
+    loading: {
+      type: Boolean,
+      default() {
+        return false;
+      }
     }
   },
   methods: {
@@ -90,10 +97,11 @@ export default {
     ...mapActions('militaryLeaders', ['searchMilitaryLeaders']),
     ...mapMutations('map', ['setSearch']),
     async search() {
-      console.log("SRCUJEM")
+      this.$emit('update:loading', true);
       await this.searchMilitaryLeaders({searchQuery: this.searchQuery}); // ja bih i filter metnuo tu
       await this.searchBattles({searchQuery: this.searchQuery});
       this.setSearch(this.searchQuery);
+      this.$emit('update:loading', false);
       // da otvori drawer
       this.$emit('input', true)
     }

@@ -63,16 +63,17 @@ const militaryLeaderBattles = {
             }
         },
 
-        async searchMilitaryLeaderBattles({commit}, {mapId, battleIds, militaryLeaderIds}) {
+        async searchMilitaryLeaderBattles({commit, rootState}, {mapId}) {
             let { data } = await Vue.$axios.get(`/militaryLeaderBattle/map/${mapId}`);
-
+            const battleIds = rootState.positions.battlePositions.map(bp => bp.battle.id);
+            const militaryLeaderIds = rootState.positions.militaryLeaderPositions.map(mlp => mlp.militaryLeader.id);
             data = data.filter(
                 mlb => battleIds.includes(mlb.battleId) && militaryLeaderIds.includes(mlb.militaryLeaderId)
             );
             commit("setMilitaryLeaderBattles", data);
         },
 
-        async additionalMilitaryLeaderBattles({ commit }, {mapId, position, type}) {
+        async additionalMilitaryLeaderBattles({ commit, rootState }, {mapId, position, type}) {
             try {
                 let res;
                 if(type.label === battleType.label)
@@ -81,7 +82,16 @@ const militaryLeaderBattles = {
                 else
                     res = await Vue.$axios
                         .get(`/militaryLeaderBattle/additionalMilitaryLeader/map/${mapId}/militaryLeader/${position.militaryLeader.id}`);
-                commit('setAdditionalMilitaryLeaderBattles', res.data);
+                let searchQuery = rootState.map.searchQuery;
+                let data = res.data;
+                if (searchQuery) {
+                    const battleIds = rootState.positions.battlePositions.map(bp => bp.battle.id);
+                    const militaryLeaderIds = rootState.positions.militaryLeaderPositions.map(mlp => mlp.militaryLeader.id);
+                    data = data.filter(
+                        mlb => battleIds.includes(mlb.battleId) && militaryLeaderIds.includes(mlb.militaryLeaderId)
+                    );
+                }
+                commit('setAdditionalMilitaryLeaderBattles', data);
             } catch (err) {
                 console.log(err);
             }

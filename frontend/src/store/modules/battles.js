@@ -98,6 +98,7 @@ const BattleModule = {
     getters: {
         wars: (state) => state.wars,
         battles: (state) => state.battles,
+        battlesLength: (state) => state.battles.length
     },
 };
 
