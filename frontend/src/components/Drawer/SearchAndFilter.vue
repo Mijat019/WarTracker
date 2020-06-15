@@ -325,8 +325,8 @@ export default {
 
     async search() {
       this.$emit("update:loading", true);
-      await this.searchMilitaryLeaders({ searchQuery: this.searchQuery }); // ja bih i filter metnuo tu
-      await this.searchBattles({ searchQuery: this.searchQuery });
+      await this.searchMilitaryLeaders({ searchQuery: this.searchQuery, filterMilitaryLeaders: this.militaryLeaders }); // ja bih i filter metnuo tu
+      await this.searchBattles({ searchQuery: this.searchQuery, battleFilter: this.battles  });
       this.setSearch({searchQuery: this.searchQuery});
       this.$emit("update:loading", false);
       // da otvori drawer
