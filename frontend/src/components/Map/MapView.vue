@@ -79,7 +79,10 @@
                     'mapObj',
                     'lineAdding',
                     'lineRemoving',
-                    'searchQuery'
+                    'searchQuery',
+                    'battleFilter',
+                    'filterMilitaryLeaders',
+                    'filterChanged'
                 ]),
             ...mapState('positionPopup', ['popup']),
             ...mapState('tutorial', ['ongoingTutorial']),
@@ -101,13 +104,20 @@
                 if(!oldVal || !newVal) return;
                 console.info("CLEARING THE MAP");
                 this.clearMap();
-                this.setup();
+                this.setup(this.searchQuery, this.battleFilter, this.filterMilitaryLeaders);
+            },
+            filterChanged() {
+                this.clearMap();
+                if(this.searchQuery || this.battleFilter || this.filterMilitaryLeaders) {
+                    this.setup(this.searchQuery, this.battleFilter, this.filterMilitaryLeaders);
+                } else {
+                    this.setup();
+                }
             },
             searchQuery(val) {
-                console.info("CLEARING MAP");
                 this.clearMap();
-                if(val) {
-                    this.setup(val);
+                if(val || this.battleFilter || this.filterMilitaryLeaders) {
+                    this.setup(val, this.battleFilter, this.filterMilitaryLeaders);
                 } else {
                     this.setup();
                 }
@@ -638,12 +648,12 @@
             async getConnections() {
                 await this.getMilitaryLeaderBattlesByMap(this.mapObj.id)
             },
-            async setup(searchQuery) {
-                if (!searchQuery){
+            async setup(searchQuery, battleFilter, filterMilitaryLeaders) {
+                if (!searchQuery && !battleFilter && !filterMilitaryLeaders){
                     await this.getPositions();
                     await this.getConnections();
                 } else {
-                    await this.searchPositions({mapCode: this.mapCode, searchQuery});
+                    await this.searchPositions({mapCode: this.mapCode, searchQuery, filterMilitaryLeaders, battleFilter});
                     await this.searchMilitaryLeaderBattles({mapId: this.mapObj.id});
                 }
             },

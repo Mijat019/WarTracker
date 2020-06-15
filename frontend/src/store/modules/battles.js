@@ -57,7 +57,7 @@ const BattleModule = {
             }
         },
 
-        async searchBattles({ commit }, { searchQuery }) {
+        async searchBattles({ commit }, { searchQuery, battleFilter }) {
             try {
                 let { data } = await Vue.$axios.get("/battles");
                 if (searchQuery)
@@ -66,6 +66,14 @@ const BattleModule = {
                             .toLocaleLowerCase()
                             .includes(searchQuery.toLocaleLowerCase())
                     );
+                if (battleFilter)
+                    data = data.filter(b => {
+                        let and = true;
+                        if(battleFilter.place) and = and && battleFilter.place.includes(b.place);
+                        if(!and) return false;
+                        if(battleFilter.warId) and = and && battleFilter.warId.includes(b.war.id);
+                        return and;
+                    });
                 commit("setBattles", data);
             } catch (err) {
                 console.log(err);

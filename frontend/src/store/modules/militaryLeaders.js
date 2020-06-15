@@ -46,7 +46,7 @@ const militaryLeaders = {
             }
         },
 
-        async searchMilitaryLeaders({ commit }, { searchQuery }) {
+        async searchMilitaryLeaders({ commit }, { searchQuery, filterMilitaryLeaders }) {
             try {
                 let { data } = await Vue.$axios.get("/militaryLeader");
                 if (searchQuery) {
@@ -60,6 +60,20 @@ const militaryLeaders = {
                                 .includes(searchQuery.toLocaleLowerCase())
                     );
                 }
+                if (filterMilitaryLeaders)
+                    data = data.filter(ml => {
+                        let and = true;
+                        if(filterMilitaryLeaders.birthPlace) and = and && filterMilitaryLeaders.birthPlace.includes(ml.birthPlace);
+                        if(!and) return false;
+                        if(filterMilitaryLeaders.militaryRank) and = and && filterMilitaryLeaders.militaryRank.includes(ml.militaryRank);
+                        if(!and) return false;
+                        if(filterMilitaryLeaders.school) and = and && filterMilitaryLeaders.militaryRank.includes(ml.school);
+                        if(!and) return false;
+                        if(filterMilitaryLeaders.dynastyName) and = and && filterMilitaryLeaders.militaryRank.includes(ml.dynastyName);
+                        if(!and) return false;
+                        if(filterMilitaryLeaders.title) and = and && filterMilitaryLeaders.militaryRank.includes(ml.title);
+                        return and;
+                    });
                 commit("setMilitaryLeaders", data);
             } catch (err) {
                 console.log(err);

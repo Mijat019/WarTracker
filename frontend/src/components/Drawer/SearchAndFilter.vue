@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pl-5 pl-lg-7 pr-7 py-0">
-    <v-form>
+    <v-form @submit.prevent="search">
       <v-row align="center" justify="space-between">
         <v-col cols="1" class="px-0 py-1">
           <v-tooltip bottom>
@@ -44,7 +44,7 @@
         <v-col cols="1" class="px-0 py-1">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn icon small @click="applyFilters" v-on="on" v-bind="attrs">
+              <v-btn icon small @click="search" v-on="on" v-bind="attrs">
                 <v-icon color="grey">mdi-magnify</v-icon>
               </v-btn>
             </template>
@@ -267,7 +267,7 @@ export default {
 
     ...mapActions("positions", ["filterPositions"]),
 
-    ...mapMutations("map", ["setSearch"]),
+    ...mapMutations("map", ["setSearch", "setFilters"]),
 
     clickedOnMilitaryLeaderFilter(attribute, value) {
       if (!this.militaryLeaders[attribute]) {
@@ -313,32 +313,20 @@ export default {
 
     async applyFilters() {
       // reset the map
-      this.setSearch(`${Date.now()}`);
-
-      await this.filterBattles({
-        filter: this.battles,
-        search: this.searchQuery
-      });
-      await this.filterMilitaryLeaders({
-        filter: this.militaryLeaders,
-        search: this.searchQuery
-      });
-
-      await this.filterPositions({
-        militaryLeaderFilters: this.militaryLeaders,
-        mapId: this.mapObj.id,
-        search: this.searchQuery,
-        battleFilters: this.battles
-      });
+      console.log(this.battles);
+      console.log(this.militaryLeaders);
 
       this.filterDialog = false;
+      await this.searchMilitaryLeaders({ searchQuery: this.searchQuery, filterMilitaryLeaders: this.militaryLeaders }); // ja bih i filter metnuo tu
+      await this.searchBattles({ searchQuery: this.searchQuery, battleFilter: this.battles  });
+      this.setFilters({battleFilter: this.battles, filterMilitaryLeaders: this.militaryLeaders});
     },
 
     async search() {
       this.$emit("update:loading", true);
       await this.searchMilitaryLeaders({ searchQuery: this.searchQuery }); // ja bih i filter metnuo tu
       await this.searchBattles({ searchQuery: this.searchQuery });
-      this.setSearch(this.searchQuery);
+      this.setSearch({searchQuery: this.searchQuery});
       this.$emit("update:loading", false);
       // da otvori drawer
       this.$emit("input", true);
