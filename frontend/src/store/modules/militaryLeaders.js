@@ -1,5 +1,5 @@
 import Vue from "vue";
-import {militaryLeaderType} from "../../utils/types";
+import { militaryLeaderType } from "../../utils/types";
 
 const militaryLeaders = {
     namespaced: true,
@@ -10,7 +10,7 @@ const militaryLeaders = {
 
     mutations: {
         setMilitaryLeaders(state, militaryLeaders) {
-            state.militaryLeaders = militaryLeaders.map(ml => {
+            state.militaryLeaders = militaryLeaders.map((ml) => {
                 ml.type = militaryLeaderType;
                 return ml;
             });
@@ -49,13 +49,32 @@ const militaryLeaders = {
         async searchMilitaryLeaders({ commit }, { searchQuery }) {
             try {
                 let { data } = await Vue.$axios.get("/militaryLeader");
-                if(searchQuery) {
-                    data = data.filter(ml => ml.firstName.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()) ||
-                        ml.lastName.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()));
+                if (searchQuery) {
+                    data = data.filter(
+                        (ml) =>
+                            ml.firstName
+                                .toLocaleLowerCase()
+                                .includes(searchQuery.toLocaleLowerCase()) ||
+                            ml.lastName
+                                .toLocaleLowerCase()
+                                .includes(searchQuery.toLocaleLowerCase())
+                    );
                 }
                 commit("setMilitaryLeaders", data);
             } catch (err) {
                 console.log(err);
+            }
+        },
+
+        async filterMilitaryLeaders({ commit }, militaryLeaderFilters) {
+            try {
+                const { data: militaryLeaders } = await Vue.$axios.post(
+                    "/militaryLeader/filter",
+                    militaryLeaderFilters
+                );
+                commit("setMilitaryLeaders", militaryLeaders);
+            } catch (error) {
+                console.log(error);
             }
         },
 
@@ -89,7 +108,9 @@ const militaryLeaders = {
                 }
 
                 commit("updateMilitaryLeader", modified);
-                commit("positions/updateMilitaryLeader", modified, {root: true})
+                commit("positions/updateMilitaryLeader", modified, {
+                    root: true,
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -134,7 +155,9 @@ const militaryLeaders = {
                     formData
                 );
                 commit("updateMilitaryLeader", newMilitaryLeader);
-                commit("positions/updateMilitaryLeader", newMilitaryLeader, {root: true})
+                commit("positions/updateMilitaryLeader", newMilitaryLeader, {
+                    root: true,
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -143,7 +166,7 @@ const militaryLeaders = {
 
     getters: {
         militaryLeaders: (state) => state.militaryLeaders,
-        militaryLeadersLength: (state) => state.militaryLeaders.length
+        militaryLeadersLength: (state) => state.militaryLeaders.length,
     },
 };
 

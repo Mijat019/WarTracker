@@ -58,7 +58,7 @@
             <v-btn icon @click="filterDialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-btn color="primary">Apply filters</v-btn>
+            <v-btn @click="applyFilters" color="primary">Apply filters</v-btn>
           </v-card-actions>
         </v-card-title>
         <v-divider></v-divider>
@@ -72,8 +72,15 @@
                     <template v-slot:activator>
                       <v-list-item-title>Brith place</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item
+                      :key="birthPlace"
+                      v-for="birthPlace in militaryLeaderFilters.birthPlace"
+                    >
+                      <v-checkbox
+                        @click="clickedOnMilitaryLeaderFilter(`birthPlace`, birthPlace)"
+                        dense
+                        :label="birthPlace"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
@@ -81,8 +88,15 @@
                     <template v-slot:activator>
                       <v-list-item-title>Military rank</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item
+                      :key="militaryRank"
+                      v-for="militaryRank in militaryLeaderFilters.militaryRank"
+                    >
+                      <v-checkbox
+                        @click="clickedOnMilitaryLeaderFilter(`militaryRank`, militaryRank)"
+                        dense
+                        :label="militaryRank"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
@@ -90,17 +104,28 @@
                     <template v-slot:activator>
                       <v-list-item-title>School</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item :key="school" v-for="school in militaryLeaderFilters.school">
+                      <v-checkbox
+                        @click="clickedOnMilitaryLeaderFilter(`school`, school)"
+                        dense
+                        :label="school"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
                   <v-list-group>
                     <template v-slot:activator>
-                      <v-list-item-title>Dinasty name</v-list-item-title>
+                      <v-list-item-title>Dynasty name</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item
+                      :key="dynastyName"
+                      v-for="dynastyName in militaryLeaderFilters.dynastyName"
+                    >
+                      <v-checkbox
+                        @click="clickedOnMilitaryLeaderFilter(`dynastyName`, dynastyName)"
+                        dense
+                        :label="dynastyName"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
@@ -108,8 +133,12 @@
                     <template v-slot:activator>
                       <v-list-item-title>Title</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item :key="title" v-for="title in militaryLeaderFilters.title">
+                      <v-checkbox
+                        @click="clickedOnMilitaryLeaderFilter(`title`, title)"
+                        dense
+                        :label="title"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
@@ -132,8 +161,12 @@
                     <template v-slot:activator>
                       <v-list-item-title>Place</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item :key="place" v-for="(place) in battleFilters.place">
+                      <v-checkbox
+                        @click="clickedOnBattleFilter(`place`, place)"
+                        dense
+                        :label="place"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
@@ -141,8 +174,12 @@
                     <template v-slot:activator>
                       <v-list-item-title>War</v-list-item-title>
                     </template>
-                    <v-list-item>
-                      <v-checkbox dense label="test"></v-checkbox>
+                    <v-list-item :key="war.name" v-for="(war) in battleFilters.war">
+                      <v-checkbox
+                        @click="clickedOnBattleFilter(`warId`, war.id)"
+                        dense
+                        :label="war.name"
+                      ></v-checkbox>
                     </v-list-item>
                   </v-list-group>
 
@@ -160,14 +197,18 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "SearchAndFilter",
+
   data: () => ({
     searchQuery: "",
-    filterDialog: false
+    filterDialog: false,
+    militaryLeaders: {},
+    battles: {}
   }),
+
   props: {
     value: {
       type: Boolean,
@@ -175,6 +216,7 @@ export default {
         return false;
       }
     },
+
     loading: {
       type: Boolean,
       default() {
@@ -182,10 +224,75 @@ export default {
       }
     }
   },
+
+  computed: {
+    ...mapGetters("battleFilters", ["battleFilters"]),
+
+    ...mapGetters("militaryLeaderFilters", ["militaryLeaderFilters"])
+  },
+
   methods: {
-    ...mapActions("battles", ["searchBattles"]),
-    ...mapActions("militaryLeaders", ["searchMilitaryLeaders"]),
+    ...mapActions("battles", ["searchBattles", "filterBattles"]),
+
+    ...mapActions("militaryLeaders", [
+      "searchMilitaryLeaders",
+      "filterMilitaryLeaders"
+    ]),
+
+    ...mapActions("battleFilters", ["getBattleFilters"]),
+
+    ...mapActions("militaryLeaderFilters", ["getMilitaryLeaderFilters"]),
+
     ...mapMutations("map", ["setSearch"]),
+
+    clickedOnMilitaryLeaderFilter(attribute, value) {
+      if (!this.militaryLeaders[attribute]) {
+        this.militaryLeaders[attribute] = [];
+      }
+
+      const index = this.militaryLeaders[attribute].indexOf(value);
+      if (index >= 0) {
+        this.removeMilitaryLeaderFilter(attribute, index);
+        return;
+      }
+
+      this.militaryLeaders[attribute].push(value);
+    },
+
+    removeMilitaryLeaderFilter(attribute, index) {
+      this.militaryLeaders[attribute].splice(index, 1);
+      if (this.militaryLeaders[attribute].length === 0) {
+        delete this.militaryLeaders[attribute];
+      }
+    },
+
+    clickedOnBattleFilter(attribute, value) {
+      if (!this.battles[attribute]) {
+        this.battles[attribute] = [];
+      }
+
+      const index = this.battles[attribute].indexOf(value);
+      if (index >= 0) {
+        this.removeBattleFilter(attribute, index);
+        return;
+      }
+
+      this.battles[attribute].push(value);
+    },
+
+    removeBattleFilter(attribute, index) {
+      this.battles[attribute].splice(index, 1);
+      if (this.battles[attribute].length === 0) {
+        delete this.battles[attribute];
+      }
+    },
+
+    async applyFilters() {
+      this.filterBattles(this.battles);
+      this.filterMilitaryLeaders(this.militaryLeaders);
+      this.filterDialog = false;
+    },
+
     async search() {
       this.$emit("update:loading", true);
       await this.searchMilitaryLeaders({ searchQuery: this.searchQuery }); // ja bih i filter metnuo tu
@@ -195,6 +302,11 @@ export default {
       // da otvori drawer
       this.$emit("input", true);
     }
+  },
+
+  created() {
+    this.getBattleFilters();
+    this.getMilitaryLeaderFilters();
   }
 };
 </script>

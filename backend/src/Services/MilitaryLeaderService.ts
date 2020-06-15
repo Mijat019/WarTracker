@@ -74,5 +74,16 @@ class MilitaryLeaderService {
 
         return filters;
     }
+
+    public async getAndFilter(filters: any) {
+        let where: any = {};
+
+        for (let filter in filters) {
+            where[filter] = { [Op.in]: filters[filter] };
+        }
+
+        const militaryLeaders = await MilitaryLeader.findAll({ where });
+        return militaryLeaders;
+    }
 }
 export default new MilitaryLeaderService();

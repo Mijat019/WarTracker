@@ -1,7 +1,10 @@
 import Vue from "vue";
 
 const state = {
-    battleFilters: {},
+    battleFilters: {
+        place: [],
+        war: [],
+    },
 };
 
 const mutations = {

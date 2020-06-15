@@ -1,7 +1,6 @@
 import Battle from "../Models/Battle";
-import { IncludeOptions } from "sequelize/types";
+import { IncludeOptions, Op } from "sequelize";
 import War from "../Models/War";
-import sequelize from "../Models/database";
 
 const include: IncludeOptions[] = [{ model: War, as: "war", required: true }];
 const attributes: string[] = [
@@ -41,11 +40,22 @@ class BattleService {
             group: "place",
         });
 
-        const wars = await War.findAll({ attributes: ["name"] });
+        const wars = await War.findAll({ attributes: ["name", "id"] });
         filters.place = places.map((el: any) => el?.place);
-        filters.war = wars.map((el: any) => el.name);
+        filters.war = wars.map((el: any) => ({ name: el.name, id: el.id }));
 
         return filters;
+    }
+
+    public async getAndFilter(filters: any) {
+        let where: any = {};
+
+        for (let filter in filters) {
+            where[filter] = { [Op.in]: filters[filter] };
+        }
+
+        const battles = await Battle.findAll({ where });
+        return battles;
     }
 }
 

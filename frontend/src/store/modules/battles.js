@@ -1,5 +1,5 @@
 import Vue from "vue";
-import {battleType} from "../../utils/types";
+import { battleType } from "../../utils/types";
 
 const BattleModule = {
     namespaced: true,
@@ -14,7 +14,7 @@ const BattleModule = {
         },
 
         setBattles(state, battles) {
-            state.battles = battles.map(b => {
+            state.battles = battles.map((b) => {
                 b.type = battleType;
                 return b;
             });
@@ -46,6 +46,7 @@ const BattleModule = {
                 console.log(err);
             }
         },
+
         async getBattles({ commit }) {
             try {
                 let res = await Vue.$axios.get("/battles");
@@ -54,16 +55,34 @@ const BattleModule = {
                 console.log(err);
             }
         },
-        async searchBattles({ commit }, {searchQuery}) {
+
+        async searchBattles({ commit }, { searchQuery }) {
             try {
-                let {data} = await Vue.$axios.get("/battles");
-                if(searchQuery)
-                    data = data.filter(b => b.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()));
+                let { data } = await Vue.$axios.get("/battles");
+                if (searchQuery)
+                    data = data.filter((b) =>
+                        b.name
+                            .toLocaleLowerCase()
+                            .includes(searchQuery.toLocaleLowerCase())
+                    );
                 commit("setBattles", data);
             } catch (err) {
                 console.log(err);
             }
         },
+
+        async filterBattles({ commit }, battleFilters) {
+            try {
+                const { data: battles } = await Vue.$axios.post(
+                    "/battles/filter",
+                    battleFilters
+                );
+                commit("setBattles", battles);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async deleteBattle({ commit }, battle) {
             try {
                 await Vue.$axios.delete(`/battles/${battle.id}`);
@@ -72,6 +91,7 @@ const BattleModule = {
                 console.log(err);
             }
         },
+
         async updateBattle({ commit }, battle) {
             try {
                 let { data: modified } = await Vue.$axios.patch(
@@ -79,12 +99,12 @@ const BattleModule = {
                     battle
                 );
                 commit("updateBattle", modified);
-                commit("positions/updateBattle", modified, {root: true});
-
+                commit("positions/updateBattle", modified, { root: true });
             } catch (err) {
                 console.log(err);
             }
         },
+
         async addBattle({ commit }, battle) {
             try {
                 let { data: added } = await Vue.$axios.post("/battles", battle);
@@ -98,7 +118,7 @@ const BattleModule = {
     getters: {
         wars: (state) => state.wars,
         battles: (state) => state.battles,
-        battlesLength: (state) => state.battles.length
+        battlesLength: (state) => state.battles.length,
     },
 };
 

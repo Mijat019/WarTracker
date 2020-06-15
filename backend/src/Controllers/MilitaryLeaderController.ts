@@ -68,6 +68,17 @@ class MilitaryLeaderController {
             res.status(400).send(error.message);
         }
     }
+
+    public async getAndFilter(req: Request, res: Response) {
+        try {
+            const militaryLeaders = await militaryLeaderService.getAndFilter(
+                req.body
+            );
+            res.send(militaryLeaders);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
 }
 
 export default new MilitaryLeaderController();

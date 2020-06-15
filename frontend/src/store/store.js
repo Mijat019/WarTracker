@@ -12,6 +12,7 @@ import map from "./modules/map";
 import existingPositionDialog from "./modules/existingPositionDialog";
 import positionPopup from "./modules/positionPopup";
 import battleFilters from "./modules/battleFilters";
+import militaryLeaderFilters from "./modules/militaryLeaderFilters";
 
 Vue.use(Vuex);
 
@@ -29,5 +30,6 @@ export default new Vuex.Store({
         existingPositionDialog,
         positionPopup,
         battleFilters,
+        militaryLeaderFilters,
     },
 });

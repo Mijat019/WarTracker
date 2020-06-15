@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/", militaryLeaderController.getAll);
 
 router.get("/filters", militaryLeaderController.getFilters);
+router.post("/filter", militaryLeaderController.getAndFilter);
 
 router.post("/", militaryLeaderController.add);
 const upload = multer({ dest: "uploads/ml/" });

@@ -48,6 +48,15 @@ class BattleController {
             res.status(400).send(error.message);
         }
     }
+
+    public async getAndFilter(req: Request, res: Response) {
+        try {
+            const battles = await battleService.getAndFilter(req.body);
+            res.send(battles);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
 }
 
 export default new BattleController();
