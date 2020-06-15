@@ -25,7 +25,7 @@
                                     <v-col cols="6" md="6" sm="6">
                                         <v-text-field
                                             :rules="[rules.required]"
-                                            label="Name"
+                                            label="*Name"
                                             required
                                             v-model="name"
                                         ></v-text-field>
@@ -33,7 +33,7 @@
                                     <v-col cols="6" md="6" sm="6">
                                         <v-text-field
                                             :rules="[rules.required]"
-                                            label="Place"
+                                            label="*Place"
                                             required
                                             v-model="place"
                                         ></v-text-field>
@@ -51,7 +51,8 @@
                                             <template v-slot:activator="{ on }">
                                                 <v-text-field
                                                         v-model="date"
-                                                        label="Date"
+                                                        :rules="[rules.required]"
+                                                        label="*Date (YYYY-MM-DD)"
                                                         prepend-icon="mdi-calendar"
                                                         readonly
                                                         v-on="on"
@@ -73,7 +74,6 @@
                                     </v-col>
                                     <v-col cols="12" md="12" sm="12">
                                         <v-textarea
-                                            :rules="[rules.required]"
                                             auto-grow
                                             outlined
                                             label="Description"
