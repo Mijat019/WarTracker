@@ -5,12 +5,14 @@ import battlesDialog from "./modules/battlesDialog";
 import militaryLeaders from "./modules/militaryLeaders";
 import militaryLeadersDialog from "./modules/militaryLeadersDialog";
 import positions from "./modules/positions";
-import snackbar from "./modules/snackbar"
+import snackbar from "./modules/snackbar";
 import militaryLeaderBattles from "./modules/militaryLeaderBattles";
 import deletePositionDialog from "./modules/deletePositionDialog";
-import map from "./modules/map"
+import map from "./modules/map";
 import existingPositionDialog from "./modules/existingPositionDialog";
 import positionPopup from "./modules/positionPopup";
+import battleFilters from "./modules/battleFilters";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -25,6 +27,7 @@ export default new Vuex.Store({
         deletePositionDialog,
         map,
         existingPositionDialog,
-        positionPopup
+        positionPopup,
+        battleFilters,
     },
 });
