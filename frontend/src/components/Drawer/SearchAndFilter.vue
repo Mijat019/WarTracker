@@ -228,7 +228,9 @@ export default {
   computed: {
     ...mapGetters("battleFilters", ["battleFilters"]),
 
-    ...mapGetters("militaryLeaderFilters", ["militaryLeaderFilters"])
+    ...mapGetters("militaryLeaderFilters", ["militaryLeaderFilters"]),
+
+    ...mapGetters("map", ["mapObj"])
   },
 
   methods: {
@@ -242,6 +244,8 @@ export default {
     ...mapActions("battleFilters", ["getBattleFilters"]),
 
     ...mapActions("militaryLeaderFilters", ["getMilitaryLeaderFilters"]),
+
+    ...mapActions("positions", ["filterPositions"]),
 
     ...mapMutations("map", ["setSearch"]),
 
@@ -289,6 +293,10 @@ export default {
 
     async applyFilters() {
       this.filterBattles(this.battles);
+      this.filterPositions({
+        militaryLeaderFilters: this.militaryLeaders,
+        mapId: this.mapObj.id
+      });
       this.filterMilitaryLeaders(this.militaryLeaders);
       this.filterDialog = false;
     },

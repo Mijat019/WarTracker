@@ -146,6 +146,19 @@ const PositionsModule = {
             commit("setBattlePositions", battlePositions);
         },
 
+        async filterPositions({ commit }, { mapId, militaryLeaderFilters }) {
+            try {
+                const { data } = await Vue.$axios.post(
+                    `/militaryLeaderMapPosition/filter/${mapId}`,
+                    militaryLeaderFilters
+                );
+                console.log(data);
+                commit("setMilitaryLeaderPositions", data);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async updateBattlePosition({ commit }, position) {
             try {
                 let { data: updated } = await Vue.$axios.patch(

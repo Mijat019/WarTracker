@@ -68,9 +68,7 @@ class MilitaryLeaderService {
         filters.school = schools.map((el: any) => el?.school);
         filters.dynastyName = dynastyNames.map((el: any) => el.dynastyName);
         filters.title = titles.map((el: any) => el?.title);
-        filters.militaryRanks = militaryRanks.map(
-            (el: any) => el?.militaryRank
-        );
+        filters.militaryRank = militaryRanks.map((el: any) => el?.militaryRank);
 
         return filters;
     }

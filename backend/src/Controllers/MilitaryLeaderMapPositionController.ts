@@ -15,6 +15,19 @@ class MilitaryLeaderMapPositionController {
         }
     }
 
+    public async getAllForMapAndFilter(req: Request, res: Response) {
+        try {
+            const { mapId } = req.params;
+            const militaryLeaderMapPositions = await militaryLeaderMapPositionService.getAllForMapAndFilter(
+                mapId,
+                req.body
+            );
+            res.send(militaryLeaderMapPositions);
+        } catch (error) {
+            res.status(400).send(error);
+        }
+    }
+
     public async getAllForMapByName(req: Request, res: Response) {
         try {
             const { mapName } = req.params;
@@ -27,7 +40,6 @@ class MilitaryLeaderMapPositionController {
         }
     }
 
-
     public async getAll(req: Request, res: Response) {
         try {
             const militaryLeaderMapPositions = await militaryLeaderMapPositionService.getAll();
@@ -38,16 +50,21 @@ class MilitaryLeaderMapPositionController {
     }
 
     public async checkPlacement(req: Request, res: Response) {
-        try{
+        try {
             const { militaryLeaderId, mapId } = req.params;
-            const exists = await militaryLeaderMapPositionService.exists(militaryLeaderId, mapId);
-            if(exists) {
-                res.status(400).send('Already placed on this map');
+            const exists = await militaryLeaderMapPositionService.exists(
+                militaryLeaderId,
+                mapId
+            );
+            if (exists) {
+                res.status(400).send("Already placed on this map");
                 return;
             }
-            const found = await militaryLeaderMapPositionService.findOne(militaryLeaderId);
+            const found = await militaryLeaderMapPositionService.findOne(
+                militaryLeaderId
+            );
             res.send(found);
-        } catch(error) {
+        } catch (error) {
             res.status(400).send(error.message);
         }
     }
@@ -85,12 +102,12 @@ class MilitaryLeaderMapPositionController {
                 militaryLeader.id,
                 militaryLeader
             );
-            console.log("Enter service update")
+            console.log("Enter service update");
             const militaryLeaderMapPosition = await militaryLeaderMapPositionService.update(
                 id,
                 req.body
             );
-            console.log("Exit service update")
+            console.log("Exit service update");
             res.send(militaryLeaderMapPosition);
         } catch (error) {
             res.status(400).send(error.message);

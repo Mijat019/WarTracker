@@ -5,10 +5,10 @@ const MapModule = {
     state: {
         mapObj: null,
         map: null,
-        mapCode: 'map1',
+        mapCode: "map1",
         lineAdding: false,
         lineRemoving: false,
-        searchQuery: '',
+        searchQuery: "",
     },
 
     mutations: {
@@ -29,36 +29,40 @@ const MapModule = {
         },
         setLineAdding(state, val) {
             state.lineAdding = val;
-            if(val) state.lineRemoving = !val;
+            if (val) state.lineRemoving = !val;
         },
         setLineRemoving(state, val) {
             state.lineRemoving = val;
-            if(val) state.lineAdding = !val;
+            if (val) state.lineAdding = !val;
         },
         setSearch(state, searchQuery) {
             state.searchQuery = searchQuery;
-        }
+        },
     },
     actions: {
         async getMapByName({ commit }, mapCode) {
             try {
-                let {data: map} = await Vue.$axios.get(`/map/mapName=${mapCode}`);
+                let { data: map } = await Vue.$axios.get(
+                    `/map/mapName=${mapCode}`
+                );
                 commit("setMapObj", map);
-            } catch(err) {
+            } catch (err) {
                 console.log(`An error occurred getting map by name: ${err}`);
             }
         },
     },
     getters: {
         isMaxZoom(state) {
-            if(!state.map) return false;
+            if (!state.map) return false;
             return state.map.getZoom() === state.map.getMaxZoom();
         },
         isMinZoom(state) {
-            if(!state.map) return false;
+            if (!state.map) return false;
             return state.map.getZoom() === state.map.getMinZoom();
-        }
-    }
+        },
+
+        mapObj: (state) => state.mapObj,
+    },
 };
 
 export default MapModule;
