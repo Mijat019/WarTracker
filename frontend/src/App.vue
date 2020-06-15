@@ -2,6 +2,8 @@
     <v-app>
         <military-leader-modify mode="add" v-model="showMilitaryLeaderModifyDialog" />
         <battle-modify mode="add" v-model="showDialogBattleModify"></battle-modify>
+        <military-leaders-table-dialog v-if="showMilitaryLeaderTableDialog===true" :show="showMilitaryLeaderTableDialog"></military-leaders-table-dialog>
+        <battle-table-dialog v-if="showBattlesTableDialog===true" :show="showBattlesTableDialog"></battle-table-dialog>
         <home />
     </v-app>
 </template>
@@ -11,10 +13,14 @@ import Home from "./views/Home";
 import {mapActions, mapMutations,mapState} from "vuex";
 import MilitaryLeaderModify from "./components/Tables/MilitaryLeader/MilitaryLeaderModify";
 import BattleModify from "./components/Tables/Battles/BattleModify";
+import MilitaryLeadersTableDialog from "./components/Tables/MilitaryLeader/MilitaryLeadersTableDialog";
+import BattleTableDialog from "./components/Tables/Battles/BattleTableDialog";
 export default {
     name: "App",
 
     components: {
+        BattleTableDialog,
+        MilitaryLeadersTableDialog,
         BattleModify,
         MilitaryLeaderModify,
         Home,
@@ -24,7 +30,10 @@ export default {
     }),
     computed: {
         ...mapState('battleModifyDialog', ["showDialogBattleModify"]),
-        ...mapState('militaryLeaderModifyDialog', ["showMilitaryLeaderModifyDialog"])
+        ...mapState('battlesTableDialog', ["showBattlesTableDialog"]),
+        ...mapState('militaryLeaderModifyDialog', ["showMilitaryLeaderModifyDialog"]),
+        ...mapState('militaryLeaderTableDialog', ["showMilitaryLeaderTableDialog"]),
+
     },
     methods: {
 
@@ -34,7 +43,9 @@ export default {
             getMilitaryLeaders: "militaryLeaders/getMilitaryLeaders",
         }),
         ...mapMutations('battleModifyDialog', ['setShowBattleModifyDialog']),
-        ...mapMutations('militaryLeaderModifyDialog', ['setShowMilitaryLeaderModifyDialog'])
+        ...mapMutations('battlesTableDialog', ['setShowBattlesTableDialog']),
+        ...mapMutations('militaryLeaderModifyDialog', ['setShowMilitaryLeaderModifyDialog']),
+        ...mapMutations('militaryLeaderTableDialog', ['setShowMilitaryLeaderTableDialog'])
     },
 
     created() {
@@ -50,8 +61,13 @@ export default {
             }
         });
         window.addEventListener('keydown', (zEvent) => {
-            if (zEvent.ctrlKey   &&   zEvent.key === "m") {  // case sensitive
-                this.setShowMilitaryLeaderModifyDialog(true);
+            if (zEvent.altKey   &&   zEvent.key === "m") {  // case sensitive
+                this.setShowMilitaryLeaderTableDialog(true);
+            }
+        });
+        window.addEventListener('keydown', (zEvent) => {
+            if (zEvent.altKey   &&   zEvent.key === "b") {  // case sensitive
+                this.setShowBattlesTableDialog(true);
             }
         });
         this.getBattles();
