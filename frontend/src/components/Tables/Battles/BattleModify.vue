@@ -148,47 +148,37 @@ export default {
   },
   methods: {
     ...mapMutations("battleModifyDialog", ["setShowBattleModifyDialog"]),
+
     ...mapActions("battles", ["deleteBattle"]),
+
     ...mapActions("battles", ["updateBattle"]),
+
     ...mapActions("battles", ["addBattle"]),
+
     closeDialog() {
       this.$emit("input", false);
       this.setShowBattleModifyDialog(false);
       if (this.mode === "add") this.$refs.form.reset();
     },
-    filters: {
-      formatCoords(value) {
-        if (!value) return "";
-        return `(${value.lat.toFixed(6)}, ${value.lng.toFixed(6)})`;
-      }
-    },
-    methods: {
-      ...mapMutations("battleModifyDialog", ["setShowBattleModifyDialog"]),
-      ...mapActions("battles", ["deleteBattle"]),
-      ...mapActions("battles", ["updateBattle"]),
-      ...mapActions("battles", ["addBattle"]),
-      closeDialog() {
-        this.$emit("input", false);
-        this.setShowBattleModifyDialog(false);
-        if (this.mode === "add") this.$refs.form.reset();
-      },
-      async submit(fun) {
-        let valid = this.$refs.form.validate();
-        if (valid) {
-          this.battle.name = this.name;
-          this.battle.place = this.place;
-          this.battle.date = this.date;
-          this.battle.description = this.description;
-          this.battle.warId = this.selectedWar.id;
-          if (this.ongoingTutorial) {
-            this.battle.war = this.selectedWar;
-            this.$store.commit("tutorial/addBattle", this.battle);
-            this.$store.commit("tutorial/increaseStep");
-          } else {
-            await fun(this.battle);
-          }
-          this.closeDialog();
+
+    async submit(fun) {
+      let valid = this.$refs.form.validate();
+      if (valid) {
+        this.battle.name = this.name;
+        this.battle.place = this.place;
+        this.battle.date = this.date;
+        this.battle.description = this.description;
+        this.battle.warId = this.selectedWar.id;
+
+        if (this.ongoingTutorial) {
+          this.battle.war = this.selectedWar;
+          this.$store.commit("tutorial/addBattle", this.battle);
+          this.$store.commit("tutorial/increaseStep");
+        } else {
+          await fun({ battle: this.battle, icon: this.icon });
         }
+
+        this.closeDialog();
       }
     },
 
