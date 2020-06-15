@@ -112,6 +112,7 @@ export default {
 
     battleInformation() {
       const { battle } = this;
+      console.log(battle);
       return [
         { title: "Name", subtitle: battle.name, icon: "mdi-knife-military" },
         {

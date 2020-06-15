@@ -1,6 +1,9 @@
 <template>
     <div class="d-flex flex-row">
-        <v-overlay v-if="ongoingTutorial && tutorialStep <= 3"></v-overlay>
+        <v-overlay v-if="ongoingTutorial && tutorialStep <= 7 && tutorialStep !== 5 && tutorialStep !== 6"></v-overlay>
+        <v-overlay v-if="ongoingTutorial && tutorialStep === 9"></v-overlay>
+        <v-overlay opacity="1" v-if="ongoingTutorial && tutorialStep === 11"></v-overlay>
+
         <v-card class="card">
             <search-and-filter v-model="drawer" :loading.sync="loading"></search-and-filter>
             <v-progress-linear

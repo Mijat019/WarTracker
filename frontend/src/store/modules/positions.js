@@ -158,6 +158,9 @@ const PositionsModule = {
                     `/militaryLeaderMapPosition/filter/${mapId}`,
                     { filter: militaryLeaderFilters, search }
                 );
+                console.log("DSA");
+                console.log(data);
+
                 commit("setMilitaryLeaderPositions", data);
 
                 const {

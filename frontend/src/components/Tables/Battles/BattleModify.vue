@@ -188,6 +188,7 @@ export default {
                 this.battle.description = this.description;
                 this.battle.warId = this.selectedWar.id;
                 if(this.ongoingTutorial) {
+                    this.battle.war = this.selectedWar;
                     this.$store.commit('tutorial/addBattle', this.battle);
                     this.$store.commit('tutorial/increaseStep');
                 } else {

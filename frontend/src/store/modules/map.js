@@ -9,6 +9,7 @@ const MapModule = {
         lineAdding: false,
         lineRemoving: false,
         searchQuery: "",
+        filterOptions: null
     },
 
     mutations: {
@@ -38,6 +39,9 @@ const MapModule = {
         setSearch(state, searchQuery) {
             state.searchQuery = searchQuery;
         },
+        setFilter(state, filterObj) {
+            state.filterOptions = filterObj;
+        }
     },
     actions: {
         async getMapByName({ commit }, mapCode) {

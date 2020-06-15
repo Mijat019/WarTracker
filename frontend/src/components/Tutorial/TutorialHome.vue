@@ -1,8 +1,6 @@
 <template>
-    <v-dialog :value="ongoingTutorial" fullscreen>
-        <v-card>
-            <tutorial-step1></tutorial-step1>
-        </v-card>
+    <v-dialog :value="ongoingTutorial" fullscreen persistent >
+        <tutorial-step1></tutorial-step1>
     </v-dialog>
 </template>
 
@@ -15,15 +13,7 @@
             TutorialStep1,
             },
         computed: {
-            ...mapState('tutorial', ['ongoingTutorial',]),
-            tutorialStep: {
-                get() {
-                    return this.$store.state.tutorial.tutorialStep;
-                },
-                set(val) {
-                    this.$store.commit('tutorial/setStep', val);
-                }
-            }
+            ...mapState('tutorial', ['ongoingTutorial',])
         }
 
     }
