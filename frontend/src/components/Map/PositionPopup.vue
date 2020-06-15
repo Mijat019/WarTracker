@@ -3,7 +3,7 @@
             absolute
             :position-x="popup.x"
             :position-y="popup.y"
-            z-index="100"
+            :z-index="ongoingTutorial ? 1005 : 100"
             :close-on-click="false"
             :close-on-content-click="false"
             :value="popup.open"
@@ -62,6 +62,7 @@
     export default {
         name: "PositionPopup",
         computed: {
+            ...mapState('tutorial', ['ongoingTutorial', 'tutorialStep']),
             ...mapState('positionPopup', ['popup']),
             name() {
                 if (!this.popup.type) return '';
@@ -97,13 +98,19 @@
             },
 
             deletePosition() {
-                this.$store.commit('deletePositionDialog/setPosition',
-                    {
-                        position: this.popup.position,
-                        type: this.popup.type
-                    }
-                );
-                this.$store.commit('deletePositionDialog/setShowDialog', true);
+                console.log(this.tutorialStep);
+                if(this.ongoingTutorial) {
+                    this.$store.commit("tutorial/increaseStep");
+                    return;
+                } else {
+                    this.$store.commit('deletePositionDialog/setPosition',
+                        {
+                            position: this.popup.position,
+                            type: this.popup.type
+                        }
+                    );
+                    this.$store.commit('deletePositionDialog/setShowDialog', true);
+                }
             }
         }
     }

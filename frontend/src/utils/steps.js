@@ -27,6 +27,36 @@ const tutorialSteps = [
     {
         title: 'Drag and drop',
         message: 'Now, you can drop your battle onto the map.',
+        next: false
+    },
+    {
+        title: 'Success',
+        message: 'Now, drag that new military leader as well',
+        next: false
+    },
+    {
+        title: 'Connect two',
+        message: 'Press the highlighted button to open connection mode',
+        next: false
+    },
+    {
+        title: 'Connect two',
+        message: 'Now press, first on the one, and then on the other marker.',
+        next: false
+    },
+    {
+        title: 'Disconnect two',
+        message: 'Press the highlighted button to open disconnection mode.',
+        next: false
+    },
+    {
+        title: 'Disconnect two',
+        message: 'Now press, first on the one, and then on the other marker.',
+        next: false
+    },
+    {
+        title: 'Success',
+        message: "The basic operations of this application performed successfully. You can find more of them under the help menu.",
         next: true
     },
 ];

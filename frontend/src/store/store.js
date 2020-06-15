@@ -16,6 +16,8 @@ import map from "./modules/map";
 import existingPositionDialog from "./modules/existingPositionDialog";
 import positionPopup from "./modules/positionPopup";
 import battleFilters from "./modules/battleFilters";
+import battleDeleteDialog from "./modules/battleDeleteDialog";
+import militaryLeaderDeleteDialog from "./modules/militaryLeaderDeleteDialog";
 import militaryLeaderFilters from "./modules/militaryLeaderFilters";
 
 import tutorial from "./modules/tutorial";
@@ -28,6 +30,8 @@ export default new Vuex.Store({
         battleModifyDialog,
         battlesTableDialog,
         battles,
+        battleDeleteDialog,
+        militaryLeaderDeleteDialog,
         militaryLeaderModifyDialog,
         battlesDialog,
         positions,

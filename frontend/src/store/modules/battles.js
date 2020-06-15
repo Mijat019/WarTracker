@@ -91,8 +91,25 @@ const BattleModule = {
             try {
                 await Vue.$axios.delete(`/battles/${battle.id}`);
                 commit("deleteBattle", battle);
+                commit(
+                    "snackbar/openSnackbar",
+                    {
+                        text: `The battle was successfully removed.`,
+                        color: "green",
+                    },
+                    { root: true }
+                );
             } catch (err) {
-                console.log(err);
+                if (err.response.status === 400) {
+                    commit(
+                        "snackbar/openSnackbar",
+                        {
+                            text: `The battle cannot be deleted.`,
+                            color: "error",
+                        },
+                        { root: true }
+                    );
+                } else console.log(err);
             }
         },
 
@@ -111,6 +128,14 @@ const BattleModule = {
                     return;
                 }
 
+                commit(
+                    "snackbar/openSnackbar",
+                    {
+                        text: `The battle was successfully updated.`,
+                        color: "green",
+                    },
+                    { root: true }
+                );
                 commit("updateBattle", modified);
                 commit("positions/updateBattle", modified, { root: true });
             } catch (err) {
