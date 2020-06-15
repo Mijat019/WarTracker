@@ -20,7 +20,8 @@ class BattleService {
     }
 
     public async add(battlePayload: any) {
-        const battle = await Battle.create(battlePayload);
+        const { id } = await Battle.create(battlePayload);
+        const battle = await Battle.findByPk(id, { include });
         return battle;
     }
 
@@ -40,7 +41,7 @@ class BattleService {
 
     public async update(id: string, battleUpdate: any) {
         await Battle.update(battleUpdate, { where: { id } });
-        const updatedBattle = await Battle.findByPk(id);
+        const updatedBattle = await Battle.findByPk(id, { include });
         return updatedBattle;
     }
 
