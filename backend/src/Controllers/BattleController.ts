@@ -20,6 +20,16 @@ class BattleController {
         }
     }
 
+    public async uploadIcon(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const battle = await battleService.setImage(id, req.file);
+            res.send(battle);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+
     public async update(req: Request, res: Response) {
         try {
             const { id } = req.params;

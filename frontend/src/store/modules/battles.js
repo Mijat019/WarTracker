@@ -96,12 +96,21 @@ const BattleModule = {
             }
         },
 
-        async updateBattle({ commit }, battle) {
+        async updateBattle({ commit, dispatch }, { battle, icon }) {
             try {
                 let { data: modified } = await Vue.$axios.patch(
                     `/battles/${battle.id}`,
                     battle
                 );
+
+                if (icon) {
+                    dispatch("uploadIcon", {
+                        battleId: modified.id,
+                        icon,
+                    });
+                    return;
+                }
+
                 commit("updateBattle", modified);
                 commit("positions/updateBattle", modified, { root: true });
             } catch (err) {
@@ -109,12 +118,37 @@ const BattleModule = {
             }
         },
 
-        async addBattle({ commit }, battle) {
+        async addBattle({ commit, dispatch }, { battle, icon }) {
             try {
                 let { data: added } = await Vue.$axios.post("/battles", battle);
                 commit("addBattle", added);
+
+                if (icon) {
+                    dispatch("uploadIcon", {
+                        battleId: added.id,
+                        icon,
+                    });
+                }
             } catch (err) {
                 console.log(err);
+            }
+        },
+
+        async uploadIcon({ commit }, { icon, battleId }) {
+            try {
+                console.log(icon);
+                let formData = new FormData();
+                formData.append("icon", icon);
+                const { data } = await Vue.$axios.post(
+                    `/battles/${battleId}`,
+                    formData
+                );
+                commit("updateBattle", data);
+                commit("positions/updateBattle", data, {
+                    root: true,
+                });
+            } catch (error) {
+                console.log(error);
             }
         },
     },

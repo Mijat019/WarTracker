@@ -22,13 +22,16 @@
                 aspect-ratio="1.7"
                 contain
                 min-height="100%"
-                :src="battles.iconUrl"
+                :src="battle.iconUrl"
               ></v-img>
               <v-container v-else class="height avatar">
                 <v-row class="height">
                   <v-col class="height">
                     <v-row class="height" align="center" justify="center">
-                      <h1 class="initials" v-if="battle.name.length > 0">{{ battle.name[0].toUpperCase() }}</h1>
+                      <h1
+                        class="initials"
+                        v-if="battle.name.length > 0"
+                      >{{ battle.name[0].toUpperCase() }}</h1>
                     </v-row>
                   </v-col>
                 </v-row>
@@ -78,7 +81,6 @@
       </v-card>
     </v-dialog>
   </v-dialog>
-
 </template>
 
 <script>

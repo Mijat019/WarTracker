@@ -34,18 +34,10 @@
                     <v-text-field label="Dynasty Name" v-model="dynastyName"></v-text-field>
                   </v-col>
                   <v-col cols="6" md="6" sm="6">
-                    <v-text-field
-                      label="Military Rank"
-                      required
-                      v-model="militaryRank"
-                    ></v-text-field>
+                    <v-text-field label="Military Rank" required v-model="militaryRank"></v-text-field>
                   </v-col>
                   <v-col cols="6" md="6" sm="6">
-                    <v-text-field
-                      label="School"
-                      required
-                      v-model="school"
-                    ></v-text-field>
+                    <v-text-field label="School" required v-model="school"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-menu
@@ -59,7 +51,7 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                                :rules="[rules.required]"
+                          :rules="[rules.required]"
                           v-model="dateOfBirth"
                           label="*Date Of Birth  (YYYY-MM-DD)"
                           prepend-icon="mdi-calendar"
@@ -67,10 +59,13 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker  :rules="[rules.required]"
-                                     v-model="dateOfBirth"
-                                     v-bind:max="addYears(dateOfDeath,-4)"
-                                     no-title scrollable>
+                      <v-date-picker
+                        :rules="[rules.required]"
+                        v-model="dateOfBirth"
+                        v-bind:max="addYears(dateOfDeath,-4)"
+                        no-title
+                        scrollable
+                      >
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="dataPicker1 = false">Cancel</v-btn>
                         <v-btn text color="primary" @click="$refs.dataPicker1.save(dateOfBirth)">OK</v-btn>
@@ -96,9 +91,12 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="dateOfDeath"
-                                     v-bind:min="addYears(dateOfBirth,4)"
-                                     no-title scrollable>
+                      <v-date-picker
+                        v-model="dateOfDeath"
+                        v-bind:min="addYears(dateOfBirth,4)"
+                        no-title
+                        scrollable
+                      >
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="dataPicker2 = false">Cancel</v-btn>
                         <v-btn text color="primary" @click="$refs.dataPicker2.save(dateOfDeath)">OK</v-btn>
@@ -138,7 +136,7 @@
 </template>
 
 <script>
-  import {mapActions, mapMutations} from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   name: "MilitaryLeaderModify",
@@ -190,12 +188,11 @@ export default {
     value() {
       if (this.editMilitaryLeader) {
         this.militaryLeader.id = this.editMilitaryLeader.id;
-        if(this.editMilitaryLeader)
+        if (this.editMilitaryLeader)
           this.dateOfBirth = this.editMilitaryLeader.dateOfBirth?.split("T")[0];
-        if(this.editMilitaryLeader.dateOfDeath)
+        if (this.editMilitaryLeader.dateOfDeath)
           this.dateOfDeath = this.editMilitaryLeader.dateOfDeath?.split("T")[0];
-        else
-          this.dateOfDeath = null;
+        else this.dateOfDeath = null;
 
         this.dynastyName = this.editMilitaryLeader.dynastyName;
         this.firstName = this.editMilitaryLeader.firstName;
@@ -214,18 +211,20 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('militaryLeaderModifyDialog', ['setShowMilitaryLeaderModifyDialog']),
+    ...mapMutations("militaryLeaderModifyDialog", [
+      "setShowMilitaryLeaderModifyDialog"
+    ]),
     ...mapActions("militaryLeaders", [
       "updateMilitaryLeader",
       "addMilitaryLeader"
     ]),
-    addYears(date, addYears){
-      if(date) {
-        let currentYears = date.split('-')[0];
+    addYears(date, addYears) {
+      if (date) {
+        let currentYears = date.split("-")[0];
         let years = parseInt(currentYears) + addYears;
         return years + "" + date.slice(currentYears.length, date.length);
       }
-      return  date;
+      return date;
     },
 
     closeAddDialog() {
@@ -252,6 +251,7 @@ export default {
 
       const { militaryLeader, image } = this;
       await fun({ militaryLeader, image });
+      this.image = null;
       this.closeAddDialog();
     },
 

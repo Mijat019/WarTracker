@@ -34,6 +34,7 @@ const PositionsModule = {
             const index = state.battlePositions.findIndex(
                 (mlp) => mlp.battle.id === battle.id
             );
+            if (index < 0) return;
             Object.assign(state.battlePositions[index].battle, battle);
             state.updatedBattle = state.battlePositions[index];
         },
@@ -64,6 +65,7 @@ const PositionsModule = {
             const index = state.militaryLeaderPositions.findIndex(
                 (mlp) => mlp.militaryLeader.id === militaryLeader.id
             );
+            if (index < 0) return;
             Object.assign(
                 state.militaryLeaderPositions[index].militaryLeader,
                 militaryLeader

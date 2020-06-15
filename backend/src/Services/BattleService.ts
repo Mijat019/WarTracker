@@ -1,4 +1,5 @@
 import Battle from "../Models/Battle";
+import { promises as fs } from "fs";
 import { IncludeOptions, Op } from "sequelize";
 import War from "../Models/War";
 
@@ -20,6 +21,20 @@ class BattleService {
 
     public async add(battlePayload: any) {
         const battle = await Battle.create(battlePayload);
+        return battle;
+    }
+
+    public async setImage(battleId: string, file: any) {
+        const extension = file.originalname.split(".")[1];
+        const newFileName = `uploads/b/${battleId}.${extension}`;
+        // rename the file because multer names it stupid
+        // and doesn't add the extension
+        await fs.rename(file.path, newFileName);
+
+        const baseUrl = "http://localhost:4200/";
+        const battle = await this.update(battleId, {
+            iconUrl: `${baseUrl}${newFileName}`,
+        });
         return battle;
     }
 

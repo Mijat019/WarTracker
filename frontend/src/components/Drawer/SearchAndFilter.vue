@@ -315,18 +315,22 @@ export default {
       // reset the map
       this.setSearch(`${Date.now()}`);
 
-      this.filterBattles({ filter: this.battles, search: this.searchQuery });
-      this.filterMilitaryLeaders({
+      await this.filterBattles({
+        filter: this.battles,
+        search: this.searchQuery
+      });
+      await this.filterMilitaryLeaders({
         filter: this.militaryLeaders,
         search: this.searchQuery
       });
 
-      this.filterPositions({
+      await this.filterPositions({
         militaryLeaderFilters: this.militaryLeaders,
         mapId: this.mapObj.id,
         search: this.searchQuery,
         battleFilters: this.battles
       });
+
       this.filterDialog = false;
     },
 
