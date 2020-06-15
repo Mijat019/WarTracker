@@ -3,8 +3,9 @@
         <v-dialog :value="value" @input="$emit('input', false)" fullscreen persistent>
             <v-card>
                 <v-card-title>
+                    <v-btn  class="right-arrow-button" @click="closeAddDialog" color="blue darken-1" text><v-icon color="red">mdi-close-circle</v-icon></v-btn>
                     <span class="headline" >Help</span>
-                    <v-btn @click="closeAddDialog" color="blue darken-1" text>Close</v-btn>
+
                 </v-card-title>
                 <v-card>
                     <search-and-filter></search-and-filter>
@@ -14,6 +15,32 @@
                     <v-expand-transition>
                         <div v-show="true">
                             <v-list color="transparent">
+                                <v-list-group v-show="true">
+                                    <template v-slot:activator>
+                                        <v-list-item-avatar>
+                                            <v-icon>mdi-map</v-icon>
+                                        </v-list-item-avatar>
+                                        <v-list-item-title>Adding a military leader/battle to a map</v-list-item-title>
+                                    </template>
+                                    <v-divider />
+                                    <div class="height overflow-y-auto">
+                                        <v-card-text class="black--text">
+                                            <v-card-title  class="font-weight-medium">Adding a military leader to a map <v-icon>mdi-account</v-icon></v-card-title>
+                                            1. Click <b>Menu</b> <v-icon>mdi-menu</v-icon><br>
+                                            2. Click on <v-icon>mdi-account</v-icon> <b>Military Leaders</b><br>
+                                            3. Find the military leader you want to add (manually or using search)<br>
+                                            4. Drag that <b>military leader</b> and drop on <b>map</b>
+                                        </v-card-text>
+                                        <v-card-text class="black--text">
+                                            <v-card-title  class="font-weight-medium">Adding a battle to a map <v-icon>mdi-account</v-icon></v-card-title>
+                                            1. Click <b>Menu</b> <v-icon>mdi-menu</v-icon><br>
+                                            2. Click on <v-icon>mdi-sword-cross</v-icon> <b>Battles</b><br>
+                                            3. Find the battle you want to add (manually or using search)<br>
+                                            4. Drag that <b>battle</b> and drop on <b>map</b>
+                                        </v-card-text>
+                                    </div>
+                                    <v-divider />
+                                </v-list-group>
                                 <v-list-group v-show="true">
                                     <template v-slot:activator>
                                         <v-list-item-avatar>
@@ -182,7 +209,13 @@
                                     <v-divider />
                                     <div class="height overflow-y-auto">
                                         <v-card-text class="black--text">
+                                            <v-card-title>Connect - Primary mode</v-card-title>
                                             1. Click on <v-icon>mdi-vector-polyline-plus</v-icon> button<br>
+                                            2. Then on the map click on the <b>military leader</b> and the <b>battle</b> you want to connect
+                                        </v-card-text>
+                                        <v-card-text class="black--text">
+                                            <v-card-title>Connect - Shortcut </v-card-title>
+                                            1. Press and hold <b>ctrl + nesto</b><br>
                                             2. Then on the map click on the <b>military leader</b> and the <b>battle</b> you want to connect
                                         </v-card-text>
                                     </div>
@@ -198,7 +231,13 @@
                                     <v-divider />
                                     <div class="height overflow-y-auto">
                                         <v-card-text class="black--text">
+                                            <v-card-title>Disconnect - Primary mode</v-card-title>
                                             1. Click on <v-icon>mdi-vector-polyline-minus</v-icon> button<br>
+                                            2. Then on the map click on the <b>military leader</b> and the <b>battle</b> you want to disconnect
+                                        </v-card-text>
+                                        <v-card-text class="black--text">
+                                            <v-card-title>Disconnect - Shortcut </v-card-title>
+                                            1. Press and hold <b>ctrl + nesto</b><br>
                                             2. Then on the map click on the <b>military leader</b> and the <b>battle</b> you want to disconnect
                                         </v-card-text>
                                     </div>

@@ -190,10 +190,13 @@ export default {
     value() {
       if (this.editMilitaryLeader) {
         this.militaryLeader.id = this.editMilitaryLeader.id;
-        if(this.editMilitaryLeader.dateOfDeath)
+        if(this.editMilitaryLeader)
           this.dateOfBirth = this.editMilitaryLeader.dateOfBirth?.split("T")[0];
         if(this.editMilitaryLeader.dateOfDeath)
           this.dateOfDeath = this.editMilitaryLeader.dateOfDeath?.split("T")[0];
+        else
+          this.dateOfDeath = null;
+
         this.dynastyName = this.editMilitaryLeader.dynastyName;
         this.firstName = this.editMilitaryLeader.firstName;
         this.id = this.editMilitaryLeader.id;
