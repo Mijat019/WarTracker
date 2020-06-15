@@ -58,8 +58,7 @@ export default {
     headers: [
       { text: "Name", value: "name" },
       { text: "Place", value: "place" },
-      { text: "Date", value: "date" },
-      { text: "Details", value: "description" },
+      { text: "War", value: "war.name" },
       {
         text: "Update/Details",
         value: "update",
