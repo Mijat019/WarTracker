@@ -42,6 +42,7 @@ const BattleModule = {
             try {
                 let res = await Vue.$axios.get("/war");
                 commit("setWars", res.data);
+                console.log(res.data);
             } catch (err) {
                 console.log(err);
             }

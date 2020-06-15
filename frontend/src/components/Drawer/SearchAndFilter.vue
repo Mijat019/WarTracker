@@ -5,7 +5,25 @@
         <v-col cols="1" class="px-0 py-1">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn icon @click="$emit('input', !value)" v-on="on" v-bind="attrs" type="button">
+              <v-btn
+                x-small
+                v-if="ongoingTutorial && tutorialStep === 2"
+                @click="tutorialOpenDrawer"
+                v-on="on"
+                v-bind="attrs"
+                type="button"
+                style="z-index: 1005"
+              >
+                <v-icon color="grey">mdi-menu</v-icon>
+              </v-btn>
+              <v-btn
+                v-else
+                icon
+                @click="$emit('input', !value)"
+                v-on="on"
+                v-bind="attrs"
+                type="button"
+              >
                 <v-icon color="grey">mdi-menu</v-icon>
               </v-btn>
             </template>
@@ -197,7 +215,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from "vuex";
+import { mapActions, mapMutations, mapState, mapGetters } from "vuex";
 
 export default {
   name: "SearchAndFilter",
@@ -230,7 +248,8 @@ export default {
 
     ...mapGetters("militaryLeaderFilters", ["militaryLeaderFilters"]),
 
-    ...mapGetters("map", ["mapObj"])
+    ...mapGetters("map", ["mapObj"]),
+    ...mapState("tutorial", ["ongoingTutorial", "tutorialStep"])
   },
 
   methods: {
@@ -309,6 +328,11 @@ export default {
       this.$emit("update:loading", false);
       // da otvori drawer
       this.$emit("input", true);
+    },
+
+    tutorialOpenDrawer() {
+      this.$emit("input", true);
+      this.$store.commit("tutorial/increaseStep");
     }
   },
 

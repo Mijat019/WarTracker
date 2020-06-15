@@ -31,7 +31,7 @@ export default {
 
 <style>
 .drawer {
-  position: fixed;
+  position: absolute;
   top: 1em;
   left: 1.5em;
   z-index: 1;

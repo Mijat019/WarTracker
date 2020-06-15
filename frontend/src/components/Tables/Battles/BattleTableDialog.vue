@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters, mapMutations} from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 import BattleModify from "./BattleModify";
 
 export default {
@@ -76,8 +76,14 @@ export default {
     show: null,
   },
   computed: {
-    ...mapGetters("battles", ["battles"])
-  },
+    ...mapState('tutorial', ['ongoingTutorial', 'tutorialStep']),
+    battles() {
+      if(this.ongoingTutorial) {
+        return this.$store.state.tutorial.battles;
+      } else {
+        return this.$store.state.battles.battles;
+      }
+    }  },
 
   created() {
     if(this.show)

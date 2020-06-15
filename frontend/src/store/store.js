@@ -18,6 +18,7 @@ import positionPopup from "./modules/positionPopup";
 import battleFilters from "./modules/battleFilters";
 import militaryLeaderFilters from "./modules/militaryLeaderFilters";
 
+import tutorial from "./modules/tutorial";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -39,5 +40,6 @@ export default new Vuex.Store({
         positionPopup,
         battleFilters,
         militaryLeaderFilters,
+        tutorial,
     },
 });

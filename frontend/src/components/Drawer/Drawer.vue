@@ -1,5 +1,6 @@
 <template>
     <div class="d-flex flex-row">
+        <v-overlay v-if="ongoingTutorial && tutorialStep <= 3"></v-overlay>
         <v-card class="card">
             <search-and-filter v-model="drawer" :loading.sync="loading"></search-and-filter>
             <v-progress-linear
@@ -15,7 +16,8 @@
             </v-fade-transition>
             <v-expand-transition>
                 <div v-show="drawer">
-                    <v-list color="transparent">
+
+                    <v-list :style="{'z-index': ongoingTutorial ? 1005 : 10}" color="transparent">
                         <battles-list v-model="showBattlesList"/>
                         <military-leaders-list v-model="showMilitaryLeadersList"/>
                     </v-list>
@@ -33,6 +35,7 @@ import SearchAndFilter from "./SearchAndFilter";
 import BattlesList from "./BattlesList";
 import MilitaryLeadersList from "./MilitaryLeadersList";
 import ConnectionPanel from "./ConnectionPanel";
+import {mapState} from "vuex";
 export default {
   components: {ConnectionPanel, MilitaryLeadersList, BattlesList, SearchAndFilter },
 
@@ -41,7 +44,11 @@ export default {
     showMilitaryLeadersList: false,
     showBattlesList: false,
     loading: false
-  })
+  }),
+    computed: {
+        ...mapState('tutorial', ['ongoingTutorial', 'tutorialStep']),
+
+    }
 };
 </script>
 

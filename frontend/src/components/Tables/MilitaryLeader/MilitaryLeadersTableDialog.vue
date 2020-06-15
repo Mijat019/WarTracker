@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters, mapMutations} from "vuex";
+  import {mapActions, mapState, mapMutations} from "vuex";
 import MilitaryLeaderModify from "./MilitaryLeaderModify";
 
 export default {
@@ -100,7 +100,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("militaryLeaders", ["militaryLeaders"])
+    ...mapState('tutorial', ['ongoingTutorial', 'tutorialStep']),
+    militaryLeaders() {
+      if(this.ongoingTutorial) {
+        return this.$store.state.tutorial.militaryLeaders;
+      } else {
+        return this.$store.state.militaryLeaders.militaryLeaders;
+      }
+    }
   },
 
   created() {

@@ -14,7 +14,10 @@
         <div class="d-flex flex-row">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn @click="addDialog = true" class="my-auto" icon v-on="on" v-bind="attrs">
+              <v-btn v-if="tutorialStep === 3" x-small style="z-index: 1005" @click="addDialog = true" class="my-auto" v-on="on" v-bind="attrs">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+              <v-btn v-else @click="addDialog = true" class="my-auto" icon v-on="on" v-bind="attrs">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
@@ -25,8 +28,7 @@
       </v-list-item-action>
     </template>
     <v-divider />
-
-    <div class="height overflow-y-auto">
+    <div :style="{'z-index': ongoingTutorial ? 1005 : 10}" class="height overflow-y-auto">
       <drag v-for="battle in battles" :data="battle" :key="battle.id">
         <v-list-item @click="showDetails(battle)">
           <v-list-item-avatar color="grey">
@@ -45,7 +47,7 @@
 <script>
 import BattlesTableDialog from "../Tables/Battles/BattleTableDialog";
 import BattleModify from "../Tables/Battles/BattleModify";
-import {mapGetters, mapMutations} from "vuex";
+import { mapMutations, mapState} from "vuex";
 import {Drag} from 'vue-easy-dnd';
 
 export default {
@@ -76,7 +78,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters("battles", ["battles", "battlesLength"])
+    ...mapState('tutorial', ['ongoingTutorial','tutorialStep']),
+    battles() {
+      if(this.ongoingTutorial) {
+        return this.$store.state.tutorial.battles;
+      } else {
+        console.log(this.$store.state.battles.battles);
+        return this.$store.state.battles.battles;
+      }
+    },
+    battlesLength() {
+      return this.battles.length;
+    }
   }
 };
 </script>
