@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+  import {mapActions, mapMutations} from "vuex";
 
 export default {
   name: "MilitaryLeaderModify",
@@ -214,6 +214,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('militaryLeaderModifyDialog', ['setShowMilitaryLeaderModifyDialog']),
     ...mapActions("militaryLeaders", [
       "updateMilitaryLeader",
       "addMilitaryLeader"
@@ -229,6 +230,7 @@ export default {
 
     closeAddDialog() {
       this.$emit("input", false);
+      this.setShowMilitaryLeaderModifyDialog(false);
       if (this.mode === "add") this.$refs.form.reset();
     },
 

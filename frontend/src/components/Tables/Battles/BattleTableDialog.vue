@@ -8,7 +8,7 @@
     <v-card min-height="100%">
       <div style="margin-bottom: 1px">
         <v-toolbar color="white" flat>
-          <v-btn class="ma-2" @click="dialog=false" tile icon>
+          <v-btn class="ma-2" @click="dialog=close()" tile icon>
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Battles</v-toolbar-title>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+  import {mapActions, mapGetters, mapMutations} from "vuex";
 import BattleModify from "./BattleModify";
 
 export default {
@@ -72,11 +72,20 @@ export default {
       }
     ]
   }),
+  props: {
+    show: null,
+  },
   computed: {
     ...mapGetters("battles", ["battles"])
   },
 
+  created() {
+    if(this.show)
+      this.dialog = this.show;
+  },
+
   methods: {
+    ...mapMutations('battlesTableDialog', ['setShowBattlesTableDialog']),
     ...mapActions("battles", ["deleteBattle"]),
     editItem(battle) {
       this.editBattle = battle;
@@ -85,7 +94,11 @@ export default {
     addItem() {
       this.addDialog = true;
     },
+    close(){
+      this.setShowBattlesTableDialog(false);
+      this.dialog= false;
 
+    },
     deleteItem(item) {
       let msg = "Are you sure you want to remove " + item.name + "?";
       confirm(msg) && this.deleteBattle(item);

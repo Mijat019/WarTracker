@@ -135,6 +135,7 @@ const PositionsModule = {
                         .includes(searchQuery.toLocaleLowerCase())
             );
             commit("setMilitaryLeaderPositions", militaryLeaderPositions);
+
             let { data: battlePositions } = await Vue.$axios.get(
                 `/battleMapPosition/mapName=${mapCode}`
             );
@@ -152,7 +153,6 @@ const PositionsModule = {
                     `/militaryLeaderMapPosition/filter/${mapId}`,
                     militaryLeaderFilters
                 );
-                console.log(data);
                 commit("setMilitaryLeaderPositions", data);
             } catch (error) {
                 console.log(error);
