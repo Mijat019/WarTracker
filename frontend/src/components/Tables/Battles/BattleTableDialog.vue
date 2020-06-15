@@ -36,6 +36,7 @@
         </v-data-table>
         <battle-modify mode="add" v-model="addDialog" />
         <battle-modify :edit-battle="editBattle" mode="update" v-model="editDialog" />
+        <battle-delete-dialog></battle-delete-dialog>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -44,10 +45,11 @@
 <script>
 import { mapActions, mapState, mapMutations } from "vuex";
 import BattleModify from "./BattleModify";
+import BattleDeleteDialog from "./BattleDeleteDialog";
 
 export default {
   name: "BattleTableDialog",
-  components: { BattleModify },
+  components: {BattleDeleteDialog, BattleModify },
   data: () => ({
     editDialog: false,
     addDialog: false,
@@ -91,6 +93,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations('battleDeleteDialog', ['setShowDialog', 'setBattle']),
     ...mapMutations('battlesTableDialog', ['setShowBattlesTableDialog']),
     ...mapActions("battles", ["deleteBattle"]),
     editItem(battle) {
@@ -106,8 +109,10 @@ export default {
 
     },
     deleteItem(item) {
-      let msg = "Are you sure you want to remove " + item.name + "?";
-      confirm(msg) && this.deleteBattle(item);
+      this.setBattle(item);
+      this.setShowDialog(true);
+      // let msg = "Are you sure you want to remove " + item.name + "?";
+      // confirm(msg) && this.deleteBattle(item);
     }
   }
 };

@@ -11,8 +11,9 @@
             <v-spacer></v-spacer>
             <v-card-actions>
               <v-btn @click="editDialog=true" text>Edit</v-btn>
-              <v-btn text>Remove</v-btn>
+              <v-btn  @click="deleteDialog()" text>Remove</v-btn>
             </v-card-actions>
+
           </v-row>
           <v-row>
             <v-col cols="4">
@@ -50,6 +51,7 @@
         </v-card-text>
       </v-container>
     </v-card>
+    <military-leader-delete-dialog></military-leader-delete-dialog>
     <military-leader-modify
             :edit-military-leader="militaryLeader"
             mode="update"
@@ -61,9 +63,10 @@
 <script>import MilitaryLeaderModify from "../Tables/MilitaryLeader/MilitaryLeaderModify";
 import moment from "moment";
 import { mapGetters, mapMutations } from "vuex";
+import MilitaryLeaderDeleteDialog from "../Tables/MilitaryLeader/MilitaryLeaderDeleteDialog";
 export default {
   name: "MilitaryLeaderDetails",
-  components: { MilitaryLeaderModify },
+  components: { MilitaryLeaderModify, MilitaryLeaderDeleteDialog },
   data: () => ({
     editDialog :false,
   }),
@@ -130,7 +133,13 @@ export default {
   },
 
   methods: {
+    ...mapMutations('militaryLeaderDeleteDialog', ['setShowDialog', 'setMilitaryLeader']),
     ...mapMutations("militaryLeadersDialog", ["setShowDialog"]),
+    deleteDialog(){
+      this.setMilitaryLeader(this.militaryLeader);
+      console.log(this.militaryLeader)
+      this.setShowDialog(true)
+    }
   }
 };
 </script>

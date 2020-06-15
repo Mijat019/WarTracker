@@ -53,6 +53,7 @@
           mode="update"
           v-model="editDialog"
         />
+        <military-leader-delete-dialog></military-leader-delete-dialog>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -61,10 +62,11 @@
 <script>
   import {mapActions, mapState, mapMutations} from "vuex";
 import MilitaryLeaderModify from "./MilitaryLeaderModify";
+  import MilitaryLeaderDeleteDialog from "./MilitaryLeaderDeleteDialog";
 
 export default {
   name: "MilitaryLeadersTableDialog",
-  components: { MilitaryLeaderModify },
+  components: {MilitaryLeaderDeleteDialog, MilitaryLeaderModify },
   data: () => ({
     editDialog: false,
     addDialog: false,
@@ -115,8 +117,8 @@ export default {
     if(this.show)
       this.dialog = this.show;
   },
-
   methods: {
+    ...mapMutations('militaryLeaderDeleteDialog', ['setShowDialog', 'setMilitaryLeader']),
     ...mapMutations('militaryLeaderTableDialog', ['setShowMilitaryLeaderTableDialog']),
     ...mapActions("militaryLeaders", [
       "getMilitaryLeaders",
@@ -141,13 +143,16 @@ export default {
     },
 
     deleteItem(item) {
-      let msg =
+      this.setMilitaryLeader(item);
+      console.log(item)
+      this.setShowDialog(true);
+     /* let msg =
         "Are you sure you want to remove " +
         item.firstName +
         " " +
         item.lastName +
         "?";
-      confirm(msg) && this.deleteMilitaryLeader(item);
+      confirm(msg) && this.deleteMilitaryLeader(item);*/
     }
   }
 };
