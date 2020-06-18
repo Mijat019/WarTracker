@@ -19,6 +19,7 @@ This is a web application (done for a Human Computer Interaction course project)
 
 1. Install [node](https://nodejs.org/en/)
 2. Clone this repository
-3. Run `npm run build`
+3. cd into WarTracker folder
+3. Run `npm run build` (it may take a while)
 4. Run `npm start`
 5. Go to http://localhost:4200
